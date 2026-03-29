@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "name": "candidate_profile",
+    "version": "1.0",
+    "generated_from": [
+      "03_career_master_clean_populated_v2.json",
+      "013_ideal_job_search_rccf.json"
+    ],
+    "purpose": "Canonical candidate profile for the Job Search OS MVP. Use confirmed facts first. Keep unresolved items visible rather than silently normalizing them away."
+  },
+  "candidateProfile": {
+    "targetStrategy": {
+      "primaryTitles": [
+        "Operations Specialist",
+        "Sales Operations Analyst / Sales Ops Analyst",
+        "Implementation Associate / Implementation Coordinator"
+      ],
+      "secondaryTitles": [
+        "Revenue Operations Associate / RevOps Associate",
+        "Enablement Analyst",
+        "Customer Onboarding / Customer Success Operations-type roles"
+      ],
+      "targetFunctions": [
+        "Operations",
+        "Revenue Operations",
+        "Sales Operations",
+        "Customer onboarding / customer coordination",
+        "Implementation / enablement"
+      ],
+      "includeRules": [
+        "Prioritize operations roles with customer coordination and process ownership.",
+        "Prioritize remote roles or hybrid roles within roughly 20-25 minutes of Canton, Ohio.",
+        "Prioritize stable base-compensation roles with benefits.",
+        "Favor roles emphasizing documentation, process design, CRM/workflow ownership, onboarding, reporting, or cross-functional execution."
+      ],
+      "excludeRules": [
+        "Deprioritize roles without meaningful benefits.",
+        "Deprioritize roles with unstable compensation structures.",
+        "Deprioritize roles incompatible with football coaching commitments.",
+        "Deprioritize roles that replicate unclear scope, founder-chaos, or heavy micromanagement patterns."
+      ],
+      "targetWorkArrangements": [
+        "Remote",
+        "Hybrid"
+      ],
+      "targetIndustries": [
+        "Tech-enabled operations / software-adjacent business operations",
+        "Healthcare operations",
+        "Insurance / enablement",
+        "Service operations / home services / field-service businesses"
+      ],
+      "targetPriorityStackNeedsFinalVerification": true
+    },
+    "workPreferences": {
+      "compensationTargetBaseUSDPerYear": "60000-70000+",
+      "benefitsPriority": "high",
+      "workModePreference": "remote_preferred_hybrid_acceptable",
+      "geographicConstraint": "remote preferred or hybrid within roughly 20-25 minutes of Canton, Ohio",
+      "scheduleConstraintSummary": "Role must be compatible with football coaching commitments.",
+      "scheduleConstraintDetails": [
+        "Summer coaching availability constraint around mornings / midday — strong inference, exact employer-facing language still needs verification.",
+        "Fall coaching availability constraint around late afternoon — strong inference, exact employer-facing language still needs verification."
+      ],
+      "preferredEmployerTraits": [
+        "clear scope",
+        "structured environment",
+        "healthy leadership and reporting clarity",
+        "documentation and process ownership",
+        "stable compensation",
+        "meaningful benefits"
+      ],
+      "avoidEmployerTraits": [
+        "founder-chaos",
+        "unclear reporting lines",
+        "micromanagement",
+        "pure sales disguised as operations",
+        "commission-heavy pay without stable base",
+        "heavy travel or hours that damage life fit"
+      ]
+    },
+    "education": [
+      {
+        "institution": "Indiana Wesleyan University",
+        "degree": "Bachelor of Applied Science",
+        "field_of_study": "Organizational Leadership",
+        "status": "IN PROGRESS",
+        "graduation_date": null,
+        "confidence": "CONFIRMED",
+        "downstream_tags": [
+          "resume",
+          "linkedin",
+          "application strategy",
+          "interview"
+        ]
+      }
+    ],
+    "roleHistory": [
+      {
+        "employer": "Advanced Pressure Washing",
+        "title": "Operations & Revenue Growth Manager",
+        "titleAliases": [
+          "Growth & Sales Manager"
+        ],
+        "displayDate": "Aug 2025 - Mar 2026",
+        "dateStatus": "MONTH_NORMALIZED_EXACT_DAY_NEEDS_VERIFICATION",
+        "responsibilities": [
+          "Managed customer onboarding and ongoing communication from initial contact through service completion.",
+          "Coordinated scheduling, job timelines, and service execution across sales, operations, and field crews.",
+          "Maintained and adjusted CRM workflows to track leads, active jobs, follow-ups, and customer service history.",
+          "Worked with ownership to refine sales and operational processes in a founder-led, low-infrastructure service environment.",
+          "Served as a primary point of contact for active customers during projects.",
+          "Handled commercial account communication and bid support while coordinating operational limits and field execution realities.",
+          "Supported marketing and sales efforts through reporting, documentation, internal coordination, and campaign planning across pressure washing and holiday lighting service lines.",
+          "Operated across residential and commercial revenue activity in a role spanning sales, marketing, operations liaison work, KPI reporting, and documentation."
+        ],
+        "achievements": [
+          "Built or refined CRM/process infrastructure, marketing calendars, proposals, follow-up logic, and documentation systems within a founder-led service environment.",
+          "Created reusable systems language around handoffs, process clarity, scheduling coordination, and customer communication.",
+          "Supported proposal and account work across both residential and commercial activity, including named commercial accounts such as Wallick Communities, Morton's Steakhouse, and Sahara Apartments."
+        ],
+        "toolsUsed": [
+          "CRM systems",
+          "ResponsiBid",
+          "Canva",
+          "Constant Contact",
+          "PandaDoc",
+          "Airtable"
+        ],
+        "confidence": "POSSIBLE / NEEDS VERIFICATION",
+        "resumeSafe": true,
+        "notes": [
+          "Master displayed title is normalized to 'Operations & Revenue Growth Manager' with 'Growth & Sales Manager' preserved as an alias.",
+          "Updated APW metrics bank now supports ResponsiBid, Constant Contact, PandaDoc, Canva, and Airtable as used tools.",
+          "Title/date normalization remains the main open verification issue for this role."
+        ]
+      },
+      {
+        "employer": "Marteney Construction",
+        "title": "Sales And Marketing Specialist",
+        "titleAliases": [],
+        "displayDate": "Jan 2025 - Aug 2025",
+        "dateStatus": "NORMALIZED_FROM_UPLOADED_ROLE_FILE",
+        "responsibilities": [
+          "Supported sales and business development through prospecting, estimating, and direct client communication.",
+          "Prepared and presented bids and contracts.",
+          "Coordinated between clients, crews, and management.",
+          "Assisted with scheduling, invoicing, documentation, and basic project tracking.",
+          "Operated heavy equipment on active job sites as needed."
+        ],
+        "achievements": [
+          "Balanced sales responsibilities with field and coordination work, strengthening practical understanding of construction workflows."
+        ],
+        "toolsUsed": [
+          "Estimating / bid workflows",
+          "Contracts documentation",
+          "Project tracking processes"
+        ],
+        "confidence": "CONFIRMED",
+        "resumeSafe": true,
+        "notes": []
+      },
+      {
+        "employer": "Stolle Machinery Company LLC",
+        "title": "Industrial Maintenance Technician",
+        "titleAliases": [],
+        "displayDate": "Mar 2021 - Jan 2025",
+        "dateStatus": "NORMALIZED_FROM_UPLOADED_ROLE_FILE",
+        "responsibilities": [
+          "Diagnosed, evaluated, and repaired industrial manufacturing equipment.",
+          "Worked on CNC horizontal and vertical lathes, mills, and both reciprocating and rotary grinders.",
+          "Communicated with machinists, supervisors, and outside contractors on maintenance needs and plant projects.",
+          "Supported equipment uptime and safe operations through preventative and corrective maintenance.",
+          "Troubleshot issues under time pressure and production constraints."
+        ],
+        "achievements": [
+          "Built strong operational discipline, troubleshooting capability, and credibility in high-pressure production environments."
+        ],
+        "toolsUsed": [
+          "CNC horizontal lathes",
+          "CNC vertical lathes",
+          "Mills",
+          "Reciprocating grinders",
+          "Rotary grinders"
+        ],
+        "confidence": "CONFIRMED",
+        "resumeSafe": true,
+        "notes": []
+      }
+    ],
+    "confirmedSkills": [
+      "Process design",
+      "SOP development",
+      "CRM workflow design / follow-up process organization",
+      "Customer onboarding / lifecycle coordination",
+      "Scheduling and cross-functional handoff coordination",
+      "KPI framework design / call-log tracking / accountability reporting",
+      "Airtable architecture / schema thinking",
+      "Proposal scoping / bid support",
+      "Seasonal campaign and promotional offer design",
+      "Route density planning / territory-efficiency thinking",
+      "Visual sales enablement / client rendering workflows",
+      "Technical service documentation",
+      "Training / seminar design",
+      "AI prompt architecture / RCCF design"
+    ],
+    "confirmedTools": [
+      "Airtable",
+      "CRM systems",
+      "ResponsiBid",
+      "Canva",
+      "Constant Contact",
+      "PandaDoc",
+      "LinkedIn"
+    ],
+    "valuePropositionThemes": [
+      "Cross-functional operator who bridges sales, customer communication, office workflows, and field execution",
+      "System builder who turns ambiguous work into structured, repeatable processes",
+      "Operations-minded communicator who reduces handoff friction and clarifies expectations",
+      "Practical, field-informed professional who understands operational reality, not just theory"
+    ],
+    "differentiators": [
+      "Rare mix of field-service credibility, customer-facing coordination, and systems/process design",
+      "Demonstrated habit of building reusable documentation, frameworks, SOPs, and KPI structures",
+      "Strong ambiguity-reduction language already exists and can be reused immediately",
+      "Coaching mindset reinforces accountability, development, and structured execution"
+    ],
+    "achievementHighlights": [
+      {
+        "achievement": "Designed and documented end-to-end revenue execution systems for time-bound promotions, including named campaign concepts such as Cookie Week and a Crumbl gift-card incentive offer, covering promotion design, lead flow, proposal creation, deposit collection, scheduling, and fulfillment controls.",
+        "category": "Revenue Operations / SOP Design",
+        "metricStatus": "QUALITATIVE_ONLY",
+        "metricValue": "Leadership-ready promotional SOPs and campaign structure; stronger ownership clarity and booking/deposit process predictability.",
+        "resumeSafe": true
+      },
+      {
+        "achievement": "Built structured KPI and tracking systems in Airtable to monitor call activity, list quality, follow-up discipline, and accountability rather than relying on ad hoc outreach.",
+        "category": "KPI Design / Airtable / Sales Enablement",
+        "metricStatus": "QUALITATIVE_ONLY",
+        "metricValue": "Implementation-ready KPI framework and structured tracking system.",
+        "resumeSafe": true
+      },
+      {
+        "achievement": "Created client-facing holiday-lighting visual workflows tied to quoting and install logic, using renderings and mock-ups to improve sales clarity and execution alignment.",
+        "category": "Visual Sales Enablement / Proposal Support / Process Design",
+        "metricStatus": "QUALITATIVE_ONLY",
+        "metricValue": "Approval-ready visual workflow aligned to quoting and install decisions; reduced revision-cycle ambiguity.",
+        "resumeSafe": true
+      },
+      {
+        "achievement": "Designed a followership seminar that translated academic leadership theory into a practical field-training framework.",
+        "category": "Training Enablement / Organizational Development",
+        "metricStatus": "KNOWN_CONTEXTUAL_METRIC",
+        "metricValue": "Structured 60-minute training asset ready for academic submission and internal use.",
+        "resumeSafe": true
+      },
+      {
+        "achievement": "Managed customer onboarding and coordination from initial contact through service completion while maintaining CRM visibility and reducing handoff issues.",
+        "category": "Customer Operations / CRM / Coordination",
+        "metricStatus": "QUALITATIVE_ONLY",
+        "metricValue": "Improved clarity and lifecycle coordination.",
+        "resumeSafe": true
+      },
+      {
+        "achievement": "Prepared bids and contracts while coordinating customers, crews, and operational limits in a construction environment.",
+        "category": "Sales Coordination / Project Support",
+        "metricStatus": "QUALITATIVE_ONLY",
+        "metricValue": "Direct support of sales and project execution.",
+        "resumeSafe": true
+      },
+      {
+        "achievement": "Troubleshot and repaired industrial machinery in a high-volume production environment under time and uptime pressure.",
+        "category": "Operations / Maintenance / Problem Solving",
+        "metricStatus": "QUALITATIVE_ONLY",
+        "metricValue": "Supported uptime and safe operations.",
+        "resumeSafe": true
+      }
+    ],
+    "copySignals": {
+      "summaryFragments": [
+        "I work at the intersection of customer experience and operations, helping teams deliver consistent, well-coordinated outcomes.",
+        "My focus is on customer onboarding, CRM organization, and process improvement.",
+        "I’m especially interested in building clear workflows that reduce handoff friction, improve visibility, and make it easier for teams to execute reliably.",
+        "My background in construction coordination and industrial maintenance shaped a practical mindset."
+      ],
+      "strongPhrases": [
+        "reduce handoff friction",
+        "improve visibility",
+        "make it easier for teams to execute reliably",
+        "commitments must align with capacity",
+        "documentation must reflect reality",
+        "structured, repeatable processes"
+      ],
+      "keywords": [
+        "operations",
+        "revenue operations",
+        "sales operations",
+        "customer onboarding",
+        "CRM workflows",
+        "process improvement",
+        "cross-functional coordination",
+        "KPI design",
+        "Airtable",
+        "sales enablement",
+        "documentation",
+        "implementation"
+      ]
+    },
+    "openNormalizationRisks": [
+      "APW end date must not be treated as day-accurate until verified.",
+      "APW displayed title must be locked with one master title plus optional alias strategy.",
+      "Target lane order is directionally strong but not fully finalized.",
+      "Hard metrics remain a major credibility gap."
+    ]
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "meta": {
+    "name": "target_lanes",
+    "version": "1.0",
+    "generated_from": [
+      "03_career_master_clean_populated_v2.json",
+      "07_target_role_fit_ranking_rccf.json"
+    ],
+    "purpose": "Normalized lane map for fit scoring and resume-direction decisions."
+  },
+  "laneOrderingStatus": "proposed_normalization_needs_final_user_lock",
+  "primaryLanes": [
+    {
+      "laneId": "operations_specialist",
+      "displayName": "Operations Specialist / Operations Coordinator",
+      "sourceTitles": [
+        "Operations Specialist"
+      ],
+      "fitLevel": "primary",
+      "whyItFits": [
+        "Best-aligned title in the current priority stack.",
+        "Matches process ownership, customer coordination, documentation, and cross-functional execution evidence."
+      ],
+      "evidenceThemes": [
+        "process design",
+        "SOP development",
+        "customer onboarding / lifecycle coordination",
+        "scheduling and handoff coordination",
+        "documentation",
+        "commercial and residential operational support"
+      ],
+      "resumeDirection": "operations_process_coordination"
+    },
+    {
+      "laneId": "sales_ops_support",
+      "displayName": "Sales Operations Coordinator / Sales Ops Analyst (entry or support level)",
+      "sourceTitles": [
+        "Sales Operations Analyst / Sales Ops Analyst"
+      ],
+      "fitLevel": "primary",
+      "whyItFits": [
+        "Strong fit with KPI design, Airtable/system thinking, follow-up workflows, documentation, and process governance.",
+        "Needs support-level framing rather than advanced analyst framing."
+      ],
+      "evidenceThemes": [
+        "KPI framework design",
+        "Airtable architecture / schema thinking",
+        "CRM workflow design",
+        "proposal support",
+        "follow-up discipline",
+        "reporting and documentation"
+      ],
+      "resumeDirection": "sales_ops_process_support"
+    },
+    {
+      "laneId": "implementation_coordination",
+      "displayName": "Implementation Associate / Implementation Coordinator",
+      "sourceTitles": [
+        "Implementation Associate / Implementation Coordinator"
+      ],
+      "fitLevel": "primary",
+      "whyItFits": [
+        "Strong thematic fit with onboarding, handoff reduction, process documentation, and cross-functional execution.",
+        "Should be framed as coordination and rollout support, not deep software implementation ownership."
+      ],
+      "evidenceThemes": [
+        "customer onboarding",
+        "handoff reduction",
+        "process documentation",
+        "cross-functional coordination",
+        "execution reliability",
+        "issue resolution and expectation alignment"
+      ],
+      "resumeDirection": "implementation_onboarding_coordination"
+    }
+  ],
+  "secondaryLanes": [
+    {
+      "laneId": "revops_support",
+      "displayName": "Revenue Operations Associate / RevOps Associate",
+      "sourceTitles": [
+        "Revenue Operations Associate / RevOps Associate"
+      ],
+      "fitLevel": "secondary",
+      "whyItFits": [
+        "Strong thematic alignment, but quantified proof and enterprise-tool depth remain weaker than the top lanes."
+      ],
+      "evidenceThemes": [
+        "revenue-support systems",
+        "workflow ownership",
+        "documentation",
+        "KPI structure",
+        "campaign operations"
+      ],
+      "resumeDirection": "revops_support_careful"
+    },
+    {
+      "laneId": "enablement_support",
+      "displayName": "Enablement Analyst / Training or Enablement Coordinator",
+      "sourceTitles": [
+        "Enablement Analyst",
+        "Training / Enablement Coordinator"
+      ],
+      "fitLevel": "secondary",
+      "whyItFits": [
+        "Supported by training/seminar design and systems-thinking, but employer-facing proof is narrower than operations lanes."
+      ],
+      "evidenceThemes": [
+        "training / seminar design",
+        "documentation",
+        "process clarity",
+        "repeatable systems"
+      ],
+      "resumeDirection": "enablement_support_careful"
+    },
+    {
+      "laneId": "customer_onboarding_ops",
+      "displayName": "Customer Onboarding / Customer Success Operations Coordinator",
+      "sourceTitles": [
+        "Customer Onboarding / Customer Success Operations-type roles",
+        "Client Onboarding / Customer Success Operations Coordinator"
+      ],
+      "fitLevel": "secondary",
+      "whyItFits": [
+        "Directly supported by onboarding, CRM organization, and customer communication language.",
+        "Use cautiously if roles require deep SaaS retention metrics or account-management scale not supported in the record."
+      ],
+      "evidenceThemes": [
+        "customer onboarding",
+        "CRM organization",
+        "lifecycle coordination",
+        "issue resolution",
+        "handoff clarity"
+      ],
+      "resumeDirection": "onboarding_coordination"
+    }
+  ],
+  "adjacentLanes": [
+    {
+      "laneId": "project_coordination",
+      "displayName": "Project Coordinator / Business Operations Coordinator",
+      "fitLevel": "adjacent",
+      "whyItFits": [
+        "Supported by scheduling, coordination, documentation, and field-informed execution.",
+        "Good bridge lane when the role emphasizes organization over formal PM credentials."
+      ]
+    },
+    {
+      "laneId": "account_commercial_support",
+      "displayName": "Account Coordinator / Commercial Support Coordinator",
+      "fitLevel": "adjacent",
+      "whyItFits": [
+        "Supported by client communication, bid support, commercial account coordination, and active customer management."
+      ]
+    },
+    {
+      "laneId": "marketing_ops_coordination",
+      "displayName": "Marketing Operations Coordinator / CRM Lifecycle Marketing Coordinator",
+      "fitLevel": "adjacent",
+      "whyItFits": [
+        "Supported by campaign planning, lead flow/process support, and CRM follow-up logic.",
+        "Should stay support-level and operations-focused."
+      ]
+    }
+  ],
+  "stretchOrCautionLanes": [
+    {
+      "laneId": "advanced_analyst_roles",
+      "displayName": "Advanced Analyst / Enterprise-heavy RevOps roles",
+      "fitLevel": "stretch",
+      "avoidUnless": [
+        "requirements are clearly support-level",
+        "tool depth is realistic",
+        "quantitative proof is not central to the role"
+      ],
+      "reason": "Current record should not be inflated into deep enterprise analytics or advanced systems ownership."
+    }
+  ]
+}

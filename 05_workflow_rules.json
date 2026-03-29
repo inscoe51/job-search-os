@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "name": "workflow_rules",
+    "version": "1.0",
+    "generated_from": [
+      "011_application_workflow_rccf.json",
+      "07_target_role_fit_ranking_rccf.json"
+    ],
+    "purpose": "Fast scoring, decision routing, and tracker behavior for the MVP."
+  },
+  "workflowDefinitions": {
+    "good_application_workflow_definition": "A repeatable operating system that helps the user apply to the right jobs with the right materials at the right cadence while preserving quality and honesty.",
+    "apply_definition": "A posting that clears the fit threshold and matches one of the user's prioritized lanes with defensible resume positioning.",
+    "hold_definition": "A posting that may be viable but needs better evidence, a tailored version, or a networking angle before applying.",
+    "reject_definition": "A posting that is weak-fit, inflation-heavy, low-quality, misaligned to compensation or schedule goals, or likely to waste time."
+  },
+  "fastFitScoringModel": {
+    "status": "proposed_normalization_for_mvp",
+    "notes": [
+      "This scoring model is a product design layer built from the source rules.",
+      "Use it as a starting point and refine after real-posting testing."
+    ],
+    "maxScore": 100,
+    "categories": [
+      {
+        "id": "lane_alignment",
+        "points": 20,
+        "description": "Primary lane = 20, secondary = 12-16, adjacent = 8-12, stretch/unsupported = 0-7"
+      },
+      {
+        "id": "evidence_alignment",
+        "points": 20,
+        "description": "Strong confirmed overlap in responsibilities, tools, and proof"
+      },
+      {
+        "id": "requirements_realism",
+        "points": 15,
+        "description": "Requirements are support-level and defensible without inflation"
+      },
+      {
+        "id": "compensation_stability",
+        "points": 15,
+        "description": "Stable base pay near target or otherwise credible bridge stability"
+      },
+      {
+        "id": "benefits_value",
+        "points": 10,
+        "description": "Health/retirement/PTO quality where stated"
+      },
+      {
+        "id": "schedule_life_fit",
+        "points": 10,
+        "description": "Compatible with coaching and broader life constraints"
+      },
+      {
+        "id": "work_mode_location_fit",
+        "points": 5,
+        "description": "Remote/hybrid or locally commutable"
+      },
+      {
+        "id": "leadership_structure_quality",
+        "points": 5,
+        "description": "Clear scope, healthy reporting, and low chaos risk"
+      }
+    ],
+    "penalties": [
+      {
+        "condition": "pure_sales_disguised_as_operations",
+        "deduct": 20
+      },
+      {
+        "condition": "commission_heavy_without_base_stability",
+        "deduct": 20
+      },
+      {
+        "condition": "unclear_scope_or_founder_chaos",
+        "deduct": 10
+      },
+      {
+        "condition": "unsupported_enterprise_or_advanced_analyst_requirements",
+        "deduct": 10
+      },
+      {
+        "condition": "schedule_conflict_with_coaching",
+        "deduct": 15
+      }
+    ],
+    "scoreBands": {
+      "apply": "80-100",
+      "hold": "65-79",
+      "caution_or_selective_apply": "50-64",
+      "reject": "0-49"
+    }
+  },
+  "applyHoldRejectLogic": {
+    "apply": [
+      "Posting matches a primary lane or strong secondary lane.",
+      "Fit score is in the apply band.",
+      "Positioning is honest and resume-defensible."
+    ],
+    "hold": [
+      "Posting may be viable but needs better evidence, networking, or a sharper variant before applying."
+    ],
+    "reject": [
+      "Weak fit, inflation-heavy, low-quality, or clearly misaligned to compensation, benefits, or schedule goals."
+    ]
+  },
+  "resumeVariantRouting": {
+    "operations_process_coordination": [
+      "operations_specialist",
+      "project_coordination",
+      "business_operations_coordinator"
+    ],
+    "sales_ops_process_support": [
+      "sales_ops_support",
+      "revops_support"
+    ],
+    "implementation_onboarding_coordination": [
+      "implementation_coordination",
+      "customer_onboarding_ops"
+    ],
+    "enablement_support_careful": [
+      "enablement_support"
+    ],
+    "account_support_coordination": [
+      "account_commercial_support"
+    ],
+    "marketing_ops_support_careful": [
+      "marketing_ops_coordination"
+    ]
+  },
+  "trackerFields": [
+    {
+      "field": "jobId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "source",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "company",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "title",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "laneMatched",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "fitScore",
+      "type": "number",
+      "required": true
+    },
+    {
+      "field": "fitVerdict",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "lifeFitLabel",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "resumeVariant",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "networkingStatus",
+      "type": "string",
+      "required": false
+    },
+    {
+      "field": "applicationStatus",
+      "type": "string",
+      "required": true
+    },
+    {
+      "field": "applicationDate",
+      "type": "date|null",
+      "required": false
+    },
+    {
+      "field": "followUpDate",
+      "type": "date|null",
+      "required": false
+    },
+    {
+      "field": "interviewStage",
+      "type": "string|null",
+      "required": false
+    },
+    {
+      "field": "outcome",
+      "type": "string|null",
+      "required": false
+    },
+    {
+      "field": "notes",
+      "type": "string|null",
+      "required": false
+    }
+  ],
+  "statusModel": {
+    "applicationStatuses": [
+      "new",
+      "analyzing",
+      "apply_now",
+      "hold_for_networking",
+      "hold_for_variant",
+      "applied",
+      "follow_up_due",
+      "interviewing",
+      "offer",
+      "passed",
+      "closed_not_selected",
+      "withdrawn"
+    ],
+    "networkingStatuses": [
+      "not_started",
+      "researching_contact",
+      "message_sent",
+      "connection_pending",
+      "conversation_started",
+      "no_response",
+      "not_applicable"
+    ]
+  },
+  "qualityControlRules": [
+    "Use only information already present in the canonical career record and any available outputs from the gap audit, target-role ranking, base resume, resume variants, and LinkedIn/interview package.",
+    "Do not invent qualifications, target industries, compensation guarantees, or market conditions not supported by the record.",
+    "Do not recommend applying broadly to weak-fit or inflated-fit roles.",
+    "Prefer structured decision rules over vague advice.",
+    "Assume the user needs a realistic, repeatable system rather than a one-time application push.",
+    "Differentiate between strong-fit, secondary-fit, and stretch-fit postings.",
+    "Tie resume-variant usage directly to posting type.",
+    "Include application tracking logic that supports later review and iteration.",
+    "Do not write actual job applications in this pass.",
+    "Do not ask the user for clarifications during this pass.",
+    "Translate the top-ranked role families into concrete posting-selection rules.",
+    "Create a fit-scoring model that is simple enough to use quickly but strong enough to improve decision quality.",
+    "Map each likely posting type to the correct resume variant.",
+    "Create red-flag criteria for postings the user should avoid.",
+    "Build a follow-up cadence that is practical and not overly aggressive.",
+    "Recommend tracking fields that support both application execution and postmortem review.",
+    "Differentiate networking-led opportunities from cold applications.",
+    "Preserve evidence discipline so the user does not drift into applying to roles that require unsupported analyst, technical, or enterprise-scale claims.",
+    "Create a weekly operating rhythm that the user can realistically maintain.",
+    "Ensure the workflow supports future iteration as new evidence or better metrics are added to the career record.",
+    "Tracker fields should support sourcing, fit review, variant selection, networking status, application date, follow-up date, interview stage, and outcome review.",
+    "The workflow should allow the user to identify which resume variant and outreach style are producing traction.",
+    "Statuses should be simple, ordered, and usable in a spreadsheet or Airtable."
+  ]
+}
