@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "name": "resume_direction_rules",
+    "version": "1.0",
+    "generated_from": [
+      "07_target_role_fit_ranking_rccf.json",
+      "08_base_resume_build_rccf.json",
+      "03_career_master_clean_populated_v2.json"
+    ],
+    "purpose": "Resume-direction guidance for the MVP without turning the app into a full resume writer."
+  },
+  "resumeConstructionPriorities": [
+    "ATS-safe formatting and keyword alignment",
+    "strong but honest summary language",
+    "clear target-lane positioning",
+    "achievement-forward bullet structure",
+    "transferable operations/process/revenue-support framing",
+    "clean skills and tools presentation",
+    "high interview defensibility",
+    "no inflated enterprise-level claims"
+  ],
+  "globalRules": {
+    "professionalSummaryRules": [
+      "Keep the summary focused on the strongest target lane.",
+      "Emphasize transferable strengths such as process design, CRM workflow support, KPI tracking, proposal support, customer lifecycle coordination, documentation, campaign operations, and cross-functional execution where supported.",
+      "Do not overstate analyst, enterprise, or technical depth.",
+      "Make the summary recruiter-readable within a few seconds."
+    ],
+    "experienceBulletRules": [
+      "Prioritize bullets that show systems thinking, coordination, process building, customer workflow management, reporting, documentation, campaign support, proposal support, and commercial/residential operational scope where supported.",
+      "Use qualitative outcome language when numeric evidence is not preserved.",
+      "Collapse repetitive process language into stronger composite bullets.",
+      "Avoid low-value tactical clutter unless it materially supports the target lane.",
+      "Do not force weak bullets just to reach a certain count."
+    ],
+    "skillsRules": [
+      "Use only the strongest, confirmed, market-relevant skill labels from the canonical record.",
+      "Prefer grouped, ATS-friendly skill phrasing.",
+      "Do not overload the resume with niche or duplicate skills.",
+      "Ensure the skills section aligns with the targeted lane."
+    ],
+    "toolsRules": [
+      "Include only confirmed, resume-safe tools.",
+      "Do not imply advanced proficiency unless supported.",
+      "Use tool names in a clean, recruiter-readable format."
+    ],
+    "omitDefinition": "Exclude or soften items that are too weak, too tactical, duplicative, poorly supported, or potentially inflationary."
+  },
+  "allowedToolClaims": [
+    "Airtable",
+    "CRM systems",
+    "ResponsiBid",
+    "Canva",
+    "Constant Contact",
+    "PandaDoc",
+    "LinkedIn"
+  ],
+  "laneDirections": {
+    "operations_process_coordination": {
+      "summaryFocus": [
+        "process design",
+        "customer coordination",
+        "workflow clarity",
+        "documentation",
+        "cross-functional execution"
+      ],
+      "emphasize": [
+        "customer onboarding and lifecycle coordination",
+        "scheduling and job timeline coordination",
+        "CRM workflow maintenance",
+        "handoff reduction",
+        "commercial and field-informed operational support"
+      ],
+      "deEmphasize": [
+        "advanced analytics language",
+        "enterprise-scale systems ownership",
+        "standalone sales hunting framing"
+      ]
+    },
+    "sales_ops_process_support": {
+      "summaryFocus": [
+        "CRM workflows",
+        "KPI design",
+        "follow-up process support",
+        "Airtable/system thinking",
+        "proposal and documentation support"
+      ],
+      "emphasize": [
+        "Airtable architecture / schema thinking",
+        "KPI framework design",
+        "call-log tracking / accountability reporting",
+        "pipeline and follow-up organization",
+        "process governance language"
+      ],
+      "deEmphasize": [
+        "advanced BI/SQL language",
+        "enterprise RevOps claims",
+        "senior analyst framing"
+      ]
+    },
+    "implementation_onboarding_coordination": {
+      "summaryFocus": [
+        "onboarding",
+        "execution support",
+        "process clarity",
+        "handoff reduction",
+        "customer communication"
+      ],
+      "emphasize": [
+        "initial contact through service completion",
+        "expectation alignment",
+        "cross-functional coordination",
+        "documentation and workflow support",
+        "issue resolution and visibility"
+      ],
+      "deEmphasize": [
+        "deep software implementation ownership",
+        "technical integration language",
+        "unsupported project-management credentials"
+      ]
+    },
+    "enablement_support_careful": {
+      "summaryFocus": [
+        "training / seminar design",
+        "repeatable systems",
+        "documentation",
+        "execution discipline"
+      ],
+      "emphasize": [
+        "training asset design",
+        "reusable frameworks",
+        "process clarity"
+      ],
+      "deEmphasize": [
+        "formal learning-and-development leadership",
+        "unsupported enterprise enablement claims"
+      ]
+    }
+  },
+  "decisionHeuristics": {
+    "bestBaseResumeLaneDefinition": "The single most practical base-resume lane that best balances evidence strength, marketability, and application volume potential.",
+    "goodBaseResumeDefinition": "A resume that is ATS-safe, evidence-disciplined, recruiter-readable, and broad enough to customize without needing a full rewrite.",
+    "strongFitLaneDefinition": "A role family supported by multiple confirmed pieces of evidence in the current record, with honest resume language and interview-defensible examples already available.",
+    "secondaryFitLaneDefinition": "A viable role family supported by some evidence, but either weaker than the top lanes or requiring slightly more careful positioning.",
+    "stretchFitLaneDefinition": "A role family that is plausible only with aggressive framing, has notable evidence gaps, or risks overstating the user's experience relative to the market."
+  }
+}

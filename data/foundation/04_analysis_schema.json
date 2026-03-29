@@ -1,0 +1,162 @@
+{
+  "meta": {
+    "name": "analysis_schema",
+    "version": "1.0",
+    "generated_from": [
+      "012_job_analysis_rccf.json",
+      "013_ideal_job_search_rccf.json"
+    ],
+    "purpose": "Normalized output contract for analyzing one job posting at a time."
+  },
+  "inputObject": {
+    "jobPosting": {
+      "company": "string|null",
+      "title": "string",
+      "location": "string|null",
+      "pay": "string|null",
+      "benefits": "string|null",
+      "schedule": "string|null",
+      "workMode": "remote|hybrid|onsite|unknown",
+      "responsibilities": [
+        "string"
+      ],
+      "requirements": [
+        "string"
+      ],
+      "tools": [
+        "string"
+      ],
+      "domain": "string|null",
+      "leadershipSignals": [
+        "string"
+      ],
+      "ambiguitySignals": [
+        "string"
+      ],
+      "sourceUrlOrIdentifier": "string|null"
+    }
+  },
+  "outputObject": {
+    "jobSnapshot": {
+      "company": "string|null",
+      "title": "string",
+      "normalizedRoleType": "string",
+      "location": "string|null",
+      "pay": "string|null",
+      "workMode": "string",
+      "summary": "string"
+    },
+    "nonNegotiablesCheck": [
+      {
+        "rule": "string",
+        "status": "pass|partial|fail|unknown",
+        "notes": "string"
+      }
+    ],
+    "positiveSignals": [
+      "string"
+    ],
+    "riskFlags": [
+      "string"
+    ],
+    "fitVerdict": {
+      "rating": "strong_fit|workable_fit|stretch_fit|low_fit",
+      "lifeFitLabel": "green_light|yellow_light|red_light|freelance_better",
+      "summary": "string"
+    },
+    "strongestMatchingProof": [
+      {
+        "claim": "string",
+        "sourceType": "role_history|achievement_bank|skills_inventory|resume_assets",
+        "confidence": "confirmed|strong_inference|possible_needs_verification"
+      }
+    ],
+    "translationAreas": [
+      {
+        "jobNeed": "string",
+        "candidateAngle": "string",
+        "warning": "string|null"
+      }
+    ],
+    "gaps": [
+      {
+        "gapType": "tool|domain|metric|scope|title|schedule|compensation|benefits|other",
+        "detail": "string",
+        "severity": "low|medium|high"
+      }
+    ],
+    "positioningStrategy": {
+      "recommendedLane": "string",
+      "positioningParagraph": "string",
+      "tone": "evidence_first_no_inflation"
+    },
+    "resumeDirection": {
+      "recommendedVariant": "string",
+      "emphasize": [
+        "string"
+      ],
+      "deEmphasize": [
+        "string"
+      ],
+      "allowedToolClaims": [
+        "string"
+      ]
+    },
+    "resumeTailoringPriorities": [
+      "string"
+    ],
+    "nextAction": {
+      "recommendation": "apply|apply_with_caution|hold|pass",
+      "why": "string",
+      "preApplyRequirements": [
+        "string"
+      ]
+    }
+  },
+  "requiredEvaluationCategories": [
+    "Core responsibilities match",
+    "Tools/platforms match",
+    "Domain/context match",
+    "Transferable skills match",
+    "Scope/complexity match",
+    "Proof strength",
+    "Gaps",
+    "Risk flags",
+    "Positioning angle",
+    "Application recommendation"
+  ],
+  "analysisScope": [
+    "Role fit",
+    "Skill overlap",
+    "Tool overlap",
+    "Experience overlap",
+    "Proof strength",
+    "Gaps and liabilities",
+    "Title alignment",
+    "Compensation / schedule / logistics fit if provided",
+    "Resume-tailoring direction",
+    "Application priority"
+  ],
+  "outputSequence": [
+    "jobSnapshot",
+    "fitVerdict",
+    "strongestMatchingProof",
+    "translationAreas",
+    "gaps",
+    "positioningStrategy",
+    "resumeTailoringPriorities",
+    "nextAction"
+  ],
+  "hardRules": [
+    "Do not invent qualifications, metrics, tools, titles, or achievements.",
+    "Do not overstate fit.",
+    "Do not convert likely exposure into confirmed proficiency unless the source supports it.",
+    "Do not force weak parallels just to make the job appear like a match.",
+    "Do not write a final resume, cover letter, or LinkedIn rewrite in this pass.",
+    "Do not ignore meaningful gaps or risk factors.",
+    "Keep the analysis hiring-signal focused, not motivational.",
+    "Use concise, recruiter-relevant language.",
+    "Separate hard matches from partial matches and from unsupported assumptions.",
+    "If the posting requests something not present in 03 or 04, mark it as a gap rather than inventing coverage."
+  ]
+}

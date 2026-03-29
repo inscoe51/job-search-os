@@ -1,0 +1,27 @@
+{
+  "company": "North Ridge Home Services",
+  "title": "Operations Coordinator",
+  "location": "Canton, OH",
+  "pay": "$62,000-$68,000 base salary",
+  "benefits": "Medical, dental, vision, 401(k), PTO",
+  "schedule": "Standard weekday schedule with occasional early morning coordination needs",
+  "workMode": "hybrid",
+  "responsibilities": [
+    "Coordinate customer onboarding and job scheduling across office and field teams",
+    "Maintain CRM workflows, follow-up tasks, and documentation standards",
+    "Support reporting, process updates, and cross-functional execution"
+  ],
+  "requirements": [
+    "2+ years of operations, customer coordination, or workflow support experience",
+    "Comfort with CRM systems, documentation, and process improvement",
+    "Ability to manage handoffs between sales, service, and leadership"
+  ],
+  "tools": ["Airtable", "CRM systems", "PandaDoc"],
+  "domain": "Field service operations",
+  "leadershipSignals": [
+    "Clear reporting line to the operations manager",
+    "Structured cross-functional team environment"
+  ],
+  "ambiguitySignals": ["Some process cleanup still in progress"],
+  "sourceUrlOrIdentifier": "sample-fixture-operations-coordinator"
+}

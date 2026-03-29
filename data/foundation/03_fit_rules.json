@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "name": "fit_rules",
+    "version": "1.0",
+    "generated_from": [
+      "013_ideal_job_search_rccf.json",
+      "03_career_master_clean_populated_v2.json"
+    ],
+    "purpose": "Top-level job filter and life-fit logic for the MVP."
+  },
+  "nonNegotiables": [
+    "Role must be realistically aligned with the user's current experience and marketable skills.",
+    "Compensation should move toward stable income, with strong preference for approximately $60000 to $70000+ base or equivalent realistic earnings stability.",
+    "Benefits matter materially, especially health coverage, retirement value, and overall stability.",
+    "Schedule must not meaningfully undermine the user's long-term coaching path.",
+    "Role should support or at least not block the user's broader teaching/coaching future.",
+    "Role should avoid obvious chaos, poor structure, or founder-risk unless upside is unusually strong and clearly justified."
+  ],
+  "preferredCharacteristics": [
+    "Operations Specialist",
+    "Operations Coordinator",
+    "Implementation Coordinator",
+    "Implementation Specialist",
+    "Sales Operations",
+    "Revenue Operations support",
+    "Customer onboarding / process coordination",
+    "Workflow / systems support",
+    "Hybrid or remote work when credible and stable",
+    "Local commute that is reasonable if on-site or hybrid"
+  ],
+  "positiveSignals": [
+    "Clear scope",
+    "Stable salary",
+    "Benefits package",
+    "Defined tools/process ownership",
+    "Cross-functional coordination responsibilities",
+    "Operational structure and documentation focus",
+    "Healthy leadership and reporting clarity",
+    "Realistic experience requirements",
+    "Good fit with process-building and execution strengths",
+    "Role can strengthen long-term resume positioning"
+  ],
+  "cautionFlags": [
+    "Micromanagement signals",
+    "Founder-led chaos without infrastructure",
+    "Low salary relative to scope",
+    "Weak or missing benefits",
+    "Role inflation where responsibilities exceed title/pay",
+    "Schedule conflict with coaching commitments",
+    "Unclear reporting lines or vague expectations",
+    "Heavy travel or hours that damage long-term life fit",
+    "Pure sales role disguised as operations",
+    "Commission-heavy structure without base stability"
+  ],
+  "evaluationCategories": [
+    {
+      "id": "compensation_fit",
+      "label": "Compensation fit",
+      "priority": "high",
+      "question": "Does the role move toward stable base compensation around $60,000-$70,000+ or otherwise offer credible earnings stability?"
+    },
+    {
+      "id": "benefits_fit",
+      "label": "Benefits fit",
+      "priority": "high",
+      "question": "Does the role offer meaningful benefits, especially health coverage, retirement value, and overall stability?"
+    },
+    {
+      "id": "schedule_coaching_fit",
+      "label": "Schedule and coaching fit",
+      "priority": "high",
+      "question": "Can the role realistically coexist with long-term coaching commitments without constant conflict?"
+    },
+    {
+      "id": "role_function_fit",
+      "label": "Role-function fit",
+      "priority": "high",
+      "question": "Does the role align with operations, sales operations support, implementation coordination, onboarding, workflow support, or similar process-centered work?"
+    },
+    {
+      "id": "experience_realism",
+      "label": "Experience-fit realism",
+      "priority": "high",
+      "question": "Are the responsibilities and requirements realistically supported by the candidate record without inflated claims?"
+    },
+    {
+      "id": "culture_leadership_risk",
+      "label": "Culture and leadership risk",
+      "priority": "medium",
+      "question": "Are there signals of healthy structure and reporting clarity, or does the posting suggest chaos, vague scope, or role inflation?"
+    },
+    {
+      "id": "growth_resume_value",
+      "label": "Growth and resume value",
+      "priority": "medium",
+      "question": "Would the role strengthen long-term positioning in stable operations-oriented work?"
+    },
+    {
+      "id": "work_mode_location_fit",
+      "label": "Location / remote-hybrid fit",
+      "priority": "medium",
+      "question": "Is the work arrangement remote or hybrid, or at least locally commutable within the candidate's constraints?"
+    },
+    {
+      "id": "overall_life_fit",
+      "label": "Overall life-fit",
+      "priority": "high",
+      "question": "Taking all tradeoffs together, is this role a net positive fit for the candidate's family, coaching, and long-term career direction?"
+    }
+  ],
+  "ratingScale": {
+    "green_light": "Strong target. Worth active pursuit.",
+    "yellow_light": "Possible role, but proceed carefully. Requires tradeoffs or verification.",
+    "red_light": "Poor fit or too risky. Not worth serious pursuit unless circumstances materially change.",
+    "freelance_better": "Given the current fit/risk tradeoff, freelancing may be the better near-term path than accepting this role."
+  },
+  "hardRules": [
+    "Do not talk the user into a bad-fit job just because they need income.",
+    "Do not ignore risk flags when a role looks attractive on the surface.",
+    "Do not invent compensation, benefits, or flexibility if not stated.",
+    "Do not over-credit weak overlap as strong fit.",
+    "Separate what is confirmed from what is assumed.",
+    "Prioritize long-term stability and credibility over short-term desperation.",
+    "If a role fails key non-negotiables, state that clearly.",
+    "If a role is usable only as a bridge, say so directly."
+  ],
+  "decisionHeuristics": {
+    "strongTarget": [
+      "clears the major non-negotiables",
+      "matches one of the primary lanes",
+      "has realistic requirements",
+      "shows stable compensation and benefits or a very credible bridge value",
+      "does not threaten coaching/life fit"
+    ],
+    "proceedCarefully": [
+      "fits a secondary lane",
+      "contains one or two meaningful tradeoffs",
+      "needs verification before applying",
+      "requires careful positioning but remains defensible"
+    ],
+    "poorFit": [
+      "fails major non-negotiables",
+      "looks like pure sales disguised as operations",
+      "has weak or missing benefits with unstable pay",
+      "requires unsupported analyst, technical, or enterprise claims",
+      "creates obvious coaching/life conflict"
+    ]
+  }
+}

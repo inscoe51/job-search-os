@@ -1,0 +1,184 @@
+{
+  "meta": {
+    "name": "second_codex_contract_integrity_pass_rccf",
+    "version": "1.0",
+    "purpose": "Tighten the first Codex scaffold pass for Job Search OS by verifying exact contract compliance, workflow/status compliance, integrity-rule compliance, and open-issue preservation using the approved MVP sources only.",
+    "stage": "post-first-scaffold-review_second-pass",
+    "artifact_type": "RCCF",
+    "preferred_behavior": [
+      "Do not restart product strategy.",
+      "Do not re-scaffold the app.",
+      "Do not expand scope beyond the approved MVP.",
+      "Do not add new routes, screens, or product features.",
+      "Make the minimum code changes required to achieve exact source-aligned compliance."
+    ]
+  },
+  "rule": {
+    "source_of_truth_policy": [
+      "Use only the approved files in data/foundation and docs as product truth for this pass.",
+      "Use the first-pass scaffold codebase itself as the implementation under review and repair.",
+      "If current code behavior is not traceable to an approved source, remove it, tighten it, or mark it as TODO rather than inventing logic.",
+      "If source ambiguity remains, preserve the ambiguity as unknown, gap, risk, comment, or TODO rather than normalizing it away."
+    ],
+    "approved_source_files": [
+      "data/foundation/01_profile.json",
+      "data/foundation/02_target_lanes.json",
+      "data/foundation/03_fit_rules.json",
+      "data/foundation/04_analysis_schema.json",
+      "data/foundation/05_workflow_rules.json",
+      "data/foundation/06_resume_direction_rules.json",
+      "data/foundation/07_integrity_rules.json",
+      "data/foundation/09_open_issues.md",
+      "docs/017_mvp_prd.md",
+      "docs/018_screen_blueprint.md",
+      "docs/019_agents.md",
+      "docs/020_codex_build_brief.md",
+      "docs/021_mvp_scaffold_plan.md",
+      "docs/022_first_build_prompt.md"
+    ],
+    "hard_constraints": [
+      "Do not add authentication, multi-user support, resume upload/parsing, resume generation, cover-letter generation, LinkedIn rewrite flows, dashboards, integrations, scraping, or speculative future features.",
+      "Do not broaden the rules engine beyond what is needed for exact alignment to the approved files.",
+      "Do not redesign the UI unless a small adjustment is required for contract or workflow correctness.",
+      "Do not refactor broadly if a localized fix is sufficient.",
+      "Do not rename approved statuses, tracker fields, analysis fields, or source-governed concepts for style reasons.",
+      "Do not overwrite original analysis context when updating tracker workflow state."
+    ],
+    "priority_order": [
+      "Exact analysis contract compliance",
+      "Exact tracker field and status-model compliance",
+      "Integrity and evidence-discipline compliance",
+      "Open-issue preservation",
+      "Tracker detail update behavior",
+      "Runtime verification",
+      "Only then: narrow cleanup needed to support those fixes"
+    ]
+  },
+  "context": {
+    "product_name": "Job Search OS",
+    "current_stage": "The first-pass MVP scaffold is directionally acceptable, but this pass exists only to verify and tighten exact compliance where the first review graded partial rather than full pass.",
+    "approved_core_loop": "Paste job -> analyze honestly -> choose lane/variant -> decide apply/hold/pass -> save to tracker -> review saved jobs",
+    "known_focus_modules": [
+      "lib/validation/schemas.ts",
+      "lib/analysis/analyze-job-posting.ts",
+      "lib/analysis/assemblers/job-analysis-assembler.ts",
+      "lib/analysis/evaluators/proof-and-gaps.ts",
+      "lib/tracker/analysis-to-tracker-record.ts",
+      "lib/tracker/status-mapping.ts",
+      "app/tracker/[jobId]/page.tsx",
+      "components/tracker/tracker-record-panel.tsx"
+    ],
+    "known_non_goals_to_enforce": [
+      "new screens or navigation",
+      "product polish beyond what is required for correctness",
+      "resume drafting",
+      "analytics expansion",
+      "integrations",
+      "future architecture work not required for this pass"
+    ]
+  },
+  "command": {
+    "primary_objective": "Inspect the first-pass scaffold implementation and make the minimum necessary code changes to achieve exact source-aligned contract, workflow, integrity, and open-issue compliance.",
+    "steps": [
+      "Read the approved source files first.",
+      "Inspect the current implementation files, especially the focus modules listed in this RCCF.",
+      "Verify that the analysis output shape exactly aligns to 04_analysis_schema.json.",
+      "Verify that tracker records, tracker fields, and status values exactly align to 05_workflow_rules.json.",
+      "Verify that resume routing and lane routing use only the approved lane and resume-direction sources.",
+      "Verify that 07_integrity_rules.json is actively enforced: unsupported claims blocked, unknowns preserved, gaps surfaced, and evidence discipline maintained.",
+      "Verify that 09_open_issues.md remains unresolved in behavior where required, especially date/title precision and other ambiguity-sensitive items.",
+      "Verify that tracker detail behavior updates workflow state only and preserves original analysis context.",
+      "Run build/test verification if the runtime supports it. If it does not, say so explicitly and still complete the source-aligned code pass.",
+      "Apply only the smallest justified fixes needed to correct mismatches.",
+      "Stop after the contract/integrity pass is complete."
+    ],
+    "checklist": [
+      {
+        "category": "Analysis contract",
+        "checks": [
+          "jobPosting validation/normalization respects approved enums and unknown handling",
+          "jobAnalysis contains all required output sections from 04_analysis_schema.json",
+          "field names and value shapes match approved schema rather than near-equivalents",
+          "nextAction values stay inside the approved action set"
+        ]
+      },
+      {
+        "category": "Tracker contract and statuses",
+        "checks": [
+          "tracker records contain the required fields from 05_workflow_rules.json",
+          "application statuses match the approved status model exactly",
+          "networking statuses match the approved status model exactly",
+          "status mapping is explicit and centralized",
+          "save/update flows do not create unofficial status values"
+        ]
+      },
+      {
+        "category": "Integrity and evidence discipline",
+        "checks": [
+          "unknown values remain unknown",
+          "missing evidence becomes a gap rather than an invented match",
+          "strong inference is not presented as confirmed proof",
+          "unsupported analyst, technical, enterprise, or implementation depth is not inflated",
+          "allowed tool claims stay inside approved resume-safe tools"
+        ]
+      },
+      {
+        "category": "Open-issue preservation",
+        "checks": [
+          "APW date/title discipline is not silently normalized beyond approved precision",
+          "target-lane order ambiguity is not falsely treated as fully resolved",
+          "hard-metric gaps stay visible where relevant",
+          "employer-facing unresolved items remain unresolved"
+        ]
+      },
+      {
+        "category": "Tracker detail behavior",
+        "checks": [
+          "record detail updates workflow fields only",
+          "original analysis context remains attached/visible",
+          "editing workflow state does not rerun or rewrite original analysis"
+        ]
+      },
+      {
+        "category": "Runtime verification",
+        "checks": [
+          "run next build if available",
+          "run vitest if available",
+          "report exact pass/fail status honestly"
+        ]
+      }
+    ],
+    "decision_logic": {
+      "acceptable_completion": [
+        "Exact contract mismatches are fixed or explicitly flagged with tight TODOs where runtime limitations prevent confirmation.",
+        "No unsupported scope is introduced.",
+        "The codebase remains a first-pass MVP scaffold, not a broadened product pass."
+      ],
+      "not_allowed": [
+        "broad feature work",
+        "new planning files",
+        "large design polish unrelated to correctness",
+        "new product logic not grounded in the approved sources"
+      ]
+    }
+  },
+  "format": {
+    "required_output_sections": [
+      "1. What was verified",
+      "2. Exact files changed",
+      "3. Contract fixes made",
+      "4. Integrity/open-issue fixes made",
+      "5. Runtime verification results",
+      "6. Remaining narrow TODOs only",
+      "7. Explicit do-not-build-yet reminder"
+    ],
+    "output_requirements": [
+      "Use direct implementation language, not strategy language.",
+      "Tie every fix back to a specific approved source or exact mismatch.",
+      "Keep the pass narrow and repair-oriented.",
+      "If runtime verification cannot run, say exactly why.",
+      "Do not propose broader roadmap work in this response."
+    ],
+    "final_line_rule": "End with one sentence stating either: 'Contract/integrity pass complete.' or 'Contract/integrity pass incomplete.'"
+  }
+}

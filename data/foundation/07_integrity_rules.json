@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "name": "integrity_rules",
+    "version": "1.0",
+    "generated_from": [
+      "08_base_resume_build_rccf.json",
+      "011_application_workflow_rccf.json",
+      "012_job_analysis_rccf.json",
+      "013_ideal_job_search_rccf.json",
+      "03_career_master_clean_populated_v2.json"
+    ],
+    "purpose": "Single truth-discipline layer. Every other file in the foundation pack should inherit these rules."
+  },
+  "evidenceLevels": {
+    "confirmed": {
+      "definition": "Directly supported by the canonical record and safe to use as a firm claim.",
+      "allowedBehavior": [
+        "may present as proven",
+        "may use in scoring as hard evidence",
+        "may use in resume-direction guidance"
+      ]
+    },
+    "strong_inference": {
+      "definition": "Reasonable inference from the record, but not a direct hard claim.",
+      "allowedBehavior": [
+        "may use as positioning support",
+        "must not present as direct proof",
+        "should be labeled carefully"
+      ]
+    },
+    "possible_needs_verification": {
+      "definition": "Directionally plausible but not locked enough for strong downstream use.",
+      "allowedBehavior": [
+        "may surface as verification item",
+        "should not drive strong-fit claims",
+        "should not be converted into confident resume language"
+      ]
+    },
+    "missing": {
+      "definition": "No preserved evidence exists.",
+      "allowedBehavior": [
+        "must be marked as a gap",
+        "must not be invented or implied"
+      ]
+    }
+  },
+  "coreRules": [
+    "Do not invent qualifications, metrics, tools, titles, or achievements.",
+    "Do not overstate fit.",
+    "Do not convert likely exposure into confirmed proficiency unless the source supports it.",
+    "Do not force weak parallels just to make a job appear like a match.",
+    "Separate confirmed facts from assumptions.",
+    "Mark missing tools, domain experience, metrics, or timeline certainty as gaps.",
+    "Prefer truth-based positioning over desperation-based inflation.",
+    "If a role fails key non-negotiables, say so clearly.",
+    "Use only confirmed, resume-safe tools in resume-direction outputs.",
+    "Every major claim should remain interview-defensible."
+  ],
+  "forbiddenBehaviors": [
+    "inventing compensation, benefits, or flexibility not stated in the posting",
+    "treating the APW end date as exact-day accurate before verification",
+    "upgrading support-level operations work into advanced enterprise RevOps ownership",
+    "describing implementation, analytics, or technical depth beyond the record",
+    "using contextual metrics as personal performance proof",
+    "writing around major risk flags to make a role look better than it is"
+  ],
+  "gapHandlingRules": [
+    "If the posting requests something not present in the profile, mark it as a gap rather than inventing coverage.",
+    "If the candidate has adjacent experience, classify it as a translation area instead of a hard match.",
+    "If the gap is central to the role, lower the fit verdict rather than softening the gap language."
+  ],
+  "timelineAndTitleRules": [
+    "Use 'Operations & Revenue Growth Manager' as the current normalized APW display title until the user locks a different master title.",
+    "Preserve 'Growth & Sales Manager' as an alias rather than erasing it.",
+    "Keep APW end date at month-normalized precision until the exact day is verified."
+  ]
+}
