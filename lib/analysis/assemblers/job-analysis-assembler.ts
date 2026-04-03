@@ -4,6 +4,7 @@ import { loadResumeDirectionRules } from "@/lib/domain/resume-direction/loader";
 import { loadWorkflowRules } from "@/lib/domain/workflow-rules/loader";
 import type { JobAnalysis, JobPosting } from "@/lib/validation/schemas";
 import { jobAnalysisSchema } from "@/lib/validation/schemas";
+import { deriveNextAction } from "@/lib/analysis/decision-routing";
 import { collectAnalysisEvidence } from "@/lib/analysis/evaluators/proof-and-gaps";
 import { evaluateNonNegotiables } from "@/lib/analysis/evaluators/non-negotiables";
 
@@ -116,51 +117,6 @@ function deriveFitVerdict(
   };
 }
 
-function deriveNextAction(
-  score: number,
-  evidence: ReturnType<typeof collectAnalysisEvidence>,
-  laneMatch: LaneMatchResult
-): JobAnalysis["nextAction"] {
-  const preApplyRequirements = evidence.gaps
-    .filter((gap) => gap.severity !== "low")
-    .map((gap) => gap.detail)
-    .slice(0, 4);
-
-  if (
-    score >= 80 &&
-    (laneMatch.level === "primary" || laneMatch.level === "secondary") &&
-    !evidence.riskFlags.some((flag) => flag.includes("Schedule conflict"))
-  ) {
-    return {
-      recommendation: "apply",
-      why: "The posting lands in the apply band and remains defensible against the approved profile and integrity rules.",
-      preApplyRequirements
-    };
-  }
-
-  if (score >= 65) {
-    return {
-      recommendation: "hold",
-      why: "The role is plausible but still needs sharper evidence, networking context, or variant discipline before applying.",
-      preApplyRequirements
-    };
-  }
-
-  if (score >= 50) {
-    return {
-      recommendation: "apply_with_caution",
-      why: "There is enough overlap to consider it selectively, but the fit stays conditional and should not be overstated.",
-      preApplyRequirements
-    };
-  }
-
-  return {
-    recommendation: "pass",
-    why: "The role remains weak-fit or too risk-heavy under the approved rules, so it should not absorb more time right now.",
-    preApplyRequirements
-  };
-}
-
 export function assembleJobAnalysis(
   posting: JobPosting,
   laneMatch: LaneMatchResult
@@ -171,7 +127,12 @@ export function assembleJobAnalysis(
   const nonNegotiables = evaluateNonNegotiables(posting, laneMatch);
   const score = computeScore(posting, laneMatch, evidence, nonNegotiables);
   const fitVerdict = deriveFitVerdict(score, laneMatch, evidence);
-  const nextAction = deriveNextAction(score, evidence, laneMatch);
+  const nextAction = deriveNextAction({
+    score,
+    laneMatchLevel: laneMatch.level,
+    gaps: evidence.gaps,
+    riskFlags: evidence.riskFlags
+  });
   const direction =
     resumeDirectionRules.laneDirections[laneMatch.resumeDirectionKey] ??
     resumeDirectionRules.laneDirections.operations_process_coordination;

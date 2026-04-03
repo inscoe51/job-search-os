@@ -9,9 +9,7 @@ describe("mapAnalysisSessionToTrackerRecord", () => {
   it("maps the analysis result into the approved tracker shape", () => {
     const repository = new MemoryTrackerRepository();
     const { session } = analyzeJobPosting(getSampleJobPosting());
-    const decision = createDefaultDecisionPayload(
-      session.analysis.nextAction.recommendation
-    );
+    const decision = createDefaultDecisionPayload(session);
     const record = mapAnalysisSessionToTrackerRecord(session, decision);
 
     repository.save(record);
@@ -28,9 +26,7 @@ describe("mapAnalysisSessionToTrackerRecord", () => {
       ...getSampleJobPosting(),
       company: null
     });
-    const decision = createDefaultDecisionPayload(
-      session.analysis.nextAction.recommendation
-    );
+    const decision = createDefaultDecisionPayload(session);
 
     expect(() => mapAnalysisSessionToTrackerRecord(session, decision)).toThrow(
       /Company is required/

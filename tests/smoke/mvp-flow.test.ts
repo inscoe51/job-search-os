@@ -18,9 +18,7 @@ describe("MVP smoke flow", () => {
       "Operations Coordinator"
     );
 
-    const decision = createDefaultDecisionPayload(
-      session.analysis.nextAction.recommendation
-    );
+    const decision = createDefaultDecisionPayload(session);
     const record = mapAnalysisSessionToTrackerRecord(session, decision);
     const savedSession = attachDecisionToSession(session, decision, record);
 

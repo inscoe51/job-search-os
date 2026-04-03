@@ -15,7 +15,10 @@ import {
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker-repository";
 import { mapAnalysisSessionToTrackerRecord } from "@/lib/tracker/analysis-to-tracker-record";
-import { createDefaultDecisionPayload } from "@/lib/tracker/status-mapping";
+import {
+  createDefaultDecisionPayload,
+  getDefaultDecisionRouting
+} from "@/lib/tracker/status-mapping";
 import type { AnalysisSession } from "@/lib/validation/schemas";
 import { analysisDecisionPayloadSchema } from "@/lib/validation/schemas";
 
@@ -31,8 +34,12 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
     []
   );
   const defaultPayload = useMemo(
-    () => createDefaultDecisionPayload(session.analysis.nextAction.recommendation),
-    [session.analysis.nextAction.recommendation]
+    () => createDefaultDecisionPayload(session),
+    [session]
+  );
+  const defaultRouting = useMemo(
+    () => getDefaultDecisionRouting(session),
+    [session]
   );
 
   const [selectedRecommendation, setSelectedRecommendation] = useState(
@@ -56,6 +63,8 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
   const [outcome, setOutcome] = useState(defaultPayload.outcome ?? "");
   const [notes, setNotes] = useState(defaultPayload.notes ?? "");
   const [error, setError] = useState<string | null>(null);
+  const applicationStatusIsOverridden =
+    applicationStatus !== defaultRouting.applicationStatus;
 
   function saveRecord(destination: "tracker" | "new-analysis") {
     try {
@@ -133,6 +142,18 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
               </option>
             ))}
           </select>
+          <div className="rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm leading-6 text-ink/75">
+            <p className="font-semibold text-ink">
+              System default: {applicationStatusLabels[defaultRouting.applicationStatus]}
+            </p>
+            <p>{defaultRouting.reason}</p>
+            {applicationStatusIsOverridden ? (
+              <p className="text-ink/60">
+                Manual override active. The system recommendation remains{" "}
+                {applicationStatusLabels[defaultRouting.applicationStatus]}.
+              </p>
+            ) : null}
+          </div>
         </Field>
 
         <Field label="Networking status">
