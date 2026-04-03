@@ -6,6 +6,7 @@ import { MemoryAnalysisSessionRepository } from "@/lib/repository/memory-analysi
 import { MemoryTrackerRepository } from "@/lib/repository/memory-tracker-repository";
 import { mapAnalysisSessionToTrackerRecord } from "@/lib/tracker/analysis-to-tracker-record";
 import { createDefaultDecisionPayload } from "@/lib/tracker/status-mapping";
+import type { JobPosting } from "@/lib/validation/schemas";
 
 describe("MVP smoke flow", () => {
   it("supports intake to analysis to save to tracker to workflow update", () => {
@@ -37,5 +38,41 @@ describe("MVP smoke flow", () => {
     expect(sessionRepository.get(session.sessionId)?.saveReadyTrackerRecord?.jobId).toBe(
       record.jobId
     );
+  });
+
+  it("keeps a caution-role smoke case on hold while still surfacing proof and cleaner review output", () => {
+    const cautionPosting: JobPosting = {
+      company: "MetricStack",
+      title: "Revenue Operations Associate",
+      location: "Remote",
+      pay: "$61,000 base salary",
+      benefits: "Medical, dental, and PTO",
+      schedule: "Standard weekday schedule",
+      workMode: "remote",
+      responsibilities: [
+        "Coordinate onboarding handoffs across revenue teams.",
+        "Maintain dashboard reporting and recurring metric rollups.",
+        "Support implementation readiness for new accounts."
+      ],
+      requirements: [
+        "Own reporting hygiene across dashboards and metrics.",
+        "Comfort with customer onboarding and implementation coordination.",
+        "Experience with CRM process support in a growing revenue operations team."
+      ],
+      tools: ["Salesforce"],
+      domain: "B2B SaaS",
+      leadershipSignals: ["Cross-functional reporting line"],
+      ambiguitySignals: ["Some process cleanup still in progress"],
+      sourceUrlOrIdentifier: "caution-smoke-case"
+    };
+
+    const { session } = analyzeJobPosting(cautionPosting);
+    const decision = createDefaultDecisionPayload(session);
+
+    expect(session.analysis.strongestMatchingProof.length).toBeGreaterThan(0);
+    expect(session.analysis.translationAreas.length).toBeLessThanOrEqual(3);
+    expect(session.analysis.gaps.filter((gap) => gap.gapType === "metric")).toHaveLength(1);
+    expect(session.analysis.nextAction.recommendation).toBe("hold");
+    expect(decision.applicationStatus).not.toBe("apply_now");
   });
 });

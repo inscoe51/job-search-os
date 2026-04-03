@@ -79,16 +79,24 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
         </Panel>
 
         <Panel title="Strongest proof">
-          <ul className="space-y-3">
-            {analysis.strongestMatchingProof.map((proof, index) => (
-              <li key={`${proof.claim}-${index}`} className="rounded-2xl bg-surface p-4">
-                <p className="text-sm leading-6 text-ink/80">{proof.claim}</p>
-                <p className="mt-2 text-xs uppercase tracking-[0.18em] text-ink/55">
-                  {proof.sourceType.replace(/_/g, " ")} | {proof.confidence.replace(/_/g, " ")}
-                </p>
-              </li>
-            ))}
-          </ul>
+          {analysis.strongestMatchingProof.length ? (
+            <ul className="space-y-3">
+              {analysis.strongestMatchingProof.map((proof, index) => (
+                <li key={`${proof.claim}-${index}`} className="rounded-2xl bg-surface p-4">
+                  <p className="text-sm leading-6 text-ink/80">{proof.claim}</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.18em] text-ink/55">
+                    {proof.sourceType.replace(/_/g, " ")} | {proof.confidence.replace(/_/g, " ")}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="rounded-2xl bg-surface px-4 py-3 text-sm leading-6 text-ink/65">
+              No defensible strongest proof surfaced from the approved candidate record for this
+              posting yet. Keep the role review anchored on gaps and translation areas instead of
+              filling this with assumed proof.
+            </p>
+          )}
         </Panel>
 
         <Panel title="Translation areas and gaps">
