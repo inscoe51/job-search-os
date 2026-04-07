@@ -7,7 +7,7 @@ import { getSampleJobPosting, analyzeJobPosting } from "@/lib/analysis/analyze-j
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import type { JobPosting } from "@/lib/validation/schemas";
 import { jobPostingSchema } from "@/lib/validation/schemas";
-import { parseListInput } from "@/lib/utils/text";
+import { normalizeOptionalText, parseListInput } from "@/lib/utils/text";
 
 type IntakeFormState = {
   company: string;
@@ -62,6 +62,27 @@ const emptyState = toFormState({
   sourceUrlOrIdentifier: null
 });
 
+export function buildJobPostingFromFormState(
+  formState: IntakeFormState
+): JobPosting {
+  return jobPostingSchema.parse({
+    company: normalizeOptionalText(formState.company),
+    title: formState.title.trim(),
+    location: normalizeOptionalText(formState.location),
+    pay: normalizeOptionalText(formState.pay),
+    benefits: normalizeOptionalText(formState.benefits),
+    schedule: normalizeOptionalText(formState.schedule),
+    workMode: formState.workMode,
+    responsibilities: parseListInput(formState.responsibilities),
+    requirements: parseListInput(formState.requirements),
+    tools: parseListInput(formState.tools),
+    domain: normalizeOptionalText(formState.domain),
+    leadershipSignals: parseListInput(formState.leadershipSignals),
+    ambiguitySignals: parseListInput(formState.ambiguitySignals),
+    sourceUrlOrIdentifier: normalizeOptionalText(formState.sourceUrlOrIdentifier)
+  });
+}
+
 export function JobIntakeForm() {
   const router = useRouter();
   const sessionRepository = useMemo(
@@ -95,22 +116,7 @@ export function JobIntakeForm() {
     event.preventDefault();
 
     try {
-      const jobPosting = jobPostingSchema.parse({
-        company: formState.company || null,
-        title: formState.title.trim(),
-        location: formState.location || null,
-        pay: formState.pay || null,
-        benefits: formState.benefits || null,
-        schedule: formState.schedule || null,
-        workMode: formState.workMode,
-        responsibilities: parseListInput(formState.responsibilities),
-        requirements: parseListInput(formState.requirements),
-        tools: parseListInput(formState.tools),
-        domain: formState.domain || null,
-        leadershipSignals: parseListInput(formState.leadershipSignals),
-        ambiguitySignals: parseListInput(formState.ambiguitySignals),
-        sourceUrlOrIdentifier: formState.sourceUrlOrIdentifier || null
-      });
+      const jobPosting = buildJobPostingFromFormState(formState);
       const { session } = analyzeJobPosting(jobPosting);
 
       sessionRepository.save(session);
