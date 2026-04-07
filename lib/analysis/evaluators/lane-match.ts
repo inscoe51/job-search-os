@@ -1,4 +1,5 @@
 import type { LaneMatchResult, LaneMatchLevel } from "@/lib/domain/analysis-session";
+import { loadResumeDirectionRules } from "@/lib/domain/resume-direction/loader";
 import { loadTargetLanes } from "@/lib/domain/target-lanes/loader";
 import { loadWorkflowRules } from "@/lib/domain/workflow-rules/loader";
 import type { TargetLane } from "@/lib/domain/target-lanes/types";
@@ -69,13 +70,22 @@ export function resolveLaneResumeDirection(
   resumeDirection?: string
 ): string {
   const workflowRules = loadWorkflowRules();
-
-  return (
-    resumeDirection ??
+  const resumeDirectionRules = loadResumeDirectionRules();
+  const workflowResumeDirection =
     Object.entries(workflowRules.resumeVariantRouting).find(([, laneIds]) =>
       laneIds.includes(laneId)
-    )?.[0] ??
-    "operations_process_coordination"
+    )?.[0] ?? null;
+  const resolvedResumeDirection = resumeDirection ?? workflowResumeDirection;
+
+  if (
+    resolvedResumeDirection &&
+    resumeDirectionRules.laneDirections[resolvedResumeDirection]
+  ) {
+    return resolvedResumeDirection;
+  }
+
+  throw new Error(
+    `Lane "${laneId}" does not map to an approved resume direction key across the target lane, workflow, and resume direction sources.`
   );
 }
 

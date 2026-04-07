@@ -133,9 +133,13 @@ export function assembleJobAnalysis(
     gaps: evidence.gaps,
     riskFlags: evidence.riskFlags
   });
-  const direction =
-    resumeDirectionRules.laneDirections[laneMatch.resumeDirectionKey] ??
-    resumeDirectionRules.laneDirections.operations_process_coordination;
+  const direction = resumeDirectionRules.laneDirections[laneMatch.resumeDirectionKey];
+
+  if (!direction) {
+    throw new Error(
+      `Resume direction "${laneMatch.resumeDirectionKey}" is not approved in the resume direction rules.`
+    );
+  }
   const allowedToolClaims = profile.confirmedTools.filter((tool) =>
     resumeDirectionRules.allowedToolClaims.includes(tool) &&
     posting.tools.some(

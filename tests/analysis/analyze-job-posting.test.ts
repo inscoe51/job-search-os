@@ -114,4 +114,43 @@ describe("analyzeJobPosting", () => {
       "Unresolved posting ambiguity: Role priorities may shift as the support model settles."
     );
   });
+
+  it("uses approved resume-direction keys for source lanes whose inline keys need normalization", () => {
+    const posting: JobPosting = {
+      company: "LaunchRail",
+      title: "Customer Onboarding Operations Coordinator",
+      location: "Remote",
+      pay: "$61,000 base",
+      benefits: "Medical and 401(k)",
+      schedule: "Weekday schedule",
+      workMode: "remote",
+      responsibilities: [
+        "Coordinate onboarding handoffs and customer launch readiness.",
+        "Maintain CRM workflow visibility across internal teams."
+      ],
+      requirements: [
+        "Experience with onboarding coordination and lifecycle communication."
+      ],
+      tools: [],
+      domain: "B2B SaaS",
+      leadershipSignals: ["Structured reporting line"],
+      ambiguitySignals: [],
+      sourceUrlOrIdentifier: "onboarding-routing-case"
+    };
+
+    const { session, laneMatch } = analyzeJobPosting(posting);
+
+    expect(laneMatch.resumeDirectionKey).toBe(
+      "implementation_onboarding_coordination"
+    );
+    expect(["implementation_coordination", "customer_onboarding_ops"]).toContain(
+      laneMatch.laneId
+    );
+    expect(session.analysis.resumeDirection.recommendedVariant).toBe(
+      "implementation_onboarding_coordination"
+    );
+    expect(session.analysis.resumeDirection.recommendedVariant).not.toBe(
+      "operations_process_coordination"
+    );
+  });
 });
