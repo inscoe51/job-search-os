@@ -72,6 +72,49 @@ function scheduleStatus(posting: JobPosting): NonNegotiableStatus {
   return "pass";
 }
 
+function coachingFutureSupportStatus(posting: JobPosting): NonNegotiableStatus {
+  const combined = [
+    posting.location,
+    posting.schedule,
+    ...posting.requirements,
+    ...posting.responsibilities
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  if (!combined && posting.workMode === "unknown") {
+    return "unknown";
+  }
+
+  if (
+    includesNormalized(combined, "relocation") ||
+    includesNormalized(combined, "relocate")
+  ) {
+    return "fail";
+  }
+
+  if (
+    posting.workMode === "remote" ||
+    includesNormalized(posting.location, "remote") ||
+    includesNormalized(combined, "fully remote")
+  ) {
+    return "pass";
+  }
+
+  if (
+    posting.workMode === "hybrid" ||
+    includesNormalized(posting.location, "hybrid")
+  ) {
+    return "partial";
+  }
+
+  if (posting.workMode === "onsite") {
+    return posting.location ? "partial" : "fail";
+  }
+
+  return "unknown";
+}
+
 function roleAlignmentStatus(
   laneMatch: LaneMatchResult,
   posting: JobPosting
@@ -120,7 +163,7 @@ export function evaluateNonNegotiables(posting: JobPosting, laneMatch: LaneMatch
     stableCompensationStatus(posting.pay),
     benefitsStatus(posting.benefits),
     scheduleStatus(posting),
-    scheduleStatus(posting),
+    coachingFutureSupportStatus(posting),
     chaosRiskStatus(posting)
   ];
 
@@ -138,6 +181,6 @@ export function evaluateNonNegotiables(posting: JobPosting, laneMatch: LaneMatch
             : status === "fail"
               ? "Conflicts with the approved rule set and should lower confidence."
               : "Unknown from the posting. Preserve as unresolved."
-    });
+    };
   });
 }
