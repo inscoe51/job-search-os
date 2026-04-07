@@ -43,4 +43,19 @@ describe("AnalysisReview", () => {
     expect(markup).toContain("Work mode");
     expect(markup).toContain(">Unknown<");
   });
+
+  it("renders preserved posting ambiguity without inventing stronger proof", () => {
+    const { session } = analyzeJobPosting({
+      ...getSampleJobPosting(),
+      ambiguitySignals: ["Priorities may shift as the team structure settles."]
+    });
+    const markup = renderToStaticMarkup(
+      React.createElement(AnalysisReview, { session })
+    );
+
+    expect(markup).toContain("Signals and risks");
+    expect(markup).toContain(
+      "Unresolved posting ambiguity: Priorities may shift as the team structure settles."
+    );
+  });
 });

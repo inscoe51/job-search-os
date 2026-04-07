@@ -260,6 +260,10 @@ export function collectAnalysisEvidence(
     riskFlags.add("Founder-led chaos without infrastructure");
   }
 
+  for (const ambiguitySignal of posting.ambiguitySignals) {
+    riskFlags.add(`Unresolved posting ambiguity: ${ambiguitySignal}`);
+  }
+
   if (
     [...posting.requirements, ...posting.responsibilities].some(
       (item) =>

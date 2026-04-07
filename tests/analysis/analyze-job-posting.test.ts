@@ -87,4 +87,31 @@ describe("analyzeJobPosting", () => {
     expect(metricGaps).toHaveLength(1);
     expect(metricGaps[0]?.detail).toContain("Multiple posting lines");
   });
+
+  it("preserves non-keyword ambiguity signals as visible risk flags", () => {
+    const posting: JobPosting = {
+      company: "SignalOps",
+      title: "Operations Coordinator",
+      location: "Hybrid",
+      pay: "$60,000 base",
+      benefits: "Medical and PTO",
+      schedule: "Weekday schedule",
+      workMode: "hybrid",
+      responsibilities: ["Coordinate customer handoffs across internal teams."],
+      requirements: ["Keep workflow documentation current."],
+      tools: [],
+      domain: "Service operations",
+      leadershipSignals: ["Clear reporting line"],
+      ambiguitySignals: [
+        "Role priorities may shift as the support model settles."
+      ],
+      sourceUrlOrIdentifier: "ambiguity-preservation-case"
+    };
+
+    const { session } = analyzeJobPosting(posting);
+
+    expect(session.analysis.riskFlags).toContain(
+      "Unresolved posting ambiguity: Role priorities may shift as the support model settles."
+    );
+  });
 });

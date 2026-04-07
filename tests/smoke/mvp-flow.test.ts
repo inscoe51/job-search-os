@@ -72,6 +72,9 @@ describe("MVP smoke flow", () => {
     expect(session.analysis.strongestMatchingProof.length).toBeGreaterThan(0);
     expect(session.analysis.translationAreas.length).toBeLessThanOrEqual(3);
     expect(session.analysis.gaps.filter((gap) => gap.gapType === "metric")).toHaveLength(1);
+    expect(session.analysis.riskFlags).toContain(
+      "Unresolved posting ambiguity: Some process cleanup still in progress"
+    );
     expect(session.analysis.nextAction.recommendation).toBe("hold");
     expect(decision.applicationStatus).not.toBe("apply_now");
   });
