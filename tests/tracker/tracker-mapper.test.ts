@@ -32,4 +32,37 @@ describe("mapAnalysisSessionToTrackerRecord", () => {
       /Company is required/
     );
   });
+
+  it("normalizes invalid save-step statuses instead of letting the save step override the routing truth", () => {
+    const { session } = analyzeJobPosting(getSampleJobPosting());
+    const passSession = {
+      ...session,
+      score: 41,
+      matchedLaneLevel: "stretch" as const,
+      analysis: {
+        ...session.analysis,
+        fitVerdict: {
+          ...session.analysis.fitVerdict,
+          rating: "low_fit" as const
+        },
+        nextAction: {
+          ...session.analysis.nextAction,
+          recommendation: "pass" as const
+        }
+      }
+    };
+    const record = mapAnalysisSessionToTrackerRecord(passSession, {
+      ...createDefaultDecisionPayload(passSession),
+      selectedRecommendation: "pass",
+      applicationStatus: "interviewing",
+      networkingStatus: "message_sent"
+    });
+
+    expect(record.applicationStatus).toBe("passed");
+    expect(record.networkingStatus).toBe("not_applicable");
+    expect(record.fitScore).toBe(passSession.score);
+    expect(record.resumeVariant).toBe(
+      passSession.analysis.resumeDirection.recommendedVariant
+    );
+  });
 });

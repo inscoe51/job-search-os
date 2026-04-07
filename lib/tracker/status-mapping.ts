@@ -11,6 +11,16 @@ export type DefaultDecisionRouting = {
   reason: string;
 };
 
+const saveApplicationStatusOptions = {
+  apply: ["apply_now", "applied"],
+  apply_with_caution: ["apply_now", "applied"],
+  hold: ["hold_for_networking", "hold_for_variant"],
+  pass: ["passed"]
+} as const satisfies Record<
+  AnalysisDecisionPayload["selectedRecommendation"],
+  ApplicationStatus[]
+>;
+
 function shouldHoldForVariant(session: AnalysisSession) {
   return (
     session.analysis.fitVerdict.rating === "stretch_fit" ||
@@ -82,5 +92,35 @@ export function createDefaultDecisionPayload(
     interviewStage: null,
     outcome: null,
     notes: null
+  };
+}
+
+export function getSaveApplicationStatusOptions(
+  recommendation: AnalysisDecisionPayload["selectedRecommendation"]
+): ApplicationStatus[] {
+  return [...saveApplicationStatusOptions[recommendation]];
+}
+
+export function normalizeDecisionPayloadForSave(
+  session: AnalysisSession,
+  payload: AnalysisDecisionPayload
+): AnalysisDecisionPayload {
+  const defaultPayload = createDefaultDecisionPayload(session);
+  const allowedApplicationStatuses = getSaveApplicationStatusOptions(
+    payload.selectedRecommendation
+  );
+  const applicationStatus = allowedApplicationStatuses.includes(payload.applicationStatus)
+    ? payload.applicationStatus
+    : defaultPayload.applicationStatus;
+
+  const networkingStatus =
+    payload.selectedRecommendation === "pass"
+      ? "not_applicable"
+      : payload.networkingStatus;
+
+  return {
+    ...payload,
+    applicationStatus,
+    networkingStatus
   };
 }

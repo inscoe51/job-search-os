@@ -1,5 +1,6 @@
 import type { AnalysisSession, AnalysisDecisionPayload, TrackerRecord } from "@/lib/validation/schemas";
 import { trackerRecordSchema } from "@/lib/validation/schemas";
+import { normalizeDecisionPayloadForSave } from "@/lib/tracker/status-mapping";
 import { nowIso } from "@/lib/utils/dates";
 import { createId } from "@/lib/utils/ids";
 
@@ -7,6 +8,7 @@ export function mapAnalysisSessionToTrackerRecord(
   session: AnalysisSession,
   decisionPayload: AnalysisDecisionPayload
 ): TrackerRecord {
+  const normalizedDecision = normalizeDecisionPayloadForSave(session, decisionPayload);
   const timestamp = nowIso();
   const source =
     session.normalizedJobPosting.sourceUrlOrIdentifier ??
@@ -29,13 +31,13 @@ export function mapAnalysisSessionToTrackerRecord(
     fitVerdict: session.analysis.fitVerdict.rating,
     lifeFitLabel: session.analysis.fitVerdict.lifeFitLabel,
     resumeVariant: session.analysis.resumeDirection.recommendedVariant,
-    networkingStatus: decisionPayload.networkingStatus,
-    applicationStatus: decisionPayload.applicationStatus,
-    applicationDate: decisionPayload.applicationDate,
-    followUpDate: decisionPayload.followUpDate,
-    interviewStage: decisionPayload.interviewStage,
-    outcome: decisionPayload.outcome,
-    notes: decisionPayload.notes,
+    networkingStatus: normalizedDecision.networkingStatus,
+    applicationStatus: normalizedDecision.applicationStatus,
+    applicationDate: normalizedDecision.applicationDate,
+    followUpDate: normalizedDecision.followUpDate,
+    interviewStage: normalizedDecision.interviewStage,
+    outcome: normalizedDecision.outcome,
+    notes: normalizedDecision.notes,
     savedAt: timestamp,
     updatedAt: timestamp,
     analysisContext: {

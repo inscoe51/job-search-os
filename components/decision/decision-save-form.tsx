@@ -8,7 +8,6 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { attachDecisionToSession } from "@/lib/domain/analysis-session";
 import {
   applicationStatusLabels,
-  applicationStatusValues,
   networkingStatusLabels,
   networkingStatusValues
 } from "@/lib/domain/tracker-status";
@@ -17,7 +16,9 @@ import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker
 import { mapAnalysisSessionToTrackerRecord } from "@/lib/tracker/analysis-to-tracker-record";
 import {
   createDefaultDecisionPayload,
-  getDefaultDecisionRouting
+  getDefaultDecisionRouting,
+  getSaveApplicationStatusOptions,
+  normalizeDecisionPayloadForSave
 } from "@/lib/tracker/status-mapping";
 import type { AnalysisSession } from "@/lib/validation/schemas";
 import { analysisDecisionPayloadSchema } from "@/lib/validation/schemas";
@@ -65,19 +66,26 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
   const [error, setError] = useState<string | null>(null);
   const applicationStatusIsOverridden =
     applicationStatus !== defaultRouting.applicationStatus;
+  const allowedApplicationStatuses = useMemo(
+    () => getSaveApplicationStatusOptions(selectedRecommendation),
+    [selectedRecommendation]
+  );
 
   function saveRecord(destination: "tracker" | "new-analysis") {
     try {
-      const payload = analysisDecisionPayloadSchema.parse({
-        selectedRecommendation,
-        applicationStatus,
-        networkingStatus,
-        applicationDate: applicationDate || null,
-        followUpDate: followUpDate || null,
-        interviewStage: interviewStage || null,
-        outcome: outcome || null,
-        notes: notes || null
-      });
+      const payload = normalizeDecisionPayloadForSave(
+        session,
+        analysisDecisionPayloadSchema.parse({
+          selectedRecommendation,
+          applicationStatus,
+          networkingStatus,
+          applicationDate: applicationDate || null,
+          followUpDate: followUpDate || null,
+          interviewStage: interviewStage || null,
+          outcome: outcome || null,
+          notes: notes || null
+        })
+      );
       const trackerRecord = mapAnalysisSessionToTrackerRecord(session, payload);
       const savedSession = attachDecisionToSession(session, payload, trackerRecord);
 
@@ -114,11 +122,19 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
         <Field label="Recommended next action">
           <select
             value={selectedRecommendation}
-            onChange={(event) =>
-              setSelectedRecommendation(
-                event.target.value as typeof selectedRecommendation
-              )
-            }
+            onChange={(event) => {
+              const nextRecommendation = event.target.value as typeof selectedRecommendation;
+              const nextAllowedStatuses = getSaveApplicationStatusOptions(nextRecommendation);
+              setSelectedRecommendation(nextRecommendation);
+
+              if (!nextAllowedStatuses.includes(applicationStatus)) {
+                setApplicationStatus(nextAllowedStatuses[0] ?? applicationStatus);
+              }
+
+              if (nextRecommendation === "pass") {
+                setNetworkingStatus("not_applicable");
+              }
+            }}
             className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
           >
             <option value="apply">Apply</option>
@@ -136,7 +152,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             }
             className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
           >
-            {applicationStatusValues.map((value) => (
+            {allowedApplicationStatuses.map((value) => (
               <option key={value} value={value}>
                 {applicationStatusLabels[value]}
               </option>
@@ -162,6 +178,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             onChange={(event) =>
               setNetworkingStatus(event.target.value as typeof networkingStatus)
             }
+            disabled={selectedRecommendation === "pass"}
             className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
           >
             {networkingStatusValues.map((value) => (

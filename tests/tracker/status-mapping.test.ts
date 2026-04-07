@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import { analyzeJobPosting, getSampleJobPosting } from "@/lib/analysis/analyze-job-posting";
 import {
   createDefaultDecisionPayload,
-  getDefaultDecisionRouting
+  getDefaultDecisionRouting,
+  getSaveApplicationStatusOptions,
+  normalizeDecisionPayloadForSave
 } from "@/lib/tracker/status-mapping";
 import type { AnalysisSession } from "@/lib/validation/schemas";
 
@@ -134,5 +136,50 @@ describe("default tracker status mapping", () => {
     expect(createDefaultDecisionPayload(session).applicationStatus).toBe(
       "passed"
     );
+  });
+
+  it("limits save-step application statuses to the approved options for each recommendation", () => {
+    expect(getSaveApplicationStatusOptions("apply")).toEqual([
+      "apply_now",
+      "applied"
+    ]);
+    expect(getSaveApplicationStatusOptions("apply_with_caution")).toEqual([
+      "apply_now",
+      "applied"
+    ]);
+    expect(getSaveApplicationStatusOptions("hold")).toEqual([
+      "hold_for_networking",
+      "hold_for_variant"
+    ]);
+    expect(getSaveApplicationStatusOptions("pass")).toEqual(["passed"]);
+  });
+
+  it("normalizes invalid save-step status combinations before save", () => {
+    const session = buildSession({
+      score: 41,
+      matchedLaneLevel: "stretch",
+      analysis: {
+        fitVerdict: {
+          rating: "low_fit"
+        },
+        nextAction: {
+          recommendation: "pass"
+        }
+      }
+    });
+
+    const normalized = normalizeDecisionPayloadForSave(session, {
+      selectedRecommendation: "pass",
+      applicationStatus: "interviewing",
+      networkingStatus: "message_sent",
+      applicationDate: null,
+      followUpDate: null,
+      interviewStage: null,
+      outcome: null,
+      notes: "Manual override attempt"
+    });
+
+    expect(normalized.applicationStatus).toBe("passed");
+    expect(normalized.networkingStatus).toBe("not_applicable");
   });
 });
