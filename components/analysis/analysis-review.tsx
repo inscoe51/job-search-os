@@ -10,6 +10,32 @@ type AnalysisReviewProps = {
 
 export function AnalysisReview({ session }: AnalysisReviewProps) {
   const { analysis } = session;
+  const jobSnapshotItems = [
+    { label: "Company", value: displayUnknown(analysis.jobSnapshot.company) },
+    { label: "Role", value: analysis.jobSnapshot.title },
+    {
+      label: "Normalized role type",
+      value: analysis.jobSnapshot.normalizedRoleType
+    },
+    { label: "Location", value: displayUnknown(analysis.jobSnapshot.location) },
+    { label: "Pay", value: displayUnknown(analysis.jobSnapshot.pay) },
+    {
+      label: "Work mode",
+      value: displayUnknown(
+        analysis.jobSnapshot.workMode === "unknown"
+          ? null
+          : analysis.jobSnapshot.workMode.replace(/_/g, " ")
+      )
+    },
+    {
+      label: "Recommended lane",
+      value: analysis.positioningStrategy.recommendedLane
+    },
+    {
+      label: "Resume variant",
+      value: analysis.resumeDirection.recommendedVariant
+    }
+  ];
 
   return (
     <div className="space-y-6">
@@ -33,11 +59,19 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <SummaryCard label="Company" value={analysis.jobSnapshot.company ?? "Unknown"} />
-          <SummaryCard label="Role" value={analysis.jobSnapshot.title} />
-          <SummaryCard label="Lane" value={analysis.positioningStrategy.recommendedLane} />
-          <SummaryCard label="Resume Variant" value={analysis.resumeDirection.recommendedVariant} />
+        <div className="mt-6 rounded-2xl bg-surface p-5">
+          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Job snapshot</p>
+          <p className="mt-3 text-sm leading-7 text-ink/80">
+            {analysis.jobSnapshot.summary}
+          </p>
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {jobSnapshotItems.map((item) => (
+              <SummaryCard key={item.label} label={item.label} value={item.value} />
+            ))}
+          </div>
+          <p className="mt-4 text-sm leading-6 text-ink/65">
+            Unknown posting details stay visible as unknown instead of being filled in by assumption.
+          </p>
         </div>
 
         <div className="mt-6 rounded-2xl bg-surface p-5">
@@ -172,6 +206,10 @@ function SummaryCard({ label, value }: { label: string; value: string }) {
       <p className="mt-2 text-sm font-semibold leading-6 text-ink/85">{value}</p>
     </div>
   );
+}
+
+function displayUnknown(value: string | null): string {
+  return value ?? "Unknown";
 }
 
 function Panel({

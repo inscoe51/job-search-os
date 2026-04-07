@@ -23,4 +23,24 @@ describe("AnalysisReview", () => {
     expect(markup).toContain("No defensible strongest proof surfaced");
     expect(markup).toContain("instead of filling this with assumed proof");
   });
+
+  it("keeps unknown job snapshot details visible in the review output", () => {
+    const { session } = analyzeJobPosting({
+      ...getSampleJobPosting(),
+      company: null,
+      location: null,
+      pay: null,
+      workMode: "unknown"
+    });
+    const markup = renderToStaticMarkup(
+      React.createElement(AnalysisReview, { session })
+    );
+
+    expect(markup).toContain("Job snapshot");
+    expect(markup).toContain("Unknown posting details stay visible as unknown");
+    expect(markup).toContain("Location");
+    expect(markup).toContain("Pay");
+    expect(markup).toContain("Work mode");
+    expect(markup).toContain(">Unknown<");
+  });
 });
