@@ -7,9 +7,8 @@ import { useRouter } from "next/navigation";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { attachDecisionToSession } from "@/lib/domain/analysis-session";
 import {
-  applicationStatusLabels,
-  networkingStatusLabels,
-  networkingStatusValues
+  getApplicationStatusLabel,
+  networkingStatusOptions
 } from "@/lib/domain/tracker-status";
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker-repository";
@@ -154,19 +153,19 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           >
             {allowedApplicationStatuses.map((value) => (
               <option key={value} value={value}>
-                {applicationStatusLabels[value]}
+                {getApplicationStatusLabel(value)}
               </option>
             ))}
           </select>
           <div className="rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm leading-6 text-ink/75">
             <p className="font-semibold text-ink">
-              System default: {applicationStatusLabels[defaultRouting.applicationStatus]}
+              System default: {getApplicationStatusLabel(defaultRouting.applicationStatus)}
             </p>
             <p>{defaultRouting.reason}</p>
             {applicationStatusIsOverridden ? (
               <p className="text-ink/60">
                 Manual override active. The system recommendation remains{" "}
-                {applicationStatusLabels[defaultRouting.applicationStatus]}.
+                {getApplicationStatusLabel(defaultRouting.applicationStatus)}.
               </p>
             ) : null}
           </div>
@@ -181,9 +180,9 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             disabled={selectedRecommendation === "pass"}
             className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
           >
-            {networkingStatusValues.map((value) => (
-              <option key={value} value={value}>
-                {networkingStatusLabels[value]}
+            {networkingStatusOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>

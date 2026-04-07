@@ -1,8 +1,12 @@
+import type {
+  ApplicationStatus,
+  NetworkingStatus
+} from "@/lib/domain/tracker-status";
 import type { TrackerRecord } from "@/lib/validation/schemas";
 
 export type TrackerFilters = {
-  applicationStatus: string;
-  networkingStatus: string;
+  applicationStatus: "all" | ApplicationStatus;
+  networkingStatus: "all" | NetworkingStatus;
   laneMatched: string;
   resumeVariant: string;
   workflowFocus: "all" | "follow_up_due" | "current_stage";

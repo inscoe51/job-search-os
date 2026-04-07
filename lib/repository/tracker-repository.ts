@@ -1,17 +1,18 @@
+import type {
+  ApplicationStatus,
+  NetworkingStatus
+} from "@/lib/domain/tracker-status";
 import type { TrackerRecord } from "@/lib/validation/schemas";
 
-export type TrackerWorkflowUpdate = Partial<
-  Pick<
-    TrackerRecord,
-    | "networkingStatus"
-    | "applicationStatus"
-    | "applicationDate"
-    | "followUpDate"
-    | "interviewStage"
-    | "outcome"
-    | "notes"
-  >
->;
+export type TrackerWorkflowUpdate = {
+  networkingStatus?: NetworkingStatus;
+  applicationStatus?: ApplicationStatus;
+  applicationDate?: TrackerRecord["applicationDate"];
+  followUpDate?: TrackerRecord["followUpDate"];
+  interviewStage?: TrackerRecord["interviewStage"];
+  outcome?: TrackerRecord["outcome"];
+  notes?: TrackerRecord["notes"];
+};
 
 const trackerWorkflowUpdateFields = [
   "networkingStatus",

@@ -3,10 +3,8 @@
 import type { ReactNode } from "react";
 
 import {
-  applicationStatusLabels,
-  applicationStatusValues,
-  networkingStatusLabels,
-  networkingStatusValues
+  applicationStatusOptions,
+  networkingStatusOptions
 } from "@/lib/domain/tracker-status";
 import type { TrackerFilters } from "@/lib/tracker/tracker-filters";
 
@@ -32,9 +30,9 @@ export function TrackerFiltersPanel({
           className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
         >
           <option value="all">All</option>
-          {applicationStatusValues.map((value) => (
-            <option key={value} value={value}>
-              {applicationStatusLabels[value]}
+          {applicationStatusOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>
@@ -47,9 +45,9 @@ export function TrackerFiltersPanel({
           className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
         >
           <option value="all">All</option>
-          {networkingStatusValues.map((value) => (
-            <option key={value} value={value}>
-              {networkingStatusLabels[value]}
+          {networkingStatusOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>

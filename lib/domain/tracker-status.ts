@@ -26,11 +26,6 @@ export const networkingStatusValues = [
 export type ApplicationStatus = (typeof applicationStatusValues)[number];
 export type NetworkingStatus = (typeof networkingStatusValues)[number];
 
-export const trackerStatusModel = {
-  applicationStatuses: applicationStatusValues,
-  networkingStatuses: networkingStatusValues
-} as const;
-
 export const applicationStatusLabels: Record<ApplicationStatus, string> = {
   new: "New",
   analyzing: "Analyzing",
@@ -55,3 +50,36 @@ export const networkingStatusLabels: Record<NetworkingStatus, string> = {
   no_response: "No response",
   not_applicable: "Not applicable"
 };
+
+export const applicationStatusOptions = applicationStatusValues.map((value) => ({
+  value,
+  label: applicationStatusLabels[value]
+})) as ReadonlyArray<{
+  value: ApplicationStatus;
+  label: string;
+}>;
+
+export const networkingStatusOptions = networkingStatusValues.map((value) => ({
+  value,
+  label: networkingStatusLabels[value]
+})) as ReadonlyArray<{
+  value: NetworkingStatus;
+  label: string;
+}>;
+
+export const trackerStatusModel = {
+  applicationStatuses: applicationStatusValues,
+  networkingStatuses: networkingStatusValues,
+  applicationStatusLabels,
+  networkingStatusLabels,
+  applicationStatusOptions,
+  networkingStatusOptions
+} as const;
+
+export function getApplicationStatusLabel(value: ApplicationStatus): string {
+  return trackerStatusModel.applicationStatusLabels[value];
+}
+
+export function getNetworkingStatusLabel(value: NetworkingStatus): string {
+  return trackerStatusModel.networkingStatusLabels[value];
+}

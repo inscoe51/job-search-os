@@ -6,10 +6,8 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
 import {
-  applicationStatusLabels,
-  applicationStatusValues,
-  networkingStatusLabels,
-  networkingStatusValues
+  applicationStatusOptions,
+  networkingStatusOptions
 } from "@/lib/domain/tracker-status";
 import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker-repository";
 import type { TrackerWorkflowUpdate } from "@/lib/repository/tracker-repository";
@@ -103,9 +101,9 @@ export function TrackerRecordPanel({
                 }
                 className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
               >
-                {applicationStatusValues.map((value) => (
-                  <option key={value} value={value}>
-                    {applicationStatusLabels[value]}
+                {applicationStatusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>
@@ -120,9 +118,9 @@ export function TrackerRecordPanel({
                 }
                 className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
               >
-                {networkingStatusValues.map((value) => (
-                  <option key={value} value={value}>
-                    {networkingStatusLabels[value]}
+                {networkingStatusOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>

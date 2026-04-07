@@ -1,6 +1,6 @@
 import {
-  applicationStatusLabels,
-  networkingStatusLabels,
+  getApplicationStatusLabel,
+  getNetworkingStatusLabel,
   type ApplicationStatus,
   type NetworkingStatus
 } from "@/lib/domain/tracker-status";
@@ -40,9 +40,9 @@ const toneMap: Record<string, string> = {
 export function StatusBadge({ value, kind = "application" }: StatusBadgeProps) {
   const label =
     kind === "application"
-      ? applicationStatusLabels[value as ApplicationStatus] ?? value
+      ? getApplicationStatusLabel(value as ApplicationStatus) ?? value
       : kind === "networking"
-        ? networkingStatusLabels[value as NetworkingStatus] ?? value
+        ? getNetworkingStatusLabel(value as NetworkingStatus) ?? value
         : value.replace(/_/g, " ");
 
   return (
