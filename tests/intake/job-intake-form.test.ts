@@ -86,5 +86,7 @@ describe("NewAnalysisPage", () => {
     expect(formMarkup).toContain(">Hybrid<");
     expect(formMarkup).toContain(">Onsite<");
     expect(formMarkup).toContain("Run first-pass analysis");
+    expect(formMarkup).toContain("Load seeded sample");
+    expect(formMarkup).toContain("demo data and still runs through the same validation and session flow");
   });
 });

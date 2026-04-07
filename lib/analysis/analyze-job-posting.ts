@@ -1,8 +1,8 @@
-import sampleJobPostingJson from "@/data/fixtures/sample-job-posting.json";
 import { createAnalysisSession, type LaneMatchResult } from "@/lib/domain/analysis-session";
 import { normalizeJobPosting } from "@/lib/analysis/normalizers/job-posting-normalizer";
 import { resolveLaneMatch } from "@/lib/analysis/evaluators/lane-match";
 import { assembleJobAnalysis } from "@/lib/analysis/assemblers/job-analysis-assembler";
+import { loadSampleJobPostingFixture } from "@/lib/demo/sample-job-posting";
 import { jobPostingSchema, type JobPosting } from "@/lib/validation/schemas";
 import { createId } from "@/lib/utils/ids";
 
@@ -26,7 +26,7 @@ export function analyzeJobPosting(input: JobPosting) {
 }
 
 export function getSampleJobPosting(): JobPosting {
-  return jobPostingSchema.parse(sampleJobPostingJson);
+  return loadSampleJobPostingFixture();
 }
 
 export type { LaneMatchResult };

@@ -3,7 +3,8 @@
 import { useMemo, useState, startTransition, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
-import { getSampleJobPosting, analyzeJobPosting } from "@/lib/analysis/analyze-job-posting";
+import { analyzeJobPosting } from "@/lib/analysis/analyze-job-posting";
+import { loadSampleJobPostingFixture } from "@/lib/demo/sample-job-posting";
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import type { JobPosting } from "@/lib/validation/schemas";
 import { jobPostingSchema } from "@/lib/validation/schemas";
@@ -103,7 +104,7 @@ export function JobIntakeForm() {
   }
 
   function loadSampleFixture() {
-    setFormState(toFormState(getSampleJobPosting()));
+    setFormState(toFormState(loadSampleJobPostingFixture()));
     setError(null);
   }
 
@@ -319,7 +320,7 @@ export function JobIntakeForm() {
         <ul className="space-y-3 text-sm leading-6 text-ink/75">
           <li>Only the approved profile and rule files drive the analysis.</li>
           <li>Unknown posting fields stay unresolved instead of being invented.</li>
-          <li>The seeded sample fixture is separate from the foundation truth files.</li>
+          <li>The seeded sample fixture lives in demo data and still runs through the same validation and session flow.</li>
           <li>
             Open issues like APW title/date precision and hard metrics remain visible
             as unresolved credibility constraints.
