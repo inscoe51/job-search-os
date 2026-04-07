@@ -4,6 +4,7 @@ import type {
   TrackerRepository,
   TrackerWorkflowUpdate
 } from "@/lib/repository/tracker-repository";
+import { sanitizeTrackerWorkflowUpdate } from "@/lib/repository/tracker-repository";
 import { nowIso } from "@/lib/utils/dates";
 
 const TRACKER_STORAGE_KEY = "job-search-os:tracker-records";
@@ -55,9 +56,11 @@ export class BrowserTrackerRepository implements TrackerRepository {
       return null;
     }
 
+    const sanitizedUpdates = sanitizeTrackerWorkflowUpdate(updates);
+
     const updatedRecord = trackerRecordSchema.parse({
       ...existing,
-      ...updates,
+      ...sanitizedUpdates,
       updatedAt: nowIso()
     });
 

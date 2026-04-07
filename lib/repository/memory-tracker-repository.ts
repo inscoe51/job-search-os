@@ -3,6 +3,7 @@ import type {
   TrackerRepository,
   TrackerWorkflowUpdate
 } from "@/lib/repository/tracker-repository";
+import { sanitizeTrackerWorkflowUpdate } from "@/lib/repository/tracker-repository";
 import { trackerRecordSchema } from "@/lib/validation/schemas";
 import { nowIso } from "@/lib/utils/dates";
 
@@ -29,9 +30,11 @@ export class MemoryTrackerRepository implements TrackerRepository {
       return null;
     }
 
+    const sanitizedUpdates = sanitizeTrackerWorkflowUpdate(updates);
+
     const next = trackerRecordSchema.parse({
       ...current,
-      ...updates,
+      ...sanitizedUpdates,
       updatedAt: nowIso()
     });
     this.records = [next, ...this.records.filter((record) => record.jobId !== jobId)];
