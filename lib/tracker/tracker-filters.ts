@@ -5,6 +5,7 @@ export type TrackerFilters = {
   networkingStatus: string;
   laneMatched: string;
   resumeVariant: string;
+  workflowFocus: "all" | "follow_up_due" | "current_stage";
   sortBy: "newest" | "fitScore" | "followUpDate";
 };
 
@@ -13,8 +14,30 @@ export const defaultTrackerFilters: TrackerFilters = {
   networkingStatus: "all",
   laneMatched: "all",
   resumeVariant: "all",
+  workflowFocus: "all",
   sortBy: "newest"
 };
+
+function isFollowUpDue(record: TrackerRecord): boolean {
+  if (record.applicationStatus === "follow_up_due") {
+    return true;
+  }
+
+  if (!record.followUpDate) {
+    return false;
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  return record.followUpDate <= today;
+}
+
+function isCurrentStage(record: TrackerRecord): boolean {
+  return (
+    Boolean(record.interviewStage) ||
+    record.applicationStatus === "interviewing" ||
+    record.applicationStatus === "offer"
+  );
+}
 
 export function filterAndSortTrackerRecords(
   records: TrackerRecord[],
@@ -43,6 +66,14 @@ export function filterAndSortTrackerRecords(
       filters.resumeVariant !== "all" &&
       record.resumeVariant !== filters.resumeVariant
     ) {
+      return false;
+    }
+
+    if (filters.workflowFocus === "follow_up_due" && !isFollowUpDue(record)) {
+      return false;
+    }
+
+    if (filters.workflowFocus === "current_stage" && !isCurrentStage(record)) {
       return false;
     }
 

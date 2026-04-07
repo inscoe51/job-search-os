@@ -1,16 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
-import {
-  applicationStatusLabels,
-  applicationStatusValues,
-  networkingStatusLabels,
-  networkingStatusValues
-} from "@/lib/domain/tracker-status";
+import { TrackerFiltersPanel } from "@/components/tracker/tracker-filters";
 import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker-repository";
 import {
   defaultTrackerFilters,
@@ -20,14 +15,20 @@ import {
 import type { TrackerRecord } from "@/lib/validation/schemas";
 import { formatDateLabel } from "@/lib/utils/dates";
 
-export function TrackerTable() {
+type TrackerTableProps = {
+  initialRecords?: TrackerRecord[];
+};
+
+export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
   const repository = useMemo(() => createBrowserTrackerRepository(), []);
-  const [records, setRecords] = useState<TrackerRecord[]>([]);
+  const [records, setRecords] = useState<TrackerRecord[]>(initialRecords ?? []);
   const [filters, setFilters] = useState<TrackerFilters>(defaultTrackerFilters);
 
   useEffect(() => {
-    setRecords(repository.list());
-  }, [repository]);
+    if (!initialRecords) {
+      setRecords(repository.list());
+    }
+  }, [initialRecords, repository]);
 
   const filteredRecords = useMemo(
     () => filterAndSortTrackerRecords(records, filters),
@@ -57,105 +58,21 @@ export function TrackerTable() {
         <p className="mt-2 text-sm leading-6 text-ink/70">
           Review saved roles, filter for action, and open one record for workflow updates.
         </p>
+        <p className="mt-2 text-sm leading-6 text-ink/70">
+          Keep the list practical: focus on status, follow-up timing, and which saved role needs attention this week.
+        </p>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-          <FilterField label="Application status">
-            <select
-              value={filters.applicationStatus}
-              onChange={(event) =>
-                setFilters((current) => ({
-                  ...current,
-                  applicationStatus: event.target.value
-                }))
-              }
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
-            >
-              <option value="all">All</option>
-              {applicationStatusValues.map((value) => (
-                <option key={value} value={value}>
-                  {applicationStatusLabels[value]}
-                </option>
-              ))}
-            </select>
-          </FilterField>
-
-          <FilterField label="Networking status">
-            <select
-              value={filters.networkingStatus}
-              onChange={(event) =>
-                setFilters((current) => ({
-                  ...current,
-                  networkingStatus: event.target.value
-                }))
-              }
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
-            >
-              <option value="all">All</option>
-              {networkingStatusValues.map((value) => (
-                <option key={value} value={value}>
-                  {networkingStatusLabels[value]}
-                </option>
-              ))}
-            </select>
-          </FilterField>
-
-          <FilterField label="Lane matched">
-            <select
-              value={filters.laneMatched}
-              onChange={(event) =>
-                setFilters((current) => ({
-                  ...current,
-                  laneMatched: event.target.value
-                }))
-              }
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
-            >
-              <option value="all">All</option>
-              {laneOptions.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </FilterField>
-
-          <FilterField label="Resume variant">
-            <select
-              value={filters.resumeVariant}
-              onChange={(event) =>
-                setFilters((current) => ({
-                  ...current,
-                  resumeVariant: event.target.value
-                }))
-              }
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
-            >
-              <option value="all">All</option>
-              {resumeVariantOptions.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </FilterField>
-
-          <FilterField label="Sort by">
-            <select
-              value={filters.sortBy}
-              onChange={(event) =>
-                setFilters((current) => ({
-                  ...current,
-                  sortBy: event.target.value as TrackerFilters["sortBy"]
-                }))
-              }
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
-            >
-              <option value="newest">Newest</option>
-              <option value="fitScore">Fit score</option>
-              <option value="followUpDate">Follow-up date</option>
-            </select>
-          </FilterField>
-        </div>
+        <TrackerFiltersPanel
+          filters={filters}
+          laneOptions={laneOptions}
+          resumeVariantOptions={resumeVariantOptions}
+          onChange={(updates) =>
+            setFilters((current) => ({
+              ...current,
+              ...updates
+            }))
+          }
+        />
       </section>
 
       <section className="overflow-hidden rounded-3xl border border-ink/10 bg-panel shadow-card">
@@ -215,20 +132,5 @@ export function TrackerTable() {
         </div>
       </section>
     </div>
-  );
-}
-
-function FilterField({
-  label,
-  children
-}: {
-  label: string;
-  children: ReactNode;
-}) {
-  return (
-    <label className="block space-y-2">
-      <span className="text-sm font-semibold">{label}</span>
-      {children}
-    </label>
   );
 }
