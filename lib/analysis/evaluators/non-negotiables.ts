@@ -95,7 +95,7 @@ function coachingFutureSupportStatus(posting: JobPosting): NonNegotiableStatus {
 
   if (
     posting.workMode === "remote" ||
-    includesNormalized(posting.location, "remote") ||
+    includesNormalized(posting.location ?? "", "remote") ||
     includesNormalized(combined, "fully remote")
   ) {
     return "pass";
@@ -103,7 +103,7 @@ function coachingFutureSupportStatus(posting: JobPosting): NonNegotiableStatus {
 
   if (
     posting.workMode === "hybrid" ||
-    includesNormalized(posting.location, "hybrid")
+    includesNormalized(posting.location ?? "", "hybrid")
   ) {
     return "partial";
   }

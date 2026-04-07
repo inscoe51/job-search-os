@@ -10,15 +10,21 @@ import type { AnalysisSession } from "@/lib/validation/schemas";
 
 type AnalysisSessionViewProps = {
   sessionId: string;
+  initialSession?: AnalysisSession | null;
 };
 
-export function AnalysisSessionView({ sessionId }: AnalysisSessionViewProps) {
+export function AnalysisSessionView({
+  sessionId,
+  initialSession = null
+}: AnalysisSessionViewProps) {
   const repository = useMemo(() => createBrowserAnalysisSessionRepository(), []);
-  const [session, setSession] = useState<AnalysisSession | null>(null);
+  const [session, setSession] = useState<AnalysisSession | null>(initialSession);
 
   useEffect(() => {
-    setSession(repository.get(sessionId));
-  }, [repository, sessionId]);
+    if (!initialSession) {
+      setSession(repository.get(sessionId));
+    }
+  }, [initialSession, repository, sessionId]);
 
   if (!session) {
     return (

@@ -7,14 +7,15 @@ import { jobPostingSchema, type JobPosting } from "@/lib/validation/schemas";
 import { createId } from "@/lib/utils/ids";
 
 export function analyzeJobPosting(input: JobPosting) {
-  const normalizedJobPosting = normalizeJobPosting(input);
+  const intakeInput = normalizeJobPosting(jobPostingSchema.parse(input));
+  const normalizedJobPosting = normalizeJobPosting(intakeInput);
   const laneMatch = resolveLaneMatch(normalizedJobPosting);
   const { analysis, score } = assembleJobAnalysis(normalizedJobPosting, laneMatch);
 
   return {
     session: createAnalysisSession({
       sessionId: createId("session"),
-      intakeInput: input,
+      intakeInput,
       normalizedJobPosting,
       analysis,
       score,
