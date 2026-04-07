@@ -18,16 +18,22 @@ import { formatDateLabel } from "@/lib/utils/dates";
 
 type TrackerRecordPanelProps = {
   jobId: string;
+  initialRecord?: TrackerRecord | null;
 };
 
-export function TrackerRecordPanel({ jobId }: TrackerRecordPanelProps) {
+export function TrackerRecordPanel({
+  jobId,
+  initialRecord = null
+}: TrackerRecordPanelProps) {
   const repository = useMemo(() => createBrowserTrackerRepository(), []);
-  const [record, setRecord] = useState<TrackerRecord | null>(null);
+  const [record, setRecord] = useState<TrackerRecord | null>(initialRecord);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setRecord(repository.get(jobId));
-  }, [jobId, repository]);
+    if (!initialRecord) {
+      setRecord(repository.get(jobId));
+    }
+  }, [initialRecord, jobId, repository]);
 
   if (!record) {
     return (
@@ -82,6 +88,10 @@ export function TrackerRecordPanel({ jobId }: TrackerRecordPanelProps) {
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <div className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
           <h3 className="text-xl font-semibold">Workflow updates</h3>
+          <p className="mt-2 text-sm leading-6 text-ink/70">
+            Edit only the approved tracker workflow fields here. Saved fit, lane,
+            and resume-direction context remains read-only below.
+          </p>
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <Field label="Application status">
               <select
@@ -191,6 +201,10 @@ export function TrackerRecordPanel({ jobId }: TrackerRecordPanelProps) {
         <div className="space-y-6">
           <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
             <h3 className="text-xl font-semibold">Original analysis context</h3>
+            <p className="mt-2 text-sm leading-6 text-ink/70">
+              Read-only saved analysis context from the original review. Updating
+              workflow state here does not rerun or rewrite fit analysis.
+            </p>
             <p className="mt-4 text-sm leading-7 text-ink/80">{record.analysisContext.summary}</p>
             <div className="mt-4">
               <StatusBadge value={record.analysisContext.recommendation} kind="fit" />
