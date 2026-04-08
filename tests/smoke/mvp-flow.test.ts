@@ -40,6 +40,51 @@ describe("MVP smoke flow", () => {
     );
   });
 
+  it("supports opening a saved tracker record and updating workflow fields without rerunning analysis", () => {
+    const sessionRepository = new MemoryAnalysisSessionRepository();
+    const trackerRepository = new MemoryTrackerRepository();
+    const { session } = analyzeJobPosting(getSampleJobPosting());
+    const decision = createDefaultDecisionPayload(session);
+    const record = mapAnalysisSessionToTrackerRecord(session, decision);
+    const savedSession = attachDecisionToSession(session, decision, record);
+
+    sessionRepository.save(savedSession);
+    trackerRepository.save(record);
+
+    const openedRecord = trackerRepository.get(
+      sessionRepository.get(savedSession.sessionId)?.saveReadyTrackerRecord?.jobId ?? ""
+    );
+
+    expect(openedRecord?.jobId).toBe(record.jobId);
+    expect(openedRecord?.analysisContext).toEqual(record.analysisContext);
+
+    const updated = trackerRepository.update(record.jobId, {
+      networkingStatus: "message_sent",
+      applicationStatus: "follow_up_due",
+      applicationDate: "2026-04-02",
+      followUpDate: "2026-04-05",
+      interviewStage: "Recruiter screen",
+      outcome: "awaiting_response",
+      notes: "Opened from tracker detail and updated after outreach."
+    });
+
+    const reopenedRecord = trackerRepository.get(record.jobId);
+    const preservedSession = sessionRepository.get(savedSession.sessionId);
+
+    expect(updated?.networkingStatus).toBe("message_sent");
+    expect(updated?.applicationStatus).toBe("follow_up_due");
+    expect(updated?.applicationDate).toBe("2026-04-02");
+    expect(updated?.followUpDate).toBe("2026-04-05");
+    expect(updated?.interviewStage).toBe("Recruiter screen");
+    expect(updated?.outcome).toBe("awaiting_response");
+    expect(updated?.notes).toBe("Opened from tracker detail and updated after outreach.");
+    expect(reopenedRecord?.analysisContext).toEqual(record.analysisContext);
+    expect(reopenedRecord?.fitScore).toBe(record.fitScore);
+    expect(reopenedRecord?.resumeVariant).toBe(record.resumeVariant);
+    expect(preservedSession?.analysis).toEqual(session.analysis);
+    expect(preservedSession?.saveReadyTrackerRecord).toEqual(record);
+  });
+
   it("keeps a caution-role smoke case on hold while still surfacing proof and cleaner review output", () => {
     const cautionPosting: JobPosting = {
       company: "MetricStack",
