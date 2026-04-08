@@ -92,7 +92,7 @@
         "KPI structure",
         "campaign operations"
       ],
-      "resumeDirection": "revops_support_careful"
+      "resumeDirection": "sales_ops_process_support"
     },
     {
       "laneId": "enablement_support",
@@ -132,7 +132,7 @@
         "issue resolution",
         "handoff clarity"
       ],
-      "resumeDirection": "onboarding_coordination"
+      "resumeDirection": "implementation_onboarding_coordination"
     }
   ],
   "adjacentLanes": [

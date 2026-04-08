@@ -22,7 +22,7 @@ describe("resolveLaneMatch", () => {
     );
   });
 
-  it("normalizes source lanes onto approved resume-direction keys before matching", () => {
+  it("keeps source lanes on approved canonical resume-direction keys", () => {
     const lanes = loadTargetLanes();
     const revopsLane = lanes.secondaryLanes.find((lane) => lane.laneId === "revops_support");
     const onboardingLane = lanes.secondaryLanes.find(
@@ -35,9 +35,12 @@ describe("resolveLaneMatch", () => {
     );
   });
 
-  it("fails visibly when a lane cannot resolve to an approved resume-direction key", () => {
-    expect(() => resolveLaneResumeDirection("account_commercial_support")).toThrow(
-      /does not map to an approved resume direction key/
+  it("resolves workflow-routed adjacent lanes to approved canonical keys", () => {
+    expect(resolveLaneResumeDirection("account_commercial_support")).toBe(
+      "account_support_coordination"
+    );
+    expect(resolveLaneResumeDirection("marketing_ops_coordination")).toBe(
+      "marketing_ops_support_careful"
     );
   });
 });

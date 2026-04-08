@@ -115,7 +115,7 @@ describe("analyzeJobPosting", () => {
     );
   });
 
-  it("uses approved resume-direction keys for source lanes whose inline keys need normalization", () => {
+  it("uses canonical approved resume-direction keys for reconciled source lanes", () => {
     const posting: JobPosting = {
       company: "LaunchRail",
       title: "Customer Onboarding Operations Coordinator",

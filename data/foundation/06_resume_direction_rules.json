@@ -135,6 +135,44 @@
         "formal learning-and-development leadership",
         "unsupported enterprise enablement claims"
       ]
+    },
+    "account_support_coordination": {
+      "summaryFocus": [
+        "client communication",
+        "commercial coordination",
+        "documentation",
+        "follow-through"
+      ],
+      "emphasize": [
+        "account coordination support",
+        "proposal and bid support",
+        "customer communication clarity",
+        "commercial follow-up discipline"
+      ],
+      "deEmphasize": [
+        "quota-carrying sales ownership",
+        "hunter-style business development framing",
+        "strategic account executive language"
+      ]
+    },
+    "marketing_ops_support_careful": {
+      "summaryFocus": [
+        "campaign coordination",
+        "CRM workflow support",
+        "process consistency",
+        "documentation"
+      ],
+      "emphasize": [
+        "campaign operations support",
+        "lead-flow and follow-up workflow coordination",
+        "CRM organization",
+        "repeatable process maintenance"
+      ],
+      "deEmphasize": [
+        "full-funnel demand generation ownership",
+        "advanced lifecycle analytics",
+        "senior marketing operations framing"
+      ]
     }
   },
   "decisionHeuristics": {
