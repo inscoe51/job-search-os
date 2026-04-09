@@ -45,6 +45,11 @@ export function TrackerRecordPanel({
   }
 
   function updateRecord(updates: TrackerWorkflowUpdate) {
+    if (!record) {
+      setError("The record could not be updated.");
+      return;
+    }
+
     const updated = repository.update(record.jobId, updates);
 
     if (!updated) {

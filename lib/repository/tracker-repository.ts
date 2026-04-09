@@ -29,10 +29,32 @@ export function sanitizeTrackerWorkflowUpdate(
 ): TrackerWorkflowUpdate {
   const sanitized: TrackerWorkflowUpdate = {};
 
-  for (const field of trackerWorkflowUpdateFields) {
-    if (field in updates) {
-      sanitized[field] = updates[field];
-    }
+  if ("networkingStatus" in updates) {
+    sanitized.networkingStatus = updates.networkingStatus;
+  }
+
+  if ("applicationStatus" in updates) {
+    sanitized.applicationStatus = updates.applicationStatus;
+  }
+
+  if ("applicationDate" in updates) {
+    sanitized.applicationDate = updates.applicationDate;
+  }
+
+  if ("followUpDate" in updates) {
+    sanitized.followUpDate = updates.followUpDate;
+  }
+
+  if ("interviewStage" in updates) {
+    sanitized.interviewStage = updates.interviewStage;
+  }
+
+  if ("outcome" in updates) {
+    sanitized.outcome = updates.outcome;
+  }
+
+  if ("notes" in updates) {
+    sanitized.notes = updates.notes;
   }
 
   return sanitized;

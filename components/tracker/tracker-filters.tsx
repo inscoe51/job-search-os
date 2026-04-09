@@ -3,7 +3,9 @@
 import type { ReactNode } from "react";
 
 import {
+  type ApplicationStatus,
   applicationStatusOptions,
+  type NetworkingStatus,
   networkingStatusOptions
 } from "@/lib/domain/tracker-status";
 import type { TrackerFilters } from "@/lib/tracker/tracker-filters";
@@ -21,12 +23,24 @@ export function TrackerFiltersPanel({
   resumeVariantOptions,
   onChange
 }: TrackerFiltersPanelProps) {
+  function handleApplicationStatusChange(value: string) {
+    onChange({
+      applicationStatus: value as "all" | ApplicationStatus
+    });
+  }
+
+  function handleNetworkingStatusChange(value: string) {
+    onChange({
+      networkingStatus: value as "all" | NetworkingStatus
+    });
+  }
+
   return (
     <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
       <FilterField label="Application status">
         <select
           value={filters.applicationStatus}
-          onChange={(event) => onChange({ applicationStatus: event.target.value })}
+          onChange={(event) => handleApplicationStatusChange(event.target.value)}
           className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
         >
           <option value="all">All</option>
@@ -41,7 +55,7 @@ export function TrackerFiltersPanel({
       <FilterField label="Networking status">
         <select
           value={filters.networkingStatus}
-          onChange={(event) => onChange({ networkingStatus: event.target.value })}
+          onChange={(event) => handleNetworkingStatusChange(event.target.value)}
           className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
         >
           <option value="all">All</option>
