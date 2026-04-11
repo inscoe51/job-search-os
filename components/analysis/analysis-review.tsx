@@ -66,28 +66,26 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
+      <section className="app-panel p-6 sm:p-7">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
-              Screen 2
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold">Analysis Review</h2>
-            <p className="mt-2 text-sm leading-6 text-ink/70">
+            <p className="app-kicker">Screen 2</p>
+            <h2 className="mt-2 text-2xl font-semibold text-ink">Analysis Review</h2>
+            <p className="mt-2 text-sm leading-6 text-ink/72">
               Review the rules-based output before saving anything into the tracker.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <StatusBadge value={analysis.fitVerdict.rating} kind="fit" />
             <StatusBadge value={analysis.fitVerdict.lifeFitLabel} kind="life" />
-            <span className="inline-flex rounded-full bg-ink/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em]">
+            <span className="inline-flex rounded-full border border-line bg-surface/78 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-ink">
               Score {session.score}
             </span>
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl bg-surface p-5">
-          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">At a glance</p>
+        <div className="app-subpanel mt-6 p-5">
+          <p className="app-kicker">At a glance</p>
           <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {quickViewItems.map((item) => (
               <SummaryCard
@@ -100,23 +98,23 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl bg-surface p-5">
+        <div className="app-subpanel mt-6 p-5">
           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Verdict summary</p>
+              <p className="app-kicker">Verdict summary</p>
               <p className="mt-3 text-sm leading-7 text-ink/80">
                 {analysis.fitVerdict.summary}
               </p>
             </div>
             <div className="md:max-w-xs">
-              <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Why this matters</p>
+              <p className="app-kicker">Why this matters</p>
               <p className="mt-3 text-sm leading-6 text-ink/70">{analysis.nextAction.why}</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl bg-surface p-5">
-          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Job snapshot</p>
+        <div className="app-subpanel mt-6 p-5">
+          <p className="app-kicker">Job snapshot</p>
           <p className="mt-3 text-sm leading-7 text-ink/80">
             {analysis.jobSnapshot.summary}
           </p>
@@ -146,7 +144,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
             />
             <Link
               href="/new-analysis"
-              className="inline-flex rounded-full border border-ink/15 px-4 py-2 text-sm font-semibold no-underline"
+              className="app-button-secondary px-4 py-2"
             >
               Start another analysis
             </Link>
@@ -175,7 +173,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
         <Panel title="Non-negotiables">
           <ul className="space-y-3">
             {analysis.nonNegotiablesCheck.map((item) => (
-              <li key={item.rule} className="rounded-2xl bg-surface p-4">
+              <li key={item.rule} className="app-card p-4">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-sm font-semibold">{item.rule}</p>
                   <StatusBadge value={item.status} kind="fit" />
@@ -205,7 +203,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
           {analysis.strongestMatchingProof.length ? (
             <ul className="space-y-3">
               {analysis.strongestMatchingProof.map((proof, index) => (
-                <li key={`${proof.claim}-${index}`} className="rounded-2xl bg-surface p-4">
+                <li key={`${proof.claim}-${index}`} className="app-card p-4">
                   <p className="text-sm leading-6 text-ink/80">{proof.claim}</p>
                   <p className="mt-2 text-xs uppercase tracking-[0.18em] text-ink/55">
                     {proof.sourceType.replace(/_/g, " ")} | {proof.confidence.replace(/_/g, " ")}
@@ -214,7 +212,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
               ))}
             </ul>
           ) : (
-            <p className="rounded-2xl bg-surface px-4 py-3 text-sm leading-6 text-ink/65">
+            <p className="app-card px-4 py-3 text-sm leading-6 text-ink/65">
               No defensible strongest proof surfaced from the approved candidate record for this
               posting yet. Keep the role review anchored on gaps and translation areas instead of
               filling this with assumed proof.
@@ -233,7 +231,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
             />
             <ul className="space-y-3">
               {analysis.gaps.map((gap, index) => (
-                <li key={`${gap.detail}-${index}`} className="rounded-2xl bg-surface p-4">
+                <li key={`${gap.detail}-${index}`} className="app-card p-4">
                   <p className="text-sm font-semibold">{gap.gapType}</p>
                   <p className="mt-2 text-sm leading-6 text-ink/75">{gap.detail}</p>
                   <p className="mt-2 text-xs uppercase tracking-[0.18em] text-ink/55">
@@ -259,8 +257,8 @@ function SummaryCard({
   valueClassName?: string;
 }) {
   return (
-    <div className="rounded-2xl bg-surface p-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-ink/55">{label}</p>
+    <div className="app-card p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{label}</p>
       <p className={`mt-2 text-sm font-semibold leading-6 text-ink/85 ${valueClassName ?? ""}`}>
         {value}
       </p>
@@ -280,8 +278,8 @@ function Panel({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
-      <h3 className="text-xl font-semibold">{title}</h3>
+    <section className="app-panel p-6">
+      <h3 className="text-xl font-semibold text-ink">{title}</h3>
       <div className="mt-4">{children}</div>
     </section>
   );
@@ -298,17 +296,17 @@ function SignalList({
 }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-[0.25em] text-ink/55">{title}</p>
+      <p className="app-kicker">{title}</p>
       {items.length ? (
         <ul className="mt-3 space-y-2">
           {items.map((item) => (
-            <li key={item} className="rounded-2xl bg-surface px-4 py-3 text-sm leading-6 text-ink/80">
+            <li key={item} className="app-card px-4 py-3 text-sm leading-6 text-ink/80">
               {item}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-3 rounded-2xl bg-surface px-4 py-3 text-sm text-ink/65">
+        <p className="app-card mt-3 px-4 py-3 text-sm text-ink/65">
           {empty ?? "No items recorded."}
         </p>
       )}

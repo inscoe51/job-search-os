@@ -103,26 +103,22 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
   }
 
   return (
-    <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
+    <section className="app-panel p-6 sm:p-7">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
-            Screen 3
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold">Decision + Save</h2>
-          <p className="mt-2 text-sm leading-6 text-ink/70">
+          <p className="app-kicker">Screen 3</p>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">Decision + Save</h2>
+          <p className="mt-2 text-sm leading-6 text-ink/72">
             Carry the analysis forward without re-entering the key fit data.
           </p>
         </div>
         <StatusBadge value={session.analysis.nextAction.recommendation} kind="fit" />
       </div>
 
-      <div className="mt-6 rounded-2xl border border-ink/10 bg-surface p-5">
+      <div className="app-subpanel mt-6 p-5">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
-              Read-only analysis handoff
-            </p>
+            <p className="app-kicker">Read-only analysis handoff</p>
             <p className="mt-2 text-sm leading-6 text-ink/75">
               This summary comes from the completed analysis and carries forward unchanged into the
               save step.
@@ -151,7 +147,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
       </div>
 
       <div className="mt-6">
-        <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Editable workflow fields</p>
+        <p className="app-kicker">Editable workflow fields</p>
         <p className="mt-2 text-sm leading-6 text-ink/70">
           Adjust only the approved save-time workflow fields below. The fit analysis, lane, and
           resume direction stay locked to the saved review.
@@ -175,7 +171,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
                 setNetworkingStatus("not_applicable");
               }
             }}
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           >
             <option value="apply">Apply</option>
             <option value="apply_with_caution">Apply with caution</option>
@@ -190,7 +186,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             onChange={(event) =>
               setApplicationStatus(event.target.value as typeof applicationStatus)
             }
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           >
             {allowedApplicationStatuses.map((value) => (
               <option key={value} value={value}>
@@ -198,7 +194,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
               </option>
             ))}
           </select>
-          <div className="rounded-2xl border border-ink/10 bg-surface px-4 py-3 text-sm leading-6 text-ink/75">
+          <div className="app-card px-4 py-3 text-sm leading-6 text-ink/75">
             <p className="font-semibold text-ink">
               System default: {getApplicationStatusLabel(defaultRouting.applicationStatus)}
             </p>
@@ -219,7 +215,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
               setNetworkingStatus(event.target.value as typeof networkingStatus)
             }
             disabled={selectedRecommendation === "pass"}
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           >
             {networkingStatusOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -234,7 +230,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             type="date"
             value={applicationDate}
             onChange={(event) => setApplicationDate(event.target.value)}
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           />
         </Field>
 
@@ -243,7 +239,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             type="date"
             value={followUpDate}
             onChange={(event) => setFollowUpDate(event.target.value)}
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           />
         </Field>
 
@@ -252,7 +248,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             value={interviewStage}
             onChange={(event) => setInterviewStage(event.target.value)}
             placeholder="Recruiter screen"
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           />
         </Field>
 
@@ -261,7 +257,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             value={outcome}
             onChange={(event) => setOutcome(event.target.value)}
             placeholder="Awaiting response"
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           />
         </Field>
       </div>
@@ -271,12 +267,12 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           rows={4}
           value={notes}
           onChange={(event) => setNotes(event.target.value)}
-          className="mt-2 w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+          className="app-input mt-2"
         />
       </Field>
 
       {error ? (
-        <p className="mt-4 rounded-2xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger">
+        <p className="mt-4 rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
           {error}
         </p>
       ) : null}
@@ -285,20 +281,20 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
         <button
           type="button"
           onClick={() => saveRecord("tracker")}
-          className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white"
+          className="app-button-primary"
         >
           Save and open tracker
         </button>
         <button
           type="button"
           onClick={() => saveRecord("new-analysis")}
-          className="rounded-full border border-ink/15 px-5 py-3 text-sm font-semibold"
+          className="app-button-secondary"
         >
           Save and start another analysis
         </button>
         <Link
           href="/tracker"
-          className="rounded-full border border-ink/15 px-5 py-3 text-sm font-semibold no-underline"
+          className="app-button-secondary"
         >
           Cancel to tracker
         </Link>
@@ -316,7 +312,7 @@ function Field({
 }) {
   return (
     <label className="block space-y-2">
-      <span className="text-sm font-semibold">{label}</span>
+      <span className="app-label">{label}</span>
       {children}
     </label>
   );
@@ -324,8 +320,8 @@ function Field({
 
 function SummaryCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-panel px-4 py-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-ink/55">{label}</p>
+    <div className="app-card px-4 py-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{label}</p>
       <p className="mt-2 text-sm font-semibold leading-6 text-ink/85">{value}</p>
     </div>
   );

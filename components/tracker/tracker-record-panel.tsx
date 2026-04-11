@@ -63,14 +63,12 @@ export function TrackerRecordPanel({
 
   return (
     <div className="space-y-6">
-      <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
+      <section className="app-panel p-6 sm:p-7">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
-              Screen 5
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold">Tracker Record Detail</h2>
-            <p className="mt-2 text-sm leading-6 text-ink/70">
+            <p className="app-kicker">Screen 5</p>
+            <h2 className="mt-2 text-2xl font-semibold text-ink">Tracker Record Detail</h2>
+            <p className="mt-2 text-sm leading-6 text-ink/72">
               Update workflow state without rerunning the original fit analysis.
             </p>
           </div>
@@ -101,10 +99,10 @@ export function TrackerRecordPanel({
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <div className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
-          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Editable workflow fields</p>
-          <h3 className="text-xl font-semibold">Workflow updates</h3>
-          <p className="mt-2 text-sm leading-6 text-ink/70">
+        <div className="app-panel p-6">
+          <p className="app-kicker">Editable workflow fields</p>
+          <h3 className="text-xl font-semibold text-ink">Workflow updates</h3>
+          <p className="mt-2 text-sm leading-6 text-ink/72">
             Edit only the approved tracker workflow fields here. Saved fit, lane,
             and resume-direction context remains read-only below.
           </p>
@@ -117,7 +115,7 @@ export function TrackerRecordPanel({
                     applicationStatus: event.target.value as TrackerRecord["applicationStatus"]
                   })
                 }
-                className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+                className="app-input"
               >
                 {applicationStatusOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -134,7 +132,7 @@ export function TrackerRecordPanel({
                     networkingStatus: event.target.value as TrackerRecord["networkingStatus"]
                   })
                 }
-                className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+                className="app-input"
               >
                 {networkingStatusOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -150,7 +148,7 @@ export function TrackerRecordPanel({
                 onChange={(event) =>
                   updateRecord({ applicationDate: event.target.value || null })
                 }
-                className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+                className="app-input"
               />
             </Field>
             <Field label="Follow-up date">
@@ -160,7 +158,7 @@ export function TrackerRecordPanel({
                 onChange={(event) =>
                   updateRecord({ followUpDate: event.target.value || null })
                 }
-                className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+                className="app-input"
               />
             </Field>
             <Field label="Interview stage">
@@ -169,7 +167,7 @@ export function TrackerRecordPanel({
                 onChange={(event) =>
                   updateRecord({ interviewStage: event.target.value || null })
                 }
-                className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+                className="app-input"
               />
             </Field>
             <Field label="Outcome">
@@ -178,7 +176,7 @@ export function TrackerRecordPanel({
                 onChange={(event) =>
                   updateRecord({ outcome: event.target.value || null })
                 }
-                className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+                className="app-input"
               />
             </Field>
           </div>
@@ -188,12 +186,12 @@ export function TrackerRecordPanel({
               rows={5}
               value={record.notes ?? ""}
               onChange={(event) => updateRecord({ notes: event.target.value || null })}
-              className="mt-2 w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input mt-2"
             />
           </Field>
 
           {error ? (
-            <p className="mt-4 rounded-2xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger">
+            <p className="mt-4 rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
               {error}
             </p>
           ) : null}
@@ -201,13 +199,13 @@ export function TrackerRecordPanel({
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href="/tracker"
-              className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white no-underline"
+              className="app-button-primary"
             >
               Back to tracker
             </Link>
             <Link
               href="/new-analysis"
-              className="rounded-full border border-ink/15 px-5 py-3 text-sm font-semibold no-underline"
+              className="app-button-secondary"
             >
               Start new analysis
             </Link>
@@ -215,15 +213,15 @@ export function TrackerRecordPanel({
         </div>
 
         <div className="space-y-6">
-          <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
-            <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Read-only analysis context</p>
-            <h3 className="text-xl font-semibold">Original analysis context</h3>
-            <p className="mt-2 text-sm leading-6 text-ink/70">
+          <section className="app-panel p-6">
+            <p className="app-kicker">Read-only analysis context</p>
+            <h3 className="text-xl font-semibold text-ink">Original analysis context</h3>
+            <p className="mt-2 text-sm leading-6 text-ink/72">
               Read-only saved analysis context from the original review. Updating
               workflow state here does not rerun or rewrite fit analysis.
             </p>
-            <div className="mt-5 rounded-2xl bg-surface p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-ink/55">Saved summary</p>
+            <div className="app-subpanel mt-5 p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">Saved summary</p>
               <p className="mt-3 text-sm leading-7 text-ink/80">{record.analysisContext.summary}</p>
             </div>
             <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -250,8 +248,8 @@ export function TrackerRecordPanel({
 
 function Summary({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl bg-surface p-4">
-      <p className="text-xs uppercase tracking-[0.2em] text-ink/55">{label}</p>
+    <div className="app-card p-4">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{label}</p>
       <p className="mt-2 text-sm font-semibold leading-6 text-ink/85">{value}</p>
     </div>
   );
@@ -266,7 +264,7 @@ function Field({
 }) {
   return (
     <label className="mt-5 block space-y-2">
-      <span className="text-sm font-semibold">{label}</span>
+      <span className="app-label">{label}</span>
       {children}
     </label>
   );
@@ -280,17 +278,17 @@ function ContextList({
   items: string[];
 }) {
   return (
-    <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
-      <h3 className="text-xl font-semibold">{title}</h3>
+    <section className="app-panel p-6">
+      <h3 className="text-xl font-semibold text-ink">{title}</h3>
       <ul className="mt-4 space-y-2">
         {items.length ? (
           items.map((item) => (
-            <li key={item} className="rounded-2xl bg-surface px-4 py-3 text-sm leading-6 text-ink/80">
+            <li key={item} className="app-card px-4 py-3 text-sm leading-6 text-ink/80">
               {item}
             </li>
           ))
         ) : (
-          <li className="rounded-2xl bg-surface px-4 py-3 text-sm text-ink/65">
+          <li className="app-card px-4 py-3 text-sm text-ink/65">
             No items recorded.
           </li>
         )}

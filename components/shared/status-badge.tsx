@@ -11,30 +11,30 @@ type StatusBadgeProps = {
 };
 
 const toneMap: Record<string, string> = {
-  apply_now: "bg-accent/15 text-accent",
-  applied: "bg-accent/15 text-accent",
-  interviewing: "bg-accent/15 text-accent",
-  offer: "bg-accent/15 text-accent",
-  passed: "bg-danger/15 text-danger",
-  withdrawn: "bg-danger/15 text-danger",
-  hold_for_networking: "bg-caution/15 text-caution",
-  hold_for_variant: "bg-caution/15 text-caution",
-  follow_up_due: "bg-caution/15 text-caution",
-  apply: "bg-accent/15 text-accent",
-  apply_with_caution: "bg-caution/15 text-caution",
-  hold: "bg-caution/15 text-caution",
-  pass: "bg-danger/15 text-danger",
-  partial: "bg-caution/15 text-caution",
-  fail: "bg-danger/15 text-danger",
-  unknown: "bg-ink/10 text-ink",
-  strong_fit: "bg-accent/15 text-accent",
-  workable_fit: "bg-caution/15 text-caution",
-  stretch_fit: "bg-caution/15 text-caution",
-  low_fit: "bg-danger/15 text-danger",
-  green_light: "bg-accent/15 text-accent",
-  yellow_light: "bg-caution/15 text-caution",
-  red_light: "bg-danger/15 text-danger",
-  freelance_better: "bg-danger/15 text-danger"
+  apply_now: "border-accent/15 bg-accent-soft text-accent-strong",
+  applied: "border-accent/15 bg-accent-soft text-accent-strong",
+  interviewing: "border-accent/15 bg-accent-soft text-accent-strong",
+  offer: "border-accent/15 bg-accent-soft text-accent-strong",
+  passed: "border-danger/15 bg-danger-soft text-danger",
+  withdrawn: "border-danger/15 bg-danger-soft text-danger",
+  hold_for_networking: "border-caution/15 bg-caution-soft text-caution",
+  hold_for_variant: "border-caution/15 bg-caution-soft text-caution",
+  follow_up_due: "border-caution/15 bg-caution-soft text-caution",
+  apply: "border-accent/15 bg-accent-soft text-accent-strong",
+  apply_with_caution: "border-caution/15 bg-caution-soft text-caution",
+  hold: "border-caution/15 bg-caution-soft text-caution",
+  pass: "border-danger/15 bg-danger-soft text-danger",
+  partial: "border-caution/15 bg-caution-soft text-caution",
+  fail: "border-danger/15 bg-danger-soft text-danger",
+  unknown: "border-line bg-surface/85 text-ink",
+  strong_fit: "border-accent/15 bg-accent-soft text-accent-strong",
+  workable_fit: "border-caution/15 bg-caution-soft text-caution",
+  stretch_fit: "border-caution/15 bg-caution-soft text-caution",
+  low_fit: "border-danger/15 bg-danger-soft text-danger",
+  green_light: "border-accent/15 bg-accent-soft text-accent-strong",
+  yellow_light: "border-caution/15 bg-caution-soft text-caution",
+  red_light: "border-danger/15 bg-danger-soft text-danger",
+  freelance_better: "border-danger/15 bg-danger-soft text-danger"
 };
 
 export function StatusBadge({ value, kind = "application" }: StatusBadgeProps) {
@@ -47,9 +47,10 @@ export function StatusBadge({ value, kind = "application" }: StatusBadgeProps) {
 
   return (
     <span
-      className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${
-        toneMap[value] ?? "bg-ink/10 text-ink"
+      className={`inline-flex rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] ${
+        toneMap[value] ?? "border-line bg-surface/85 text-ink"
       }`}
+      style={{ fontFamily: '"Aptos", "Segoe UI", sans-serif' }}
     >
       {label}
     </span>

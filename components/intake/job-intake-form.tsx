@@ -138,14 +138,12 @@ export function JobIntakeForm() {
     <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
       <form
         onSubmit={handleSubmit}
-        className="space-y-5 rounded-3xl border border-ink/10 bg-panel p-6 shadow-card"
+        className="app-panel space-y-6 p-6 sm:p-7"
       >
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
-            Screen 1
-          </p>
-          <h2 className="text-2xl font-semibold">New Analysis / Job Intake</h2>
-          <p className="text-sm leading-6 text-ink/70">
+          <p className="app-kicker">Screen 1</p>
+          <h2 className="text-2xl font-semibold text-ink">New Analysis / Job Intake</h2>
+          <p className="app-copy">
             Enter one posting in structured form. Partial data is allowed, but
             unknown fields stay unknown.
           </p>
@@ -156,14 +154,14 @@ export function JobIntakeForm() {
             <input
               value={formState.company}
               onChange={(event) => updateField("company", event.target.value)}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Title" required>
             <input
               value={formState.title}
               onChange={(event) => updateField("title", event.target.value)}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
               required
             />
           </Field>
@@ -171,7 +169,7 @@ export function JobIntakeForm() {
             <input
               value={formState.location}
               onChange={(event) => updateField("location", event.target.value)}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Work Mode">
@@ -180,7 +178,7 @@ export function JobIntakeForm() {
               onChange={(event) =>
                 updateField("workMode", event.target.value as JobPosting["workMode"])
               }
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             >
               <option value="unknown">Unknown</option>
               <option value="remote">Remote</option>
@@ -192,14 +190,14 @@ export function JobIntakeForm() {
             <input
               value={formState.pay}
               onChange={(event) => updateField("pay", event.target.value)}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Benefits">
             <input
               value={formState.benefits}
               onChange={(event) => updateField("benefits", event.target.value)}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
         </div>
@@ -209,7 +207,7 @@ export function JobIntakeForm() {
             value={formState.schedule}
             onChange={(event) => updateField("schedule", event.target.value)}
             rows={3}
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           />
         </Field>
 
@@ -221,7 +219,7 @@ export function JobIntakeForm() {
                 updateField("responsibilities", event.target.value)
               }
               rows={7}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Requirements" hint="One item per line">
@@ -229,7 +227,7 @@ export function JobIntakeForm() {
               value={formState.requirements}
               onChange={(event) => updateField("requirements", event.target.value)}
               rows={7}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Tools" hint="One item per line">
@@ -237,7 +235,7 @@ export function JobIntakeForm() {
               value={formState.tools}
               onChange={(event) => updateField("tools", event.target.value)}
               rows={5}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Leadership Signals" hint="One item per line">
@@ -247,7 +245,7 @@ export function JobIntakeForm() {
                 updateField("leadershipSignals", event.target.value)
               }
               rows={5}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Ambiguity Signals" hint="One item per line">
@@ -257,7 +255,7 @@ export function JobIntakeForm() {
                 updateField("ambiguitySignals", event.target.value)
               }
               rows={5}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
           <Field label="Domain / Context">
@@ -265,7 +263,7 @@ export function JobIntakeForm() {
               value={formState.domain}
               onChange={(event) => updateField("domain", event.target.value)}
               rows={5}
-              className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+              className="app-input"
             />
           </Field>
         </div>
@@ -276,12 +274,12 @@ export function JobIntakeForm() {
             onChange={(event) =>
               updateField("sourceUrlOrIdentifier", event.target.value)
             }
-            className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
+            className="app-input"
           />
         </Field>
 
         {error ? (
-          <p className="rounded-2xl border border-danger/20 bg-danger/10 px-4 py-3 text-sm text-danger">
+          <p className="rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
             {error}
           </p>
         ) : null}
@@ -289,39 +287,37 @@ export function JobIntakeForm() {
         <div className="flex flex-wrap gap-3">
           <button
             type="submit"
-            className="rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white"
+            className="app-button-primary"
           >
             Run first-pass analysis
           </button>
           <button
             type="button"
             onClick={loadSampleFixture}
-            className="rounded-full border border-ink/15 px-5 py-3 text-sm font-semibold"
+            className="app-button-secondary"
           >
             Load seeded sample
           </button>
           <button
             type="button"
             onClick={resetForm}
-            className="rounded-full border border-ink/15 px-5 py-3 text-sm font-semibold"
+            className="app-button-secondary"
           >
             Reset
           </button>
         </div>
       </form>
 
-      <aside className="space-y-5 rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
+      <aside className="app-panel space-y-5 p-6 sm:p-7">
         <div>
-          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
-            Guardrails
-          </p>
-          <h3 className="mt-2 text-xl font-semibold">First-pass scope only</h3>
+          <p className="app-kicker">Guardrails</p>
+          <h3 className="mt-2 text-xl font-semibold text-ink">First-pass scope only</h3>
         </div>
         <ul className="space-y-3 text-sm leading-6 text-ink/75">
-          <li>Only the approved profile and rule files drive the analysis.</li>
-          <li>Unknown posting fields stay unresolved instead of being invented.</li>
-          <li>The seeded sample fixture lives in demo data and still runs through the same validation and session flow.</li>
-          <li>
+          <li className="app-card px-4 py-3">Only the approved profile and rule files drive the analysis.</li>
+          <li className="app-card px-4 py-3">Unknown posting fields stay unresolved instead of being invented.</li>
+          <li className="app-card px-4 py-3">The seeded sample fixture lives in demo data and still runs through the same validation and session flow.</li>
+          <li className="app-card px-4 py-3">
             Open issues like APW title/date precision and hard metrics remain visible
             as unresolved credibility constraints.
           </li>
@@ -341,11 +337,11 @@ type FieldProps = {
 function Field({ label, children, hint, required }: FieldProps) {
   return (
     <label className="block space-y-2">
-      <span className="text-sm font-semibold text-ink">
+      <span className="app-label">
         {label}
         {required ? " *" : ""}
       </span>
-      {hint ? <span className="block text-xs text-ink/55">{hint}</span> : null}
+      {hint ? <span className="block text-xs text-muted">{hint}</span> : null}
       {children}
     </label>
   );

@@ -9,15 +9,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#13212f",
-        surface: "#f5f1e8",
-        panel: "#fffdf8",
-        accent: "#1f6f5f",
-        danger: "#a33f2f",
-        caution: "#9a6a12"
+        ink: "#18232f",
+        canvas: "#f3f0e8",
+        surface: "#ece7dc",
+        panel: "#fffdfa",
+        muted: "#5f6b75",
+        line: "#d6d0c3",
+        accent: "#1d6158",
+        "accent-strong": "#154b43",
+        "accent-soft": "#dcebe6",
+        danger: "#9f4133",
+        "danger-soft": "#f3dfd9",
+        caution: "#8f6518",
+        "caution-soft": "#f3ead2"
       },
       boxShadow: {
-        card: "0 10px 30px rgba(19, 33, 47, 0.08)"
+        card: "0 14px 36px rgba(24, 35, 47, 0.08)",
+        elevated: "0 20px 48px rgba(24, 35, 47, 0.12)"
       }
     }
   },

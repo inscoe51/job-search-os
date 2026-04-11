@@ -14,14 +14,14 @@ export function EmptyState({
   actionLabel
 }: EmptyStateProps) {
   return (
-    <div className="rounded-3xl border border-dashed border-ink/20 bg-panel p-10 text-center shadow-card">
-      <p className="text-xs uppercase tracking-[0.25em] text-ink/55">MVP state</p>
-      <h2 className="mt-2 text-2xl font-semibold">{title}</h2>
-      <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-ink/70">{body}</p>
+    <div className="app-panel border-dashed p-10 text-center">
+      <p className="app-kicker">MVP state</p>
+      <h2 className="mt-2 text-2xl font-semibold text-ink">{title}</h2>
+      <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-ink/72">{body}</p>
       {actionHref && actionLabel ? (
         <Link
           href={actionHref}
-          className="mt-6 inline-flex rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white no-underline"
+          className="app-button-primary mt-6"
         >
           {actionLabel}
         </Link>

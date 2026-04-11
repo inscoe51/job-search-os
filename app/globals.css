@@ -6,22 +6,146 @@
   color-scheme: light;
 }
 
-body {
-  @apply bg-surface text-ink antialiased;
-  font-family: Georgia, "Times New Roman", serif;
+@layer base {
+  html {
+    @apply bg-canvas;
+  }
+
+  body {
+    @apply bg-canvas text-ink antialiased;
+    font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+    background-image:
+      radial-gradient(circle at top left, rgba(29, 97, 88, 0.14), transparent 32%),
+      linear-gradient(180deg, rgba(255, 253, 250, 0.72) 0%, rgba(243, 240, 232, 0.94) 100%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Aptos Display", "Segoe UI Semibold", "Trebuchet MS", sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  a {
+    @apply text-accent underline-offset-2 transition-colors hover:text-accent-strong hover:underline;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button {
+    @apply transition duration-150;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted) / 0.7);
+  }
+
+  ::selection {
+    background-color: hsl(var(--accent) / 0.18);
+    @apply text-ink;
+  }
 }
 
-a {
-  @apply text-accent underline-offset-2 transition hover:underline;
-}
+@layer components {
+  .app-panel {
+    @apply rounded-[28px] border shadow-card;
+    border-color: hsl(var(--line) / 0.8);
+    background-color: hsl(var(--panel) / 0.95);
+  }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
-}
+  .app-subpanel {
+    @apply rounded-3xl border shadow-card;
+    border-color: hsl(var(--line) / 0.7);
+    background-color: hsl(var(--panel) / 0.72);
+  }
 
-button {
-  @apply transition;
+  .app-card {
+    @apply rounded-2xl border;
+    border-color: hsl(var(--line) / 0.6);
+    background-color: hsl(var(--surface) / 0.72);
+  }
+
+  .app-kicker {
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-muted;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-label {
+    @apply text-sm font-semibold text-ink;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-copy {
+    @apply text-sm leading-6;
+    color: hsl(var(--ink) / 0.74);
+  }
+
+  .app-input {
+    @apply w-full rounded-2xl border border-line bg-panel px-4 py-3 text-[15px] text-ink shadow-sm outline-none transition duration-150;
+  }
+
+  .app-input::placeholder {
+    color: hsl(var(--muted) / 0.7);
+  }
+
+  .app-input:hover {
+    border-color: hsl(var(--ink) / 0.2);
+  }
+
+  .app-input:focus {
+    @apply border-accent bg-white;
+    box-shadow: 0 0 0 4px hsl(var(--accent) / 0.1);
+  }
+
+  .app-input:disabled {
+    @apply cursor-not-allowed text-muted;
+    background-color: hsl(var(--surface) / 0.8);
+  }
+
+  .app-button-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white no-underline shadow-sm;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-button-primary:hover {
+    @apply bg-accent-strong shadow-card;
+  }
+
+  .app-button-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-line bg-panel px-5 py-3 text-sm font-semibold text-ink no-underline;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-button-secondary:hover {
+    @apply text-accent-strong;
+    border-color: hsl(var(--accent) / 0.4);
+    background-color: hsl(var(--accent-soft) / 0.5);
+  }
+
+  .app-button-ghost {
+    @apply inline-flex items-center justify-center rounded-full border bg-transparent px-4 py-2 text-sm font-semibold text-ink no-underline;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+    border-color: hsl(var(--line) / 0.8);
+  }
+
+  .app-button-ghost:hover {
+    @apply text-accent-strong;
+    border-color: hsl(var(--accent) / 0.35);
+    background-color: hsl(var(--accent-soft) / 0.35);
+  }
+
+  .app-table-head {
+    @apply text-[11px] font-semibold uppercase tracking-[0.24em] text-muted;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+    background-color: hsl(var(--surface) / 0.7);
+  }
 }
