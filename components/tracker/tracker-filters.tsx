@@ -15,13 +15,19 @@ type TrackerFiltersPanelProps = {
   laneOptions: string[];
   resumeVariantOptions: string[];
   onChange: (updates: Partial<TrackerFilters>) => void;
+  onReset: () => void;
+  visibleCount: number;
+  totalCount: number;
 };
 
 export function TrackerFiltersPanel({
   filters,
   laneOptions,
   resumeVariantOptions,
-  onChange
+  onChange,
+  onReset,
+  visibleCount,
+  totalCount
 }: TrackerFiltersPanelProps) {
   function handleApplicationStatusChange(value: string) {
     onChange({
@@ -36,8 +42,25 @@ export function TrackerFiltersPanel({
   }
 
   return (
-    <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-6">
-      <FilterField label="Application status">
+    <div className="mt-6 rounded-2xl bg-surface p-4">
+      <div className="flex flex-col gap-3 border-b border-ink/10 pb-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Review filters</p>
+          <p className="mt-1 text-sm leading-6 text-ink/75">
+            Showing {visibleCount} of {totalCount} saved role{totalCount === 1 ? "" : "s"}.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onReset}
+          className="inline-flex rounded-full border border-ink/15 px-4 py-2 text-sm font-semibold"
+        >
+          Reset filters
+        </button>
+      </div>
+
+      <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <FilterField label="Application status">
         <select
           value={filters.applicationStatus}
           onChange={(event) => handleApplicationStatusChange(event.target.value)}
@@ -128,6 +151,7 @@ export function TrackerFiltersPanel({
           <option value="followUpDate">Follow-up date</option>
         </select>
       </FilterField>
+      </div>
     </div>
   );
 }

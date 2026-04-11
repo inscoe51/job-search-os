@@ -83,13 +83,26 @@ export function TrackerRecordPanel({
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <Summary label="Company" value={record.company} />
           <Summary label="Title" value={record.title} />
-          <Summary label="Lane matched" value={record.laneMatched} />
+          <Summary label="Saved lane" value={record.laneMatched} />
           <Summary label="Saved" value={formatDateLabel(record.savedAt)} />
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          <Summary label="Saved fit verdict" value={record.fitVerdict.replace(/_/g, " ")} />
+          <Summary
+            label="Saved resume direction"
+            value={record.resumeVariant.replace(/_/g, " ")}
+          />
+          <Summary
+            label="Saved next move"
+            value={record.analysisContext.recommendation.replace(/_/g, " ")}
+          />
         </div>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
         <div className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
+          <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Editable workflow fields</p>
           <h3 className="text-xl font-semibold">Workflow updates</h3>
           <p className="mt-2 text-sm leading-6 text-ink/70">
             Edit only the approved tracker workflow fields here. Saved fit, lane,
@@ -203,16 +216,20 @@ export function TrackerRecordPanel({
 
         <div className="space-y-6">
           <section className="rounded-3xl border border-ink/10 bg-panel p-6 shadow-card">
+            <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Read-only analysis context</p>
             <h3 className="text-xl font-semibold">Original analysis context</h3>
             <p className="mt-2 text-sm leading-6 text-ink/70">
               Read-only saved analysis context from the original review. Updating
               workflow state here does not rerun or rewrite fit analysis.
             </p>
-            <p className="mt-4 text-sm leading-7 text-ink/80">{record.analysisContext.summary}</p>
-            <div className="mt-4">
-              <StatusBadge value={record.analysisContext.recommendation} kind="fit" />
+            <div className="mt-5 rounded-2xl bg-surface p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-ink/55">Saved summary</p>
+              <p className="mt-3 text-sm leading-7 text-ink/80">{record.analysisContext.summary}</p>
             </div>
-            <p className="mt-4 text-sm leading-7 text-ink/70">{record.analysisContext.nextAction}</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <StatusBadge value={record.analysisContext.recommendation} kind="fit" />
+              <p className="text-sm leading-7 text-ink/70">{record.analysisContext.nextAction}</p>
+            </div>
           </section>
 
           <ContextList title="Positive signals" items={record.analysisContext.positiveSignals} />

@@ -117,7 +117,48 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
         <StatusBadge value={session.analysis.nextAction.recommendation} kind="fit" />
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
+      <div className="mt-6 rounded-2xl border border-ink/10 bg-surface p-5">
+        <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="text-xs uppercase tracking-[0.25em] text-ink/55">
+              Read-only analysis handoff
+            </p>
+            <p className="mt-2 text-sm leading-6 text-ink/75">
+              This summary comes from the completed analysis and carries forward unchanged into the
+              save step.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <StatusBadge value={session.analysis.fitVerdict.rating} kind="fit" />
+            <StatusBadge value={session.analysis.fitVerdict.lifeFitLabel} kind="life" />
+          </div>
+        </div>
+
+        <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <SummaryCard label="Lane" value={session.analysis.positioningStrategy.recommendedLane} />
+          <SummaryCard
+            label="Resume direction"
+            value={session.analysis.resumeDirection.recommendedVariant}
+          />
+          <SummaryCard
+            label="Recommended move"
+            value={session.analysis.nextAction.recommendation.replace(/_/g, " ")}
+          />
+          <SummaryCard label="Default status" value={getApplicationStatusLabel(defaultRouting.applicationStatus)} />
+        </div>
+
+        <p className="mt-4 text-sm leading-6 text-ink/75">{session.analysis.fitVerdict.summary}</p>
+      </div>
+
+      <div className="mt-6">
+        <p className="text-xs uppercase tracking-[0.25em] text-ink/55">Editable workflow fields</p>
+        <p className="mt-2 text-sm leading-6 text-ink/70">
+          Adjust only the approved save-time workflow fields below. The fit analysis, lane, and
+          resume direction stay locked to the saved review.
+        </p>
+      </div>
+
+      <div className="mt-5 grid gap-4 md:grid-cols-2">
         <Field label="Recommended next action">
           <select
             value={selectedRecommendation}
@@ -210,6 +251,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           <input
             value={interviewStage}
             onChange={(event) => setInterviewStage(event.target.value)}
+            placeholder="Recruiter screen"
             className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
           />
         </Field>
@@ -218,6 +260,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           <input
             value={outcome}
             onChange={(event) => setOutcome(event.target.value)}
+            placeholder="Awaiting response"
             className="w-full rounded-2xl border border-ink/15 bg-surface px-4 py-3"
           />
         </Field>
@@ -276,5 +319,14 @@ function Field({
       <span className="text-sm font-semibold">{label}</span>
       {children}
     </label>
+  );
+}
+
+function SummaryCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl bg-panel px-4 py-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-ink/55">{label}</p>
+      <p className="mt-2 text-sm font-semibold leading-6 text-ink/85">{value}</p>
+    </div>
   );
 }

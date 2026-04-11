@@ -15,7 +15,8 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <div className="rounded-3xl border border-dashed border-ink/20 bg-panel p-10 text-center shadow-card">
-      <h2 className="text-2xl font-semibold">{title}</h2>
+      <p className="text-xs uppercase tracking-[0.25em] text-ink/55">MVP state</p>
+      <h2 className="mt-2 text-2xl font-semibold">{title}</h2>
       <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-ink/70">{body}</p>
       {actionHref && actionLabel ? (
         <Link
