@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { analyzeJobPosting } from "@/lib/analysis/analyze-job-posting";
 import {
+  getPrimaryDemoScenarioSummary,
   getDemoScenarioSummaries,
   loadDemoJobPostingScenario,
   loadSampleJobPostingFixture
@@ -33,6 +34,13 @@ describe("loadSampleJobPostingFixture", () => {
     expect(posting.title).toBe("Sales Development Representative");
     expect(posting.workMode).toBe("onsite");
     expect(posting.tools).toContain("SQL");
+  });
+
+  it("marks the strong-fit example as the recommended live demo path", () => {
+    const primaryScenario = getPrimaryDemoScenarioSummary();
+
+    expect(primaryScenario.id).toBe("strong-fit-example");
+    expect(primaryScenario.recommendedForLiveDemo).toBe(true);
   });
 
   it("feeds the seeded fixture through the same typed AnalysisSession flow", () => {

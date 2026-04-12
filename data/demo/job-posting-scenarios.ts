@@ -9,6 +9,8 @@ export type DemoJobPostingScenarioDefinition = {
   emphasis: string;
   preview: string;
   expectedFitLabel: string;
+  presenterNote: string;
+  recommendedForLiveDemo?: boolean;
   posting: JobPosting;
 };
 
@@ -20,6 +22,9 @@ export const demoJobPostingScenarios: DemoJobPostingScenarioDefinition[] = [
     preview:
       "A structured hybrid operations role with stable compensation, benefits, and strong overlap in onboarding, CRM workflow ownership, and cross-functional execution.",
     expectedFitLabel: "Expected outcome: strong-fit review with an apply-ready path",
+    presenterNote:
+      "Recommended live demo path: the cleanest end-to-end walkthrough with the clearest positive recommendation and tracker-ready save flow.",
+    recommendedForLiveDemo: true,
     posting: {
       company: "Harbor North Services",
       title: "Operations Coordinator",
@@ -55,6 +60,8 @@ export const demoJobPostingScenarios: DemoJobPostingScenarioDefinition[] = [
     preview:
       "A support-level RevOps-style role that overlaps with coordination and reporting discipline, but still needs careful handling around analytics depth and measurable proof.",
     expectedFitLabel: "Expected outcome: workable or caution-band review with visible tradeoffs",
+    presenterNote:
+      "Good backup scenario when you want to show honest caution, tradeoffs, and evidence gaps without breaking the guided path.",
     posting: {
       company: "MetricStack",
       title: "Revenue Operations Associate",
@@ -87,6 +94,8 @@ export const demoJobPostingScenarios: DemoJobPostingScenarioDefinition[] = [
     preview:
       "A sales-heavy onsite role with commission pressure, schedule conflict risk, and enterprise-tool expectations the current candidate record should not claim.",
     expectedFitLabel: "Expected outcome: low-fit review and a clear pass recommendation",
+    presenterNote:
+      "Use only if you want to demonstrate hard guardrails and why the engine declines to force a weak-fit application.",
     posting: {
       company: "Peak Velocity Systems",
       title: "Sales Development Representative",

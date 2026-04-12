@@ -1,6 +1,10 @@
 "use client";
 
-import type { DemoScenarioSummary, DemoScenarioId } from "@/lib/demo/sample-job-posting";
+import {
+  getPrimaryDemoScenarioSummary,
+  type DemoScenarioSummary,
+  type DemoScenarioId
+} from "@/lib/demo/sample-job-posting";
 
 type DemoGuideProps = {
   scenarios: DemoScenarioSummary[];
@@ -21,6 +25,8 @@ export function DemoGuide({
   selectedScenarioId,
   onLoadScenario
 }: DemoGuideProps) {
+  const primaryScenario = getPrimaryDemoScenarioSummary();
+
   return (
     <section className="app-accent-panel space-y-6 p-6 sm:p-7">
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_320px] xl:items-start">
@@ -37,10 +43,10 @@ export function DemoGuide({
           </p>
         </div>
         <div className="app-callout">
-          <p className="app-mini-label">Judge Path</p>
+          <p className="app-mini-label">Recommended Live Path</p>
           <p className="mt-2 text-sm leading-6 text-ink/78">
-            Use a seeded scenario below to populate the live intake flow, then run
-            analysis exactly as a judge would.
+            Start with <span className="font-semibold text-ink">{primaryScenario.label}</span>, run the first-pass analysis,
+            save the default recommendation, and open the saved tracker result.
           </p>
         </div>
       </div>
@@ -105,13 +111,18 @@ export function DemoGuide({
                       <p className="mt-1 text-sm leading-6 text-ink/72">{scenario.emphasis}</p>
                     </div>
                     <span className="rounded-full border border-line/70 bg-panel/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
-                      {isSelected ? "Loaded" : "Demo"}
+                      {scenario.recommendedForLiveDemo
+                        ? "Recommended"
+                        : isSelected
+                          ? "Loaded"
+                          : "Demo"}
                     </span>
                   </div>
                   <p className="text-sm leading-6 text-ink/76">{scenario.preview}</p>
                   <div className="rounded-2xl border border-line/60 bg-panel/92 px-4 py-3 text-sm leading-6 text-ink/80">
                     {scenario.expectedFitLabel}
                   </div>
+                  <p className="text-sm leading-6 text-ink/68">{scenario.presenterNote}</p>
                   <span className="inline-flex text-sm font-semibold text-accent-strong">
                     {isSelected ? "Loaded into intake" : "Load into intake"}
                   </span>
@@ -120,6 +131,10 @@ export function DemoGuide({
             );
           })}
         </div>
+        <p className="text-sm leading-6 text-ink/70">
+          Presenter shortcut: choose the recommended strong-fit path when you want the cleanest
+          full walkthrough with the least explanation overhead.
+        </p>
       </section>
     </section>
   );

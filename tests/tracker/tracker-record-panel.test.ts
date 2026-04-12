@@ -31,6 +31,7 @@ describe("TrackerRecordPanel", () => {
     expect(markup).toContain("Notes");
     expect(markup).toContain("Read-only saved analysis context");
     expect(markup).toContain("does not rerun or rewrite fit analysis");
+    expect(markup).toContain("Recommended Demo Result");
     expect(markup).not.toContain("Fit score");
     expect(markup).not.toContain("Resume variant");
   });

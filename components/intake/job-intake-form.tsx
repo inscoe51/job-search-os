@@ -11,7 +11,10 @@ import {
 import { useRouter } from "next/navigation";
 
 import { analyzeJobPosting } from "@/lib/analysis/analyze-job-posting";
-import type { DemoScenarioId } from "@/lib/demo/sample-job-posting";
+import {
+  primaryDemoScenarioId,
+  type DemoScenarioId
+} from "@/lib/demo/sample-job-posting";
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import type { JobPosting } from "@/lib/validation/schemas";
 import { jobPostingSchema } from "@/lib/validation/schemas";
@@ -177,6 +180,11 @@ export function JobIntakeForm({
               <p className="app-mini-label">Active Seed</p>
               <p className="mt-2 text-sm leading-6 text-ink/80">
                 Loaded from Demo Guide: {scenarioLabelById[selectedScenarioId]}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-ink/68">
+                {selectedScenarioId === primaryDemoScenarioId
+                  ? "Recommended live demo path loaded. Next step: run the first-pass analysis."
+                  : "Scenario loaded. Next step: run the first-pass analysis to continue the guided flow."}
               </p>
             </div>
           ) : null}
@@ -359,6 +367,9 @@ export function JobIntakeForm({
             Reset
           </button>
         </div>
+        <p className="text-sm leading-6 text-ink/68">
+          For the cleanest live walkthrough, keep the seeded structure intact and move directly into review after submission.
+        </p>
       </form>
 
       <aside className="app-accent-panel space-y-5 p-6 sm:p-7 lg:sticky lg:top-6">

@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { isPrimaryDemoSource } from "@/lib/demo/sample-job-posting";
+import { formatDisplayLabel, formatResumeDirectionLabel } from "@/lib/display/labels";
 import {
   applicationStatusOptions,
   networkingStatusOptions
@@ -26,6 +28,7 @@ export function TrackerRecordPanel({
   const repository = useMemo(() => createBrowserTrackerRepository(), []);
   const [record, setRecord] = useState<TrackerRecord | null>(initialRecord);
   const [error, setError] = useState<string | null>(null);
+  const showPrimaryDemoCue = record ? isPrimaryDemoSource(record.source) : false;
 
   useEffect(() => {
     if (!initialRecord) {
@@ -86,16 +89,25 @@ export function TrackerRecordPanel({
         </div>
 
         <div className="mt-4 grid gap-4 md:grid-cols-3">
-          <Summary label="Saved fit verdict" value={record.fitVerdict.replace(/_/g, " ")} />
+          <Summary label="Saved fit verdict" value={formatDisplayLabel(record.fitVerdict)} />
           <Summary
             label="Saved resume direction"
-            value={record.resumeVariant.replace(/_/g, " ")}
+            value={formatResumeDirectionLabel(record.resumeVariant)}
           />
           <Summary
             label="Saved next move"
-            value={record.analysisContext.recommendation.replace(/_/g, " ")}
+            value={formatDisplayLabel(record.analysisContext.recommendation)}
           />
         </div>
+        {showPrimaryDemoCue ? (
+          <div className="app-callout mt-5">
+            <p className="app-mini-label">Recommended Demo Result</p>
+            <p className="mt-2 text-sm leading-6 text-ink/80">
+              This is the recommended live-demo record. Use it to show that saved analysis context
+              stays intact while workflow fields remain editable.
+            </p>
+          </div>
+        ) : null}
       </section>
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">

@@ -5,6 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { isPrimaryDemoSource } from "@/lib/demo/sample-job-posting";
+import { formatResumeDirectionLabel } from "@/lib/display/labels";
 import { TrackerFiltersPanel } from "@/components/tracker/tracker-filters";
 import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker-repository";
 import {
@@ -44,6 +46,8 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
   const currentStageCount = records.filter((record) =>
     ["interviewing", "offer"].includes(record.applicationStatus)
   ).length;
+  const primaryDemoRecord =
+    records.find((record) => isPrimaryDemoSource(record.source)) ?? null;
 
   if (!records.length) {
     return (
@@ -84,6 +88,26 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
             }))
           }
         />
+        {primaryDemoRecord ? (
+          <div className="app-callout mt-5">
+            <p className="app-mini-label">Recommended Demo Result</p>
+            <div className="mt-2 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <p className="text-sm leading-6 text-ink/80">
+                The recommended live demo record is saved. Open{" "}
+                <span className="font-semibold text-ink">
+                  {primaryDemoRecord.company} / {primaryDemoRecord.title}
+                </span>{" "}
+                to show the persisted analysis context and editable workflow state.
+              </p>
+              <Link
+                href={`/tracker/${primaryDemoRecord.jobId}`}
+                className="app-button-primary px-4 py-2"
+              >
+                Open recommended result
+              </Link>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       {!filteredRecords.length ? (
@@ -129,7 +153,7 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
                   <td className="px-5 py-4 align-top">
                     <p className="font-semibold text-ink">{record.company}</p>
                     <p className="mt-1 text-[11px] uppercase tracking-[0.18em] text-muted">
-                      {record.resumeVariant.replace(/_/g, " ")}
+                      {formatResumeDirectionLabel(record.resumeVariant)}
                     </p>
                   </td>
                   <td className="px-5 py-4 align-top">

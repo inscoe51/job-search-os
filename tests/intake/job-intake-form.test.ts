@@ -94,6 +94,7 @@ describe("NewAnalysisPage", () => {
     expect(guideMarkup).toContain("Strong Fit Example");
     expect(guideMarkup).toContain("Borderline / Workable Fit Example");
     expect(guideMarkup).toContain("Poor Fit / Pass Example");
+    expect(guideMarkup).toContain("Recommended live demo path");
     expect(formMarkup).toContain("Company");
     expect(formMarkup).toContain("Title *");
     expect(formMarkup).toContain("Work Mode");

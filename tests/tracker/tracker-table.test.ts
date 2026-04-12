@@ -27,7 +27,8 @@ describe("TrackerTable", () => {
     expect(markup).toContain("Current stage");
     expect(markup).toContain("Sort by");
     expect(markup).toContain(`/tracker/${record.jobId}`);
-    expect(markup).toContain("needs attention this week");
+    expect(markup).toContain("Recommended Demo Result");
+    expect(markup).toContain("Open recommended result");
     expect(markup).not.toContain("dashboard");
   });
 });

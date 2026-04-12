@@ -3,6 +3,10 @@ import type { ReactNode } from "react";
 
 import { SummaryCard } from "@/components/shared/summary-card";
 import { StatusBadge } from "@/components/shared/status-badge";
+import {
+  getDemoScenarioSummaryBySource,
+  isPrimaryDemoSource
+} from "@/lib/demo/sample-job-posting";
 import { formatDisplayLabel, formatResumeDirectionLabel } from "@/lib/display/labels";
 import type { AnalysisSession } from "@/lib/validation/schemas";
 
@@ -12,6 +16,12 @@ type AnalysisReviewProps = {
 
 export function AnalysisReview({ session }: AnalysisReviewProps) {
   const { analysis } = session;
+  const activeDemoScenario = getDemoScenarioSummaryBySource(
+    session.intakeInput.sourceUrlOrIdentifier
+  );
+  const showPrimaryDemoCue = isPrimaryDemoSource(
+    session.intakeInput.sourceUrlOrIdentifier
+  );
   const jobSnapshotItems = [
     { label: "Company", value: displayUnknown(analysis.jobSnapshot.company) },
     { label: "Role", value: analysis.jobSnapshot.title },
@@ -99,6 +109,16 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
             ))}
           </div>
         </div>
+        {activeDemoScenario ? (
+          <div className="app-callout mt-5">
+            <p className="app-mini-label">Presenter Cue</p>
+            <p className="mt-2 text-sm leading-6 text-ink/80">
+              {showPrimaryDemoCue
+                ? `You are on the recommended live demo path: ${activeDemoScenario.label}. Highlight the strong fit, resume direction, and recommended move, then continue to save.`
+                : `${activeDemoScenario.label} is loaded. Use this screen to explain how the engine keeps its reasoning visible before any save step.`}
+            </p>
+          </div>
+        ) : null}
 
         <div className="mt-6 grid gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.8fr)]">
           <div className="app-subpanel p-5 sm:p-6">

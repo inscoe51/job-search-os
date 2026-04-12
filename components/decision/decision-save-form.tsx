@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { SummaryCard } from "@/components/shared/summary-card";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { isPrimaryDemoSource } from "@/lib/demo/sample-job-posting";
 import { formatDisplayLabel, formatResumeDirectionLabel } from "@/lib/display/labels";
 import { attachDecisionToSession } from "@/lib/domain/analysis-session";
 import {
@@ -30,6 +31,9 @@ type DecisionSaveFormProps = {
 
 export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
   const router = useRouter();
+  const showPrimaryDemoCue = isPrimaryDemoSource(
+    session.intakeInput.sourceUrlOrIdentifier
+  );
   const trackerRepository = useMemo(() => createBrowserTrackerRepository(), []);
   const sessionRepository = useMemo(
     () => createBrowserAnalysisSessionRepository(),
@@ -156,6 +160,15 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
             resume direction stay locked to the saved review.
           </p>
         </div>
+        {showPrimaryDemoCue ? (
+          <div className="app-callout">
+            <p className="app-mini-label">Recommended Demo Step</p>
+            <p className="mt-2 text-sm leading-6 text-ink/80">
+              For the strongest live walkthrough, keep the default recommendation and save directly
+              to tracker to show the persisted handoff.
+            </p>
+          </div>
+        ) : null}
 
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           <section className="app-form-section space-y-4">
