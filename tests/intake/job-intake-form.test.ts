@@ -3,10 +3,12 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
 import NewAnalysisPage from "@/app/new-analysis/page";
+import { DemoGuide } from "@/components/intake/demo-guide";
 import {
   JobIntakeForm,
   buildJobPostingFromFormState
 } from "@/components/intake/job-intake-form";
+import { getDemoScenarioSummaries } from "@/lib/demo/sample-job-posting";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -73,11 +75,25 @@ describe("buildJobPostingFromFormState", () => {
 });
 
 describe("NewAnalysisPage", () => {
-  it("renders the approved intake fields and supported work-mode enum", () => {
+  it("renders the page header, demo guide, and approved intake fields", () => {
     const pageMarkup = renderToStaticMarkup(React.createElement(NewAnalysisPage));
     const formMarkup = renderToStaticMarkup(React.createElement(JobIntakeForm));
+    const guideMarkup = renderToStaticMarkup(
+      React.createElement(DemoGuide, {
+        scenarios: getDemoScenarioSummaries(),
+        selectedScenarioId: null,
+        onLoadScenario: vi.fn()
+      })
+    );
 
-    expect(pageMarkup).toContain("New Analysis / Job Intake");
+    expect(pageMarkup).toContain("New Analysis");
+    expect(pageMarkup).toContain("Competition-ready guided testing");
+    expect(guideMarkup).toContain("About This Demo");
+    expect(guideMarkup).toContain("What This Engine Is Tuned For");
+    expect(guideMarkup).toContain("Try Me");
+    expect(guideMarkup).toContain("Strong Fit Example");
+    expect(guideMarkup).toContain("Borderline / Workable Fit Example");
+    expect(guideMarkup).toContain("Poor Fit / Pass Example");
     expect(formMarkup).toContain("Company");
     expect(formMarkup).toContain("Title *");
     expect(formMarkup).toContain("Work Mode");
@@ -86,7 +102,6 @@ describe("NewAnalysisPage", () => {
     expect(formMarkup).toContain(">Hybrid<");
     expect(formMarkup).toContain(">Onsite<");
     expect(formMarkup).toContain("Run first-pass analysis");
-    expect(formMarkup).toContain("Load seeded sample");
-    expect(formMarkup).toContain("demo data and still runs through the same validation and session flow");
+    expect(formMarkup).toContain("Seeded demo scenarios populate this exact form");
   });
 });

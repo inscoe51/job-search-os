@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useMemo, useState, startTransition, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
+import { SummaryCard } from "@/components/shared/summary-card";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { formatDisplayLabel, formatResumeDirectionLabel } from "@/lib/display/labels";
 import { attachDecisionToSession } from "@/lib/domain/analysis-session";
 import {
   getApplicationStatusLabel,
@@ -134,11 +136,11 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           <SummaryCard label="Lane" value={session.analysis.positioningStrategy.recommendedLane} />
           <SummaryCard
             label="Resume direction"
-            value={session.analysis.resumeDirection.recommendedVariant}
+            value={formatResumeDirectionLabel(session.analysis.resumeDirection.recommendedVariant)}
           />
           <SummaryCard
             label="Recommended move"
-            value={session.analysis.nextAction.recommendation.replace(/_/g, " ")}
+            value={formatDisplayLabel(session.analysis.nextAction.recommendation)}
           />
           <SummaryCard label="Default status" value={getApplicationStatusLabel(defaultRouting.applicationStatus)} />
         </div>
@@ -315,14 +317,5 @@ function Field({
       <span className="app-label">{label}</span>
       {children}
     </label>
-  );
-}
-
-function SummaryCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="app-card px-4 py-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{label}</p>
-      <p className="mt-2 text-sm font-semibold leading-6 text-ink/85">{value}</p>
-    </div>
   );
 }

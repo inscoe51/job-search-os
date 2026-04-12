@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import { SummaryCard } from "@/components/shared/summary-card";
 import { StatusBadge } from "@/components/shared/status-badge";
+import { formatDisplayLabel, formatResumeDirectionLabel } from "@/lib/display/labels";
 import type { AnalysisSession } from "@/lib/validation/schemas";
 
 type AnalysisReviewProps = {
@@ -24,7 +26,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
       value: displayUnknown(
         analysis.jobSnapshot.workMode === "unknown"
           ? null
-          : analysis.jobSnapshot.workMode.replace(/_/g, " ")
+          : formatDisplayLabel(analysis.jobSnapshot.workMode)
       )
     },
     {
@@ -33,13 +35,13 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
     },
     {
       label: "Resume variant",
-      value: analysis.resumeDirection.recommendedVariant
+      value: formatResumeDirectionLabel(analysis.resumeDirection.recommendedVariant)
     }
   ];
   const quickViewItems = [
     {
       label: "Fit verdict",
-      value: analysis.fitVerdict.rating.replace(/_/g, " "),
+      value: formatDisplayLabel(analysis.fitVerdict.rating),
       tone: "text-accent"
     },
     {
@@ -49,12 +51,12 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
     },
     {
       label: "Resume direction",
-      value: analysis.resumeDirection.recommendedVariant,
+      value: formatResumeDirectionLabel(analysis.resumeDirection.recommendedVariant),
       tone: "text-ink"
     },
     {
       label: "Next action",
-      value: analysis.nextAction.recommendation.replace(/_/g, " "),
+      value: formatDisplayLabel(analysis.nextAction.recommendation),
       tone:
         analysis.nextAction.recommendation === "pass"
           ? "text-danger"
@@ -243,25 +245,6 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
           </div>
         </Panel>
       </div>
-    </div>
-  );
-}
-
-function SummaryCard({
-  label,
-  value,
-  valueClassName
-}: {
-  label: string;
-  value: string;
-  valueClassName?: string;
-}) {
-  return (
-    <div className="app-card p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">{label}</p>
-      <p className={`mt-2 text-sm font-semibold leading-6 text-ink/85 ${valueClassName ?? ""}`}>
-        {value}
-      </p>
     </div>
   );
 }

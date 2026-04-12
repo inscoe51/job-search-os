@@ -1,10 +1,17 @@
 "use client";
 
-import { useMemo, useState, startTransition, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  startTransition,
+  type FormEvent,
+  type ReactNode
+} from "react";
 import { useRouter } from "next/navigation";
 
 import { analyzeJobPosting } from "@/lib/analysis/analyze-job-posting";
-import { loadSampleJobPostingFixture } from "@/lib/demo/sample-job-posting";
+import type { DemoScenarioId } from "@/lib/demo/sample-job-posting";
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import type { JobPosting } from "@/lib/validation/schemas";
 import { jobPostingSchema } from "@/lib/validation/schemas";
@@ -84,7 +91,21 @@ export function buildJobPostingFromFormState(
   });
 }
 
-export function JobIntakeForm() {
+type JobIntakeFormProps = {
+  seededPosting?: JobPosting | null;
+  selectedScenarioId?: DemoScenarioId | null;
+};
+
+const scenarioLabelById: Record<DemoScenarioId, string> = {
+  "strong-fit-example": "Strong Fit Example",
+  "borderline-workable-fit-example": "Borderline / Workable Fit Example",
+  "poor-fit-pass-example": "Poor Fit / Pass Example"
+};
+
+export function JobIntakeForm({
+  seededPosting = null,
+  selectedScenarioId = null
+}: JobIntakeFormProps) {
   const router = useRouter();
   const sessionRepository = useMemo(
     () => createBrowserAnalysisSessionRepository(),
@@ -103,15 +124,19 @@ export function JobIntakeForm() {
     }));
   }
 
-  function loadSampleFixture() {
-    setFormState(toFormState(loadSampleJobPostingFixture()));
-    setError(null);
-  }
-
   function resetForm() {
     setFormState(emptyState);
     setError(null);
   }
+
+  useEffect(() => {
+    if (!seededPosting) {
+      return;
+    }
+
+    setFormState(toFormState(seededPosting));
+    setError(null);
+  }, [seededPosting]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -141,12 +166,17 @@ export function JobIntakeForm() {
         className="app-panel space-y-6 p-6 sm:p-7"
       >
         <div className="space-y-2">
-          <p className="app-kicker">Screen 1</p>
-          <h2 className="text-2xl font-semibold text-ink">New Analysis / Job Intake</h2>
+          <p className="app-kicker">Job Intake</p>
+          <h2 className="text-2xl font-semibold text-ink">Structured posting input</h2>
           <p className="app-copy">
             Enter one posting in structured form. Partial data is allowed, but
             unknown fields stay unknown.
           </p>
+          {selectedScenarioId ? (
+            <p className="rounded-2xl border border-accent/20 bg-accent-soft/70 px-4 py-3 text-sm text-ink/78">
+              Loaded from Demo Guide: {scenarioLabelById[selectedScenarioId]}
+            </p>
+          ) : null}
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
@@ -293,13 +323,6 @@ export function JobIntakeForm() {
           </button>
           <button
             type="button"
-            onClick={loadSampleFixture}
-            className="app-button-secondary"
-          >
-            Load seeded sample
-          </button>
-          <button
-            type="button"
             onClick={resetForm}
             className="app-button-secondary"
           >
@@ -310,13 +333,13 @@ export function JobIntakeForm() {
 
       <aside className="app-panel space-y-5 p-6 sm:p-7">
         <div>
-          <p className="app-kicker">Guardrails</p>
-          <h3 className="mt-2 text-xl font-semibold text-ink">First-pass scope only</h3>
+          <p className="app-kicker">Intake Notes</p>
+          <h3 className="mt-2 text-xl font-semibold text-ink">The live engine stays unchanged</h3>
         </div>
         <ul className="space-y-3 text-sm leading-6 text-ink/75">
           <li className="app-card px-4 py-3">Only the approved profile and rule files drive the analysis.</li>
           <li className="app-card px-4 py-3">Unknown posting fields stay unresolved instead of being invented.</li>
-          <li className="app-card px-4 py-3">The seeded sample fixture lives in demo data and still runs through the same validation and session flow.</li>
+          <li className="app-card px-4 py-3">Seeded demo scenarios populate this exact form and still run through the same validation, routing, and saved-session flow.</li>
           <li className="app-card px-4 py-3">
             Open issues like APW title/date precision and hard metrics remain visible
             as unresolved credibility constraints.

@@ -58,4 +58,26 @@ describe("AnalysisReview", () => {
       "Unresolved posting ambiguity: Priorities may shift as the team structure settles."
     );
   });
+
+  it("formats long internal resume-direction keys into readable wrapped labels", () => {
+    const { session } = analyzeJobPosting(getSampleJobPosting());
+    const markup = renderToStaticMarkup(
+      React.createElement(AnalysisReview, {
+        session: {
+          ...session,
+          analysis: {
+            ...session.analysis,
+            resumeDirection: {
+              ...session.analysis.resumeDirection,
+              recommendedVariant: "implementation_onboarding_coordination"
+            }
+          }
+        }
+      })
+    );
+
+    expect(markup).toContain("Implementation / Onboarding Coordination");
+    expect(markup).not.toContain("implementation_onboarding_coordination");
+    expect(markup).toContain("[overflow-wrap:anywhere]");
+  });
 });

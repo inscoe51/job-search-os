@@ -43,4 +43,30 @@ describe("DecisionSaveForm", () => {
     expect(markup).not.toContain("Offer");
     expect(markup).not.toContain("Withdrawn");
   });
+
+  it("renders readable handoff labels for long internal values", () => {
+    const { session } = analyzeJobPosting(getSampleJobPosting());
+    const markup = renderToStaticMarkup(
+      React.createElement(DecisionSaveForm, {
+        session: {
+          ...session,
+          analysis: {
+            ...session.analysis,
+            resumeDirection: {
+              ...session.analysis.resumeDirection,
+              recommendedVariant: "implementation_onboarding_coordination"
+            },
+            nextAction: {
+              ...session.analysis.nextAction,
+              recommendation: "apply_with_caution"
+            }
+          }
+        }
+      })
+    );
+
+    expect(markup).toContain("Implementation / Onboarding Coordination");
+    expect(markup).toContain("Apply With Caution");
+    expect(markup).not.toContain("implementation_onboarding_coordination");
+  });
 });
