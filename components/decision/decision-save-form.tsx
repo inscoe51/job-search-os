@@ -105,11 +105,11 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
   }
 
   return (
-    <section className="app-panel p-6 sm:p-7">
+    <section className="app-page-hero">
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="app-kicker">Screen 3</p>
-          <h2 className="mt-2 text-2xl font-semibold text-ink">Decision + Save</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-[2rem]">Decision + Save</h2>
           <p className="mt-2 text-sm leading-6 text-ink/72">
             Carry the analysis forward without re-entering the key fit data.
           </p>
@@ -117,7 +117,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
         <StatusBadge value={session.analysis.nextAction.recommendation} kind="fit" />
       </div>
 
-      <div className="app-subpanel mt-6 p-5">
+      <div className="app-accent-panel mt-6 p-5 sm:p-6">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="app-kicker">Read-only analysis handoff</p>
@@ -132,7 +132,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           </div>
         </div>
 
-        <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <SummaryCard label="Lane" value={session.analysis.positioningStrategy.recommendedLane} />
           <SummaryCard
             label="Resume direction"
@@ -145,133 +145,155 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           <SummaryCard label="Default status" value={getApplicationStatusLabel(defaultRouting.applicationStatus)} />
         </div>
 
-        <p className="mt-4 text-sm leading-6 text-ink/75">{session.analysis.fitVerdict.summary}</p>
+        <p className="mt-5 text-sm leading-7 text-ink/78">{session.analysis.fitVerdict.summary}</p>
       </div>
 
-      <div className="mt-6">
-        <p className="app-kicker">Editable workflow fields</p>
-        <p className="mt-2 text-sm leading-6 text-ink/70">
-          Adjust only the approved save-time workflow fields below. The fit analysis, lane, and
-          resume direction stay locked to the saved review.
-        </p>
-      </div>
+      <div className="mt-6 space-y-5">
+        <div className="space-y-2">
+          <p className="app-kicker">Editable workflow fields</p>
+          <p className="text-sm leading-6 text-ink/70">
+            Adjust only the approved save-time workflow fields below. The fit analysis, lane, and
+            resume direction stay locked to the saved review.
+          </p>
+        </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-2">
-        <Field label="Recommended next action">
-          <select
-            value={selectedRecommendation}
-            onChange={(event) => {
-              const nextRecommendation = event.target.value as typeof selectedRecommendation;
-              const nextAllowedStatuses = getSaveApplicationStatusOptions(nextRecommendation);
-              setSelectedRecommendation(nextRecommendation);
-
-              if (!nextAllowedStatuses.includes(applicationStatus)) {
-                setApplicationStatus(nextAllowedStatuses[0] ?? applicationStatus);
-              }
-
-              if (nextRecommendation === "pass") {
-                setNetworkingStatus("not_applicable");
-              }
-            }}
-            className="app-input"
-          >
-            <option value="apply">Apply</option>
-            <option value="apply_with_caution">Apply with caution</option>
-            <option value="hold">Hold</option>
-            <option value="pass">Pass</option>
-          </select>
-        </Field>
-
-        <Field label="Application status">
-          <select
-            value={applicationStatus}
-            onChange={(event) =>
-              setApplicationStatus(event.target.value as typeof applicationStatus)
-            }
-            className="app-input"
-          >
-            {allowedApplicationStatuses.map((value) => (
-              <option key={value} value={value}>
-                {getApplicationStatusLabel(value)}
-              </option>
-            ))}
-          </select>
-          <div className="app-card px-4 py-3 text-sm leading-6 text-ink/75">
-            <p className="font-semibold text-ink">
-              System default: {getApplicationStatusLabel(defaultRouting.applicationStatus)}
-            </p>
-            <p>{defaultRouting.reason}</p>
-            {applicationStatusIsOverridden ? (
-              <p className="text-ink/60">
-                Manual override active. The system recommendation remains{" "}
-                {getApplicationStatusLabel(defaultRouting.applicationStatus)}.
+        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <section className="app-form-section space-y-4">
+            <div className="space-y-1">
+              <p className="app-kicker">Decision Controls</p>
+              <p className="text-sm leading-6 text-ink/72">
+                Capture the save-ready recommendation and system-aligned workflow status.
               </p>
-            ) : null}
-          </div>
-        </Field>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Recommended next action">
+                <select
+                  value={selectedRecommendation}
+                  onChange={(event) => {
+                    const nextRecommendation = event.target.value as typeof selectedRecommendation;
+                    const nextAllowedStatuses = getSaveApplicationStatusOptions(nextRecommendation);
+                    setSelectedRecommendation(nextRecommendation);
 
-        <Field label="Networking status">
-          <select
-            value={networkingStatus}
-            onChange={(event) =>
-              setNetworkingStatus(event.target.value as typeof networkingStatus)
-            }
-            disabled={selectedRecommendation === "pass"}
-            className="app-input"
-          >
-            {networkingStatusOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </Field>
+                    if (!nextAllowedStatuses.includes(applicationStatus)) {
+                      setApplicationStatus(nextAllowedStatuses[0] ?? applicationStatus);
+                    }
 
-        <Field label="Application date">
-          <input
-            type="date"
-            value={applicationDate}
-            onChange={(event) => setApplicationDate(event.target.value)}
-            className="app-input"
-          />
-        </Field>
+                    if (nextRecommendation === "pass") {
+                      setNetworkingStatus("not_applicable");
+                    }
+                  }}
+                  className="app-input"
+                >
+                  <option value="apply">Apply</option>
+                  <option value="apply_with_caution">Apply with caution</option>
+                  <option value="hold">Hold</option>
+                  <option value="pass">Pass</option>
+                </select>
+              </Field>
 
-        <Field label="Follow-up date">
-          <input
-            type="date"
-            value={followUpDate}
-            onChange={(event) => setFollowUpDate(event.target.value)}
-            className="app-input"
-          />
-        </Field>
+              <Field label="Application status">
+                <select
+                  value={applicationStatus}
+                  onChange={(event) =>
+                    setApplicationStatus(event.target.value as typeof applicationStatus)
+                  }
+                  className="app-input"
+                >
+                  {allowedApplicationStatuses.map((value) => (
+                    <option key={value} value={value}>
+                      {getApplicationStatusLabel(value)}
+                    </option>
+                  ))}
+                </select>
+                <div className="app-card px-4 py-3 text-sm leading-6 text-ink/75">
+                  <p className="font-semibold text-ink">
+                    System default: {getApplicationStatusLabel(defaultRouting.applicationStatus)}
+                  </p>
+                  <p>{defaultRouting.reason}</p>
+                  {applicationStatusIsOverridden ? (
+                    <p className="text-ink/60">
+                      Manual override active. The system recommendation remains{" "}
+                      {getApplicationStatusLabel(defaultRouting.applicationStatus)}.
+                    </p>
+                  ) : null}
+                </div>
+              </Field>
 
-        <Field label="Interview stage">
-          <input
-            value={interviewStage}
-            onChange={(event) => setInterviewStage(event.target.value)}
-            placeholder="Recruiter screen"
-            className="app-input"
-          />
-        </Field>
+              <Field label="Networking status">
+                <select
+                  value={networkingStatus}
+                  onChange={(event) =>
+                    setNetworkingStatus(event.target.value as typeof networkingStatus)
+                  }
+                  disabled={selectedRecommendation === "pass"}
+                  className="app-input"
+                >
+                  {networkingStatusOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
 
-        <Field label="Outcome">
-          <input
-            value={outcome}
-            onChange={(event) => setOutcome(event.target.value)}
-            placeholder="Awaiting response"
-            className="app-input"
-          />
-        </Field>
+              <Field label="Outcome">
+                <input
+                  value={outcome}
+                  onChange={(event) => setOutcome(event.target.value)}
+                  placeholder="Awaiting response"
+                  className="app-input"
+                />
+              </Field>
+            </div>
+          </section>
+
+          <section className="app-form-section space-y-4">
+            <div className="space-y-1">
+              <p className="app-kicker">Follow-through And Notes</p>
+              <p className="text-sm leading-6 text-ink/72">
+                Preserve operational next steps without changing the saved analysis itself.
+              </p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Application date">
+                <input
+                  type="date"
+                  value={applicationDate}
+                  onChange={(event) => setApplicationDate(event.target.value)}
+                  className="app-input"
+                />
+              </Field>
+
+              <Field label="Follow-up date">
+                <input
+                  type="date"
+                  value={followUpDate}
+                  onChange={(event) => setFollowUpDate(event.target.value)}
+                  className="app-input"
+                />
+              </Field>
+
+              <Field label="Interview stage">
+                <input
+                  value={interviewStage}
+                  onChange={(event) => setInterviewStage(event.target.value)}
+                  placeholder="Recruiter screen"
+                  className="app-input"
+                />
+              </Field>
+            </div>
+
+            <Field label="Notes">
+              <textarea
+                rows={4}
+                value={notes}
+                onChange={(event) => setNotes(event.target.value)}
+                className="app-input mt-2"
+              />
+            </Field>
+          </section>
+        </div>
       </div>
-
-      <Field label="Notes">
-        <textarea
-          rows={4}
-          value={notes}
-          onChange={(event) => setNotes(event.target.value)}
-          className="app-input mt-2"
-        />
-      </Field>
 
       {error ? (
         <p className="mt-4 rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
@@ -279,27 +301,30 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
         </p>
       ) : null}
 
-      <div className="mt-6 flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={() => saveRecord("tracker")}
-          className="app-button-primary"
-        >
-          Save and open tracker
-        </button>
-        <button
-          type="button"
-          onClick={() => saveRecord("new-analysis")}
-          className="app-button-secondary"
-        >
-          Save and start another analysis
-        </button>
-        <Link
-          href="/tracker"
-          className="app-button-secondary"
-        >
-          Cancel to tracker
-        </Link>
+      <div className="app-callout mt-6">
+        <p className="app-mini-label">Save Step</p>
+        <div className="mt-3 flex flex-wrap gap-3">
+          <button
+            type="button"
+            onClick={() => saveRecord("tracker")}
+            className="app-button-primary"
+          >
+            Save and open tracker
+          </button>
+          <button
+            type="button"
+            onClick={() => saveRecord("new-analysis")}
+            className="app-button-secondary"
+          >
+            Save and start another analysis
+          </button>
+          <Link
+            href="/tracker"
+            className="app-button-secondary"
+          >
+            Cancel to tracker
+          </Link>
+        </div>
       </div>
     </section>
   );

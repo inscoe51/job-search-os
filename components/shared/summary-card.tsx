@@ -12,12 +12,12 @@ export function SummaryCard({
   valueClassName
 }: SummaryCardProps) {
   return (
-    <div className="app-card min-w-0 p-4">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
+    <div className="app-card min-w-0 p-4 sm:p-5">
+      <p className="app-mini-label">
         {label}
       </p>
       <p
-        className={`mt-2 min-w-0 whitespace-normal break-words text-sm font-semibold leading-6 text-ink/85 [overflow-wrap:anywhere] ${
+        className={`mt-3 min-w-0 whitespace-normal break-words text-[15px] font-semibold leading-7 text-ink/88 [overflow-wrap:anywhere] ${
           valueClassName ?? ""
         }`}
       >

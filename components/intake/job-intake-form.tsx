@@ -165,7 +165,7 @@ export function JobIntakeForm({
         onSubmit={handleSubmit}
         className="app-panel space-y-6 p-6 sm:p-7"
       >
-        <div className="space-y-2">
+        <div className="space-y-3">
           <p className="app-kicker">Job Intake</p>
           <h2 className="text-2xl font-semibold text-ink">Structured posting input</h2>
           <p className="app-copy">
@@ -173,140 +173,170 @@ export function JobIntakeForm({
             unknown fields stay unknown.
           </p>
           {selectedScenarioId ? (
-            <p className="rounded-2xl border border-accent/20 bg-accent-soft/70 px-4 py-3 text-sm text-ink/78">
-              Loaded from Demo Guide: {scenarioLabelById[selectedScenarioId]}
-            </p>
+            <div className="app-callout">
+              <p className="app-mini-label">Active Seed</p>
+              <p className="mt-2 text-sm leading-6 text-ink/80">
+                Loaded from Demo Guide: {scenarioLabelById[selectedScenarioId]}
+              </p>
+            </div>
           ) : null}
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Company">
-            <input
-              value={formState.company}
-              onChange={(event) => updateField("company", event.target.value)}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Title" required>
-            <input
-              value={formState.title}
-              onChange={(event) => updateField("title", event.target.value)}
-              className="app-input"
-              required
-            />
-          </Field>
-          <Field label="Location">
-            <input
-              value={formState.location}
-              onChange={(event) => updateField("location", event.target.value)}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Work Mode">
-            <select
-              value={formState.workMode}
-              onChange={(event) =>
-                updateField("workMode", event.target.value as JobPosting["workMode"])
-              }
-              className="app-input"
-            >
-              <option value="unknown">Unknown</option>
-              <option value="remote">Remote</option>
-              <option value="hybrid">Hybrid</option>
-              <option value="onsite">Onsite</option>
-            </select>
-          </Field>
-          <Field label="Pay">
-            <input
-              value={formState.pay}
-              onChange={(event) => updateField("pay", event.target.value)}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Benefits">
-            <input
-              value={formState.benefits}
-              onChange={(event) => updateField("benefits", event.target.value)}
-              className="app-input"
-            />
-          </Field>
-        </div>
+        <section className="app-form-section space-y-4">
+          <div className="space-y-1">
+            <p className="app-kicker">Core Posting Details</p>
+            <p className="text-sm leading-6 text-ink/72">
+              Capture the highest-signal role facts first so the first-pass analysis starts with the right frame.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Company">
+              <input
+                value={formState.company}
+                onChange={(event) => updateField("company", event.target.value)}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Title" required>
+              <input
+                value={formState.title}
+                onChange={(event) => updateField("title", event.target.value)}
+                className="app-input"
+                required
+              />
+            </Field>
+            <Field label="Location">
+              <input
+                value={formState.location}
+                onChange={(event) => updateField("location", event.target.value)}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Work Mode">
+              <select
+                value={formState.workMode}
+                onChange={(event) =>
+                  updateField("workMode", event.target.value as JobPosting["workMode"])
+                }
+                className="app-input"
+              >
+                <option value="unknown">Unknown</option>
+                <option value="remote">Remote</option>
+                <option value="hybrid">Hybrid</option>
+                <option value="onsite">Onsite</option>
+              </select>
+            </Field>
+            <Field label="Pay">
+              <input
+                value={formState.pay}
+                onChange={(event) => updateField("pay", event.target.value)}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Benefits">
+              <input
+                value={formState.benefits}
+                onChange={(event) => updateField("benefits", event.target.value)}
+                className="app-input"
+              />
+            </Field>
+          </div>
 
-        <Field label="Schedule">
-          <textarea
-            value={formState.schedule}
-            onChange={(event) => updateField("schedule", event.target.value)}
-            rows={3}
-            className="app-input"
-          />
-        </Field>
+          <Field label="Schedule">
+            <textarea
+              value={formState.schedule}
+              onChange={(event) => updateField("schedule", event.target.value)}
+              rows={3}
+              className="app-input"
+            />
+          </Field>
+        </section>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <Field label="Responsibilities" hint="One item per line">
-            <textarea
-              value={formState.responsibilities}
-              onChange={(event) =>
-                updateField("responsibilities", event.target.value)
-              }
-              rows={7}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Requirements" hint="One item per line">
-            <textarea
-              value={formState.requirements}
-              onChange={(event) => updateField("requirements", event.target.value)}
-              rows={7}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Tools" hint="One item per line">
-            <textarea
-              value={formState.tools}
-              onChange={(event) => updateField("tools", event.target.value)}
-              rows={5}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Leadership Signals" hint="One item per line">
-            <textarea
-              value={formState.leadershipSignals}
-              onChange={(event) =>
-                updateField("leadershipSignals", event.target.value)
-              }
-              rows={5}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Ambiguity Signals" hint="One item per line">
-            <textarea
-              value={formState.ambiguitySignals}
-              onChange={(event) =>
-                updateField("ambiguitySignals", event.target.value)
-              }
-              rows={5}
-              className="app-input"
-            />
-          </Field>
-          <Field label="Domain / Context">
-            <textarea
-              value={formState.domain}
-              onChange={(event) => updateField("domain", event.target.value)}
-              rows={5}
-              className="app-input"
-            />
-          </Field>
-        </div>
+        <section className="app-form-section space-y-4">
+          <div className="space-y-1">
+            <p className="app-kicker">Role Requirements And Execution</p>
+            <p className="text-sm leading-6 text-ink/72">
+              Use one item per line to preserve the exact language the engine will analyze.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Responsibilities" hint="One item per line">
+              <textarea
+                value={formState.responsibilities}
+                onChange={(event) =>
+                  updateField("responsibilities", event.target.value)
+                }
+                rows={7}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Requirements" hint="One item per line">
+              <textarea
+                value={formState.requirements}
+                onChange={(event) => updateField("requirements", event.target.value)}
+                rows={7}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Tools" hint="One item per line">
+              <textarea
+                value={formState.tools}
+                onChange={(event) => updateField("tools", event.target.value)}
+                rows={5}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Leadership Signals" hint="One item per line">
+              <textarea
+                value={formState.leadershipSignals}
+                onChange={(event) =>
+                  updateField("leadershipSignals", event.target.value)
+                }
+                rows={5}
+                className="app-input"
+              />
+            </Field>
+          </div>
+        </section>
 
-        <Field label="Source URL or Identifier">
-          <input
-            value={formState.sourceUrlOrIdentifier}
-            onChange={(event) =>
-              updateField("sourceUrlOrIdentifier", event.target.value)
-            }
-            className="app-input"
-          />
-        </Field>
+        <section className="app-form-section space-y-4">
+          <div className="space-y-1">
+            <p className="app-kicker">Context And Provenance</p>
+            <p className="text-sm leading-6 text-ink/72">
+              Keep ambiguity visible instead of smoothing it away.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Ambiguity Signals" hint="One item per line">
+              <textarea
+                value={formState.ambiguitySignals}
+                onChange={(event) =>
+                  updateField("ambiguitySignals", event.target.value)
+                }
+                rows={5}
+                className="app-input"
+              />
+            </Field>
+            <Field label="Domain / Context">
+              <textarea
+                value={formState.domain}
+                onChange={(event) => updateField("domain", event.target.value)}
+                rows={5}
+                className="app-input"
+              />
+            </Field>
+          </div>
+
+          <Field label="Source URL or Identifier">
+            <input
+              value={formState.sourceUrlOrIdentifier}
+              onChange={(event) =>
+                updateField("sourceUrlOrIdentifier", event.target.value)
+              }
+              className="app-input"
+            />
+          </Field>
+        </section>
 
         {error ? (
           <p className="rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
@@ -331,10 +361,13 @@ export function JobIntakeForm({
         </div>
       </form>
 
-      <aside className="app-panel space-y-5 p-6 sm:p-7">
+      <aside className="app-accent-panel space-y-5 p-6 sm:p-7 lg:sticky lg:top-6">
         <div>
           <p className="app-kicker">Intake Notes</p>
           <h3 className="mt-2 text-xl font-semibold text-ink">The live engine stays unchanged</h3>
+          <p className="mt-3 text-sm leading-6 text-ink/74">
+            This screen is polished for demo presentation, but the guardrails and downstream session flow stay exactly the same.
+          </p>
         </div>
         <ul className="space-y-3 text-sm leading-6 text-ink/75">
           <li className="app-card px-4 py-3">Only the approved profile and rule files drive the analysis.</li>

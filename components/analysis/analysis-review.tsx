@@ -68,11 +68,11 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
 
   return (
     <div className="space-y-6">
-      <section className="app-panel p-6 sm:p-7">
+      <section className="app-page-hero">
         <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="app-kicker">Screen 2</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink">Analysis Review</h2>
+            <h2 className="mt-2 text-2xl font-semibold text-ink sm:text-[2rem]">Analysis Review</h2>
             <p className="mt-2 text-sm leading-6 text-ink/72">
               Review the rules-based output before saving anything into the tracker.
             </p>
@@ -86,7 +86,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
           </div>
         </div>
 
-        <div className="app-subpanel mt-6 p-5">
+        <div className="app-accent-panel mt-6 p-5 sm:p-6">
           <p className="app-kicker">At a glance</p>
           <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {quickViewItems.map((item) => (
@@ -100,22 +100,24 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
           </div>
         </div>
 
-        <div className="app-subpanel mt-6 p-5">
-          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+        <div className="mt-6 grid gap-4 xl:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.8fr)]">
+          <div className="app-subpanel p-5 sm:p-6">
             <div>
               <p className="app-kicker">Verdict summary</p>
               <p className="mt-3 text-sm leading-7 text-ink/80">
                 {analysis.fitVerdict.summary}
               </p>
             </div>
-            <div className="md:max-w-xs">
+          </div>
+          <div className="app-subpanel p-5 sm:p-6">
+            <div>
               <p className="app-kicker">Why this matters</p>
               <p className="mt-3 text-sm leading-6 text-ink/70">{analysis.nextAction.why}</p>
             </div>
           </div>
         </div>
 
-        <div className="app-subpanel mt-6 p-5">
+        <div className="app-subpanel mt-6 p-5 sm:p-6">
           <p className="app-kicker">Job snapshot</p>
           <p className="mt-3 text-sm leading-7 text-ink/80">
             {analysis.jobSnapshot.summary}
@@ -132,7 +134,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <Panel title="Recommended move">
+        <Panel title="Recommended move" emphasize>
           <div className="space-y-4">
             <div className="flex flex-wrap items-center gap-3">
               <StatusBadge value={analysis.nextAction.recommendation} kind="fit" />
@@ -255,14 +257,17 @@ function displayUnknown(value: string | null): string {
 
 function Panel({
   title,
-  children
+  children,
+  emphasize = false
 }: {
   title: string;
   children: ReactNode;
+  emphasize?: boolean;
 }) {
   return (
-    <section className="app-panel p-6">
-      <h3 className="text-xl font-semibold text-ink">{title}</h3>
+    <section className={emphasize ? "app-accent-panel p-6" : "app-panel p-6"}>
+      <p className="app-kicker">{emphasize ? "Priority Readout" : "Review Detail"}</p>
+      <h3 className="mt-2 text-xl font-semibold text-ink">{title}</h3>
       <div className="mt-4">{children}</div>
     </section>
   );
