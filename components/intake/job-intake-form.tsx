@@ -116,6 +116,7 @@ export function JobIntakeForm({
   );
   const [formState, setFormState] = useState<IntakeFormState>(emptyState);
   const [error, setError] = useState<string | null>(null);
+  const [showSeedPreview, setShowSeedPreview] = useState(false);
 
   function updateField<K extends keyof IntakeFormState>(
     key: K,
@@ -177,15 +178,40 @@ export function JobIntakeForm({
           </p>
           {selectedScenarioId ? (
             <div className="app-callout">
-              <p className="app-mini-label">Active Seed</p>
+              <p className="app-mini-label">Seed</p>
               <p className="mt-2 text-sm leading-6 text-ink/80">
-                Loaded from Demo Guide: {scenarioLabelById[selectedScenarioId]}
+                {scenarioLabelById[selectedScenarioId]}
               </p>
-              <p className="mt-2 text-sm leading-6 text-ink/68">
-                {selectedScenarioId === primaryDemoScenarioId
-                  ? "Recommended live demo path loaded. Next step: run the first-pass analysis."
-                  : "Scenario loaded. Next step: run the first-pass analysis to continue the guided flow."}
-              </p>
+              <div className="mt-3 flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => setShowSeedPreview((s) => !s)}
+                  className="app-button-secondary"
+                >
+                  {showSeedPreview ? "Hide seed" : "View seed"}
+                </button>
+                <p className="text-sm text-ink/68">
+                  {selectedScenarioId === primaryDemoScenarioId
+                    ? "Recommended demo path."
+                    : "Demo scenario loaded."}
+                </p>
+              </div>
+
+              {showSeedPreview && seededPosting ? (
+                <div className="mt-3 app-card p-3" id="seed-preview">
+                  <p className="font-semibold">{seededPosting.title || "(no title)"}</p>
+                  {seededPosting.company ? (
+                    <p className="text-sm text-ink/72">{seededPosting.company}</p>
+                  ) : null}
+                  {seededPosting.responsibilities?.length ? (
+                    <ul className="mt-2 text-sm list-disc pl-5">
+                      {seededPosting.responsibilities.slice(0, 3).map((r, i) => (
+                        <li key={i}>{r}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>
@@ -373,6 +399,14 @@ export function JobIntakeForm({
       </form>
 
       <aside className="app-accent-panel space-y-5 p-6 sm:p-7 lg:sticky lg:top-6">
+        <div>
+          <p className="app-kicker">What the app gives you</p>
+          <div className="mt-2 space-y-2">
+            <div className="app-card px-4 py-3">Recommendation: — visible after run</div>
+            <div className="app-card px-4 py-3">Top signals: — highlights the strongest matches</div>
+          </div>
+        </div>
+
         <div>
           <p className="app-kicker">Intake Notes</p>
           <h3 className="mt-2 text-xl font-semibold text-ink">The live engine stays unchanged</h3>
