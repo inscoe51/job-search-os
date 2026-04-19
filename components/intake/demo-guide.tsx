@@ -8,134 +8,186 @@ import {
 
 type DemoGuideProps = {
   scenarios: DemoScenarioSummary[];
+  entryPath: "guided" | "manual";
   selectedScenarioId: DemoScenarioId | null;
+  onChooseGuided: () => void;
+  onChooseManual: () => void;
   onLoadScenario: (scenarioId: DemoScenarioId) => void;
 };
 
-const tuningPoints = [
-  "Single candidate profile",
-  "Operations and coordination-focused roles",
-  "Evidence-first fit analysis",
-  "Life-fit and schedule guardrails",
-  "No invented qualifications or inflated claims"
-];
-
 export function DemoGuide({
   scenarios,
+  entryPath,
   selectedScenarioId,
+  onChooseGuided,
+  onChooseManual,
   onLoadScenario
 }: DemoGuideProps) {
   const primaryScenario = getPrimaryDemoScenarioSummary();
+  const alternateScenarios = scenarios.filter(
+    (scenario) => scenario.id !== primaryScenario.id
+  );
+  const guidedActive = entryPath === "guided";
+  const manualActive = entryPath === "manual";
 
   return (
-    <section className="app-accent-panel space-y-6 p-6 sm:p-7">
-      <div className="grid gap-5 xl:grid-cols-[minmax(0,1.2fr)_320px] xl:items-start">
-        <div className="space-y-3">
-          <p className="app-kicker">Demo Guide</p>
-          <h2 className="max-w-3xl text-2xl font-semibold text-ink sm:text-[2rem]">
-            Competition-ready guided testing
-          </h2>
-          <p className="app-copy">
-            This prototype translates a structured ChatGPT-built project framework
-            into a working app experience. It is intentionally tuned to one
-            candidate profile, one approved set of guardrails, and evidence-first
-            decision rules.
+    <section className="space-y-4">
+      <details className="rounded-[30px] border border-emerald-300/70 bg-[linear-gradient(135deg,rgba(239,248,255,0.99),rgba(236,253,245,0.97))] p-4 shadow-card ring-1 ring-emerald-200/70 sm:p-5">
+        <summary className="cursor-pointer list-none">
+          <div className="space-y-2 rounded-[24px] border border-emerald-200/80 bg-[linear-gradient(135deg,rgba(224,242,254,0.82),rgba(220,252,231,0.82))] px-4 py-3 shadow-sm">
+            <div className="space-y-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-800">
+                How This Demo Works
+              </p>
+              <h3 className="text-xl font-semibold text-ink">Before You Scroll</h3>
+              <p className="text-sm leading-6 text-ink/68">
+                Open this quick guide before choosing a path.
+              </p>
+            </div>
+            <div>
+              <span className="rounded-full bg-emerald-800 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-sm">
+                Expand Here
+              </span>
+            </div>
+          </div>
+        </summary>
+        <div className="mt-4 space-y-4">
+          <div className="grid gap-4 lg:grid-cols-3">
+            <div className="rounded-[24px] border border-sky-300 bg-sky-50/90 p-5 shadow-sm">
+              <p className="app-mini-label text-sky-800">Start here</p>
+              <p className="mt-3 text-sm leading-6 text-sky-950">
+                The recommended template is already loaded and ready to analyze. To go straight to results, click &ldquo;Review this job&rdquo; at the bottom of the page.
+              </p>
+            </div>
+            <div className="rounded-[24px] border border-emerald-200 bg-emerald-50/85 p-5 shadow-sm">
+              <p className="app-mini-label text-emerald-800">Other demo paths</p>
+              <p className="mt-3 text-sm leading-6 text-ink/78">
+                To try a different job scenario, click &ldquo;More Example Scenarios&rdquo; at the bottom of the Primary Path section.
+              </p>
+            </div>
+            <div className="rounded-[24px] border border-sky-200/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(239,248,255,0.92))] p-5 shadow-sm">
+              <p className="app-mini-label text-sky-800">Manual option</p>
+              <p className="mt-3 text-sm leading-6 text-ink/78">
+                To enter a custom job posting, click &ldquo;Open manual form&rdquo; inside the Primary Path section.
+              </p>
+            </div>
+          </div>
+          <p className="px-1 text-xs leading-5 text-ink/56">
+            Full version direction: future versions could support personal profiles, pasted jobs, and ATS-safe wording help without inventing claims.
           </p>
         </div>
-        <div className="app-callout">
-          <p className="app-mini-label">Recommended Live Path</p>
-          <p className="mt-2 text-sm leading-6 text-ink/78">
-            Start with <span className="font-semibold text-ink">{primaryScenario.label}</span>, run the first-pass analysis,
-            save the default recommendation, and open the saved tracker result.
-          </p>
-        </div>
-      </div>
+      </details>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-        <section className="app-subpanel space-y-3 p-5 sm:p-6">
-          <div className="space-y-1">
-            <p className="app-kicker">About This Demo</p>
-            <h3 className="text-xl font-semibold text-ink">Structured prototype, bounded scope</h3>
-          </div>
-          <p className="app-copy">
-            The app is designed to show how a constrained job-search operating
-            system can turn a vetted project framework into a credible first-pass
-            analysis experience without expanding into unsupported product scope.
-          </p>
-        </section>
-
-        <section className="app-subpanel space-y-3 p-5 sm:p-6">
-          <div className="space-y-1">
-            <p className="app-kicker">What This Engine Is Tuned For</p>
-            <h3 className="text-xl font-semibold text-ink">Core guardrails at a glance</h3>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {tuningPoints.map((point) => (
-              <div
-                key={point}
-                className="rounded-2xl border border-line/60 bg-panel/88 px-4 py-3 text-sm font-medium text-ink/82 shadow-sm"
-              >
-                {point}
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
-
-      <section className="space-y-3">
-        <div className="space-y-1">
-          <p className="app-kicker">Try Me</p>
-          <h3 className="text-xl font-semibold text-ink">Load a realistic seeded posting</h3>
-        </div>
-
-        <div className="grid gap-4 xl:grid-cols-3">
-          {scenarios.map((scenario) => {
-            const isSelected = scenario.id === selectedScenarioId;
-
-            return (
-              <button
-                key={scenario.id}
-                type="button"
-                onClick={() => onLoadScenario(scenario.id)}
-                className={`group relative overflow-hidden rounded-[28px] border p-5 text-left transition duration-150 sm:p-6 ${
-                  isSelected
-                    ? "border-accent bg-white shadow-card ring-1 ring-accent/10"
-                    : "border-line/70 bg-surface/82 hover:-translate-y-0.5 hover:border-accent/35 hover:bg-panel hover:shadow-card"
-                }`}
-              >
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent/70 via-accent/20 to-transparent" />
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-lg font-semibold text-ink">{scenario.label}</p>
-                      <p className="mt-1 text-sm leading-6 text-ink/72">{scenario.emphasis}</p>
-                    </div>
-                    <span className="rounded-full border border-line/70 bg-panel/85 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
-                      {scenario.recommendedForLiveDemo
-                        ? "Recommended"
-                        : isSelected
-                          ? "Loaded"
-                          : "Demo"}
-                    </span>
-                  </div>
-                  <p className="text-sm leading-6 text-ink/76">{scenario.preview}</p>
-                  <div className="rounded-2xl border border-line/60 bg-panel/92 px-4 py-3 text-sm leading-6 text-ink/80">
-                    {scenario.expectedFitLabel}
-                  </div>
-                  <p className="text-sm leading-6 text-ink/68">{scenario.presenterNote}</p>
-                  <span className="inline-flex text-sm font-semibold text-accent-strong">
-                    {isSelected ? "Loaded into intake" : "Load into intake"}
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-        <p className="text-sm leading-6 text-ink/70">
-          Presenter shortcut: choose the recommended strong-fit path when you want the cleanest
-          full walkthrough with the least explanation overhead.
+      <div className="space-y-2">
+        <p className="app-kicker">Next Step</p>
+        <h2 className="max-w-3xl text-2xl font-semibold text-ink sm:text-[2rem]">
+          Start with the guided demo or enter your own job
+        </h2>
+        <p className="max-w-3xl text-sm leading-6 text-ink/74">
+          The recommended example is already loaded, so the fastest path is to stay on the guided demo and click Review this job below.
         </p>
-      </section>
+      </div>
+
+      <div className="space-y-4">
+        <section
+          id="guided-demo-launcher"
+          className={`relative overflow-hidden rounded-[30px] border p-6 sm:p-7 ${
+            guidedActive
+              ? "border-emerald-300/70 bg-[linear-gradient(135deg,rgba(239,248,255,0.98),rgba(236,253,245,0.98))] shadow-card ring-1 ring-emerald-200/70"
+              : "border-line/70 bg-white/88 shadow-sm"
+          }`}
+        >
+          <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-sky-500 via-emerald-500 to-transparent" />
+          <div className="space-y-3.5">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div className="space-y-2">
+                <p className="app-kicker">Primary Path</p>
+                <h3 className="text-[1.6rem] font-semibold text-ink">Try the guided demo</h3>
+                <p className="max-w-2xl text-sm leading-6 text-ink/76">
+                  Start with the strongest example, review the result, and save it to the tracker in the usual demo path.
+                </p>
+              </div>
+              <span className="rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
+                Recommended
+              </span>
+            </div>
+
+            <div className="space-y-3 rounded-[24px] bg-white/56 px-1 py-1">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <p className="text-lg font-semibold text-ink">{primaryScenario.label}</p>
+                  <p className="mt-1 text-sm leading-6 text-ink/72">{primaryScenario.emphasis}</p>
+                </div>
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-800">
+                  Strong fit
+                </span>
+              </div>
+              <p className="text-sm leading-6 text-ink/78">{primaryScenario.preview}</p>
+              <p className="text-sm leading-6 text-sky-950">{primaryScenario.expectedFitLabel}</p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm leading-6 text-ink/68">{primaryScenario.presenterNote}</p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={onChooseGuided}
+                    className="app-button-primary"
+                  >
+                    {selectedScenarioId === primaryScenario.id && guidedActive
+                      ? "Recommended demo loaded"
+                      : "Load recommended demo"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onChooseManual}
+                    className={manualActive ? "app-button-primary" : "app-button-secondary"}
+                  >
+                    Open manual form
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <details className="group rounded-[24px] border border-sky-200/80 bg-white/78 p-4 shadow-sm">
+              <summary className="cursor-pointer list-none text-sm font-semibold text-ink marker:hidden">
+                <span className="inline-flex items-center gap-2">
+                  More example scenarios
+                  <span className="text-ink/45 transition group-open:rotate-45">+</span>
+                </span>
+              </summary>
+              <div className="mt-4 grid gap-3">
+                {alternateScenarios.map((scenario) => {
+                  const isSelected = scenario.id === selectedScenarioId;
+
+                  return (
+                    <button
+                      key={scenario.id}
+                      type="button"
+                      onClick={() => onLoadScenario(scenario.id)}
+                      className={`rounded-[24px] border p-4 text-left transition duration-150 ${
+                        isSelected
+                          ? "border-sky-300 bg-sky-50 shadow-sm"
+                          : "border-slate-200 bg-slate-50/80 hover:border-sky-200 hover:bg-white"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-base font-semibold text-ink">{scenario.label}</p>
+                          <p className="mt-1 text-sm leading-6 text-ink/72">{scenario.preview}</p>
+                        </div>
+                        <span className="rounded-full border border-line/70 bg-white/80 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted">
+                          {isSelected ? "Loaded" : "Example"}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </details>
+          </div>
+        </section>
+      </div>
+
     </section>
   );
 }
+

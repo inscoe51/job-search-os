@@ -1,56 +1,48 @@
-import Link from "next/link";
+"use client";
+
 import type { ReactNode } from "react";
+import { usePathname } from "next/navigation";
 
 type PageShellProps = {
   children: ReactNode;
 };
 
-const navItems = [
-  { href: "/new-analysis", label: "New Analysis" },
-  { href: "/tracker", label: "Tracker" }
-];
-
 export function PageShell({ children }: PageShellProps) {
+  const pathname = usePathname();
+  const isTrackerRoute = pathname === "/tracker" || pathname.startsWith("/tracker/");
+
   return (
     <div className="min-h-screen">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-6 sm:px-6 lg:px-8">
-        <header className="app-page-hero mb-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-            <div className="max-w-2xl space-y-2">
-              <p className="app-kicker">
-                Job Search OS MVP
-              </p>
-              <h1 className="text-3xl font-semibold tracking-tight text-ink sm:text-[2.1rem]">
-                Rules-first job analysis and weekly review
-              </h1>
-              <p className="max-w-xl text-sm leading-6 text-ink/72">
-                Single-user scaffold for disciplined job intake, analysis,
-                decision, and tracker follow-through.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4 md:items-end">
-              <div className="app-hero-stat max-w-xs">
-                <p className="app-mini-label">Competition Demo</p>
-                <p className="mt-2 text-sm leading-6 text-ink/76">
-                  Guided intake, evidence-first review, and save-ready workflow in one bounded path.
-                </p>
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+        {isTrackerRoute ? (
+          <header className="app-brand-header-compact mb-2.5">
+            <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="app-brand-header-compact-label">MVP Demo</p>
+                <p className="app-brand-header-compact-name">Job Search OS</p>
               </div>
-              <nav className="flex flex-wrap gap-3">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="app-button-secondary px-4 py-2"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
+              <p className="app-brand-header-compact-status">Saved Follow-Up</p>
             </div>
-          </div>
-        </header>
+          </header>
+        ) : (
+          <header className="app-brand-header mb-5 text-center">
+            <div className="mx-auto max-w-3xl space-y-2">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-900/68">
+                MVP Demo
+              </p>
+              <h1 className="app-brand-wordmark">
+                Job <span className="app-brand-wordmark-search">Search</span> OS
+              </h1>
+              <div className="mx-auto h-px w-24 bg-gradient-to-r from-transparent via-emerald-400/65 to-transparent" />
+              <p className="app-brand-process">
+                Review <span className="px-1.5 text-emerald-700/70">&rarr;</span> Recommendation <span className="px-1.5 text-emerald-700/70">&rarr;</span> Saved Follow-Up
+              </p>
+            </div>
+          </header>
+        )}
         <main className="flex-1">{children}</main>
       </div>
     </div>
   );
 }
+

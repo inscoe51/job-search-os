@@ -11,10 +11,7 @@ import {
 import { useRouter } from "next/navigation";
 
 import { analyzeJobPosting } from "@/lib/analysis/analyze-job-posting";
-import {
-  primaryDemoScenarioId,
-  type DemoScenarioId
-} from "@/lib/demo/sample-job-posting";
+import { type DemoScenarioId } from "@/lib/demo/sample-job-posting";
 import { createBrowserAnalysisSessionRepository } from "@/lib/repository/browser-analysis-session-repository";
 import type { JobPosting } from "@/lib/validation/schemas";
 import { jobPostingSchema } from "@/lib/validation/schemas";
@@ -97,17 +94,13 @@ export function buildJobPostingFromFormState(
 type JobIntakeFormProps = {
   seededPosting?: JobPosting | null;
   selectedScenarioId?: DemoScenarioId | null;
-};
-
-const scenarioLabelById: Record<DemoScenarioId, string> = {
-  "strong-fit-example": "Strong Fit Example",
-  "borderline-workable-fit-example": "Borderline / Workable Fit Example",
-  "poor-fit-pass-example": "Poor Fit / Pass Example"
+  openCoreDetailsToken?: number;
 };
 
 export function JobIntakeForm({
   seededPosting = null,
-  selectedScenarioId = null
+  selectedScenarioId = null,
+  openCoreDetailsToken = 0
 }: JobIntakeFormProps) {
   const router = useRouter();
   const sessionRepository = useMemo(
@@ -117,6 +110,7 @@ export function JobIntakeForm({
   const [formState, setFormState] = useState<IntakeFormState>(emptyState);
   const [error, setError] = useState<string | null>(null);
   const [showSeedPreview, setShowSeedPreview] = useState(false);
+  const [isCoreDetailsOpen, setIsCoreDetailsOpen] = useState(false);
 
   function updateField<K extends keyof IntakeFormState>(
     key: K,
@@ -135,12 +129,22 @@ export function JobIntakeForm({
 
   useEffect(() => {
     if (!seededPosting) {
+      setFormState(emptyState);
+      setShowSeedPreview(false);
+      setError(null);
       return;
     }
 
     setFormState(toFormState(seededPosting));
+    setShowSeedPreview(false);
     setError(null);
   }, [seededPosting]);
+
+  useEffect(() => {
+    if (openCoreDetailsToken > 0) {
+      setIsCoreDetailsOpen(true);
+    }
+  }, [openCoreDetailsToken]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -164,41 +168,42 @@ export function JobIntakeForm({
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(280px,1fr)]">
+    <div className="space-y-4" id="job-intake-section">
       <form
         onSubmit={handleSubmit}
-        className="app-panel space-y-6 p-6 sm:p-7"
+        className="app-panel space-y-5 border-emerald-200/70 bg-[linear-gradient(180deg,rgba(252,252,245,0.98),rgba(250,248,242,0.96)_54%,rgba(240,248,246,0.94))] p-6 shadow-sm sm:p-7"
       >
-        <div className="space-y-3">
+        <div className="space-y-3 rounded-[26px] border border-emerald-200/70 bg-[linear-gradient(135deg,rgba(236,253,245,0.74),rgba(255,251,245,0.92)_52%,rgba(239,248,255,0.78))] px-5 py-4.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.58),0_10px_24px_rgba(15,23,42,0.04)] sm:px-6">
           <p className="app-kicker">Job Intake</p>
-          <h2 className="text-2xl font-semibold text-ink">Structured posting input</h2>
+          <h2 className="text-2xl font-semibold text-ink">
+            {selectedScenarioId ? "Review the sample job" : "Structured posting input"}
+          </h2>
           <p className="app-copy">
-            Enter one posting in structured form. Partial data is allowed, but
-            unknown fields stay unknown.
+            {selectedScenarioId
+              ? "The recommended demo example is already loaded into the same form used by the live review."
+              : "Enter one posting in structured form. Partial data is allowed, but unknown fields stay unknown."}
           </p>
           {selectedScenarioId ? (
-            <div className="app-callout">
-              <p className="app-mini-label">Seed</p>
+            <div className="app-callout border-emerald-200/80 bg-[linear-gradient(180deg,rgba(236,253,245,0.82),rgba(255,251,245,0.92))]">
+              <p className="app-mini-label">Demo Loaded</p>
               <p className="mt-2 text-sm leading-6 text-ink/80">
-                {scenarioLabelById[selectedScenarioId]}
+                Strong Fit Example
               </p>
-              <div className="mt-3 flex items-center gap-3">
+              <div className="mt-3">
                 <button
                   type="button"
                   onClick={() => setShowSeedPreview((s) => !s)}
-                  className="app-button-secondary"
+                  className="app-disclosure-toggle"
                 >
-                  {showSeedPreview ? "Hide seed" : "View seed"}
+                  Expand Here
                 </button>
-                <p className="text-sm text-ink/68">
-                  {selectedScenarioId === primaryDemoScenarioId
-                    ? "Recommended demo path."
-                    : "Demo scenario loaded."}
-                </p>
               </div>
 
               {showSeedPreview && seededPosting ? (
-                <div className="mt-3 app-card p-3" id="seed-preview">
+                <div
+                  className="mt-3 app-card border-sky-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(248,250,248,0.9))] p-3"
+                  id="seed-preview"
+                >
                   <p className="font-semibold">{seededPosting.title || "(no title)"}</p>
                   {seededPosting.company ? (
                     <p className="text-sm text-ink/72">{seededPosting.company}</p>
@@ -216,85 +221,112 @@ export function JobIntakeForm({
           ) : null}
         </div>
 
-        <section className="app-form-section space-y-4">
-          <div className="space-y-1">
-            <p className="app-kicker">Core Posting Details</p>
-            <p className="text-sm leading-6 text-ink/72">
-              Capture the highest-signal role facts first so the first-pass analysis starts with the right frame.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Company">
-              <input
-                value={formState.company}
-                onChange={(event) => updateField("company", event.target.value)}
-                className="app-input"
-              />
-            </Field>
-            <Field label="Title" required>
-              <input
-                value={formState.title}
-                onChange={(event) => updateField("title", event.target.value)}
-                className="app-input"
-                required
-              />
-            </Field>
-            <Field label="Location">
-              <input
-                value={formState.location}
-                onChange={(event) => updateField("location", event.target.value)}
-                className="app-input"
-              />
-            </Field>
-            <Field label="Work Mode">
-              <select
-                value={formState.workMode}
-                onChange={(event) =>
-                  updateField("workMode", event.target.value as JobPosting["workMode"])
-                }
-                className="app-input"
-              >
-                <option value="unknown">Unknown</option>
-                <option value="remote">Remote</option>
-                <option value="hybrid">Hybrid</option>
-                <option value="onsite">Onsite</option>
-              </select>
-            </Field>
-            <Field label="Pay">
-              <input
-                value={formState.pay}
-                onChange={(event) => updateField("pay", event.target.value)}
-                className="app-input"
-              />
-            </Field>
-            <Field label="Benefits">
-              <input
-                value={formState.benefits}
-                onChange={(event) => updateField("benefits", event.target.value)}
-                className="app-input"
-              />
-            </Field>
-          </div>
+        <details
+          className="app-form-section group relative overflow-hidden border-emerald-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(249,247,240,0.92))] shadow-sm"
+          open={isCoreDetailsOpen}
+        >
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-sky-300/90 via-emerald-300/90 to-transparent" />
+          <summary
+            className="cursor-pointer list-none"
+            onClick={() => setIsCoreDetailsOpen((current) => !current)}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="space-y-1">
+                <p className="app-kicker">Core Posting Details</p>
+                <p className="text-sm leading-6 text-ink/72">
+                  Start with the main facts so the review begins with the clearest picture of the job.
+                </p>
+              </div>
+              <span className="app-disclosure-toggle">
+                Expand Here
+              </span>
+            </div>
+          </summary>
+          <div className="mt-4 space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Company">
+                <input
+                  value={formState.company}
+                  onChange={(event) => updateField("company", event.target.value)}
+                  className="app-input"
+                />
+              </Field>
+              <Field label="Title" required>
+                <input
+                  value={formState.title}
+                  onChange={(event) => updateField("title", event.target.value)}
+                  className="app-input"
+                  required
+                />
+              </Field>
+              <Field label="Location">
+                <input
+                  value={formState.location}
+                  onChange={(event) => updateField("location", event.target.value)}
+                  className="app-input"
+                />
+              </Field>
+              <Field label="Work Mode">
+                <select
+                  value={formState.workMode}
+                  onChange={(event) =>
+                    updateField("workMode", event.target.value as JobPosting["workMode"])
+                  }
+                  className="app-input"
+                >
+                  <option value="unknown">Unknown</option>
+                  <option value="remote">Remote</option>
+                  <option value="hybrid">Hybrid</option>
+                  <option value="onsite">Onsite</option>
+                </select>
+              </Field>
+              <Field label="Pay">
+                <input
+                  value={formState.pay}
+                  onChange={(event) => updateField("pay", event.target.value)}
+                  className="app-input"
+                />
+              </Field>
+              <Field label="Benefits">
+                <input
+                  value={formState.benefits}
+                  onChange={(event) => updateField("benefits", event.target.value)}
+                  className="app-input"
+                />
+              </Field>
+            </div>
 
-          <Field label="Schedule">
-            <textarea
-              value={formState.schedule}
-              onChange={(event) => updateField("schedule", event.target.value)}
-              rows={3}
-              className="app-input"
-            />
-          </Field>
-        </section>
-
-        <section className="app-form-section space-y-4">
-          <div className="space-y-1">
-            <p className="app-kicker">Role Requirements And Execution</p>
-            <p className="text-sm leading-6 text-ink/72">
-              Use one item per line to preserve the exact language the engine will analyze.
-            </p>
+            <Field label="Schedule">
+              <textarea
+                value={formState.schedule}
+                onChange={(event) => updateField("schedule", event.target.value)}
+                rows={3}
+                className="app-input"
+              />
+            </Field>
           </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Responsibilities" hint="One item per line">
+        </details>
+
+        <details
+          className="app-form-section group relative overflow-hidden border-sky-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(249,247,240,0.92))] shadow-sm"
+          open={false}
+        >
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-emerald-300/90 via-sky-300/90 to-transparent" />
+          <summary className="cursor-pointer list-none">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="space-y-1">
+                <p className="app-kicker">What The Job Asks For</p>
+                <p className="text-sm leading-6 text-ink/72">
+                  Use one item per line so each responsibility, requirement, or tool stays easy to review.
+                </p>
+              </div>
+              <span className="app-disclosure-toggle">
+                Expand Here
+              </span>
+            </div>
+          </summary>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <Field label="Responsibilities">
               <textarea
                 value={formState.responsibilities}
                 onChange={(event) =>
@@ -304,7 +336,7 @@ export function JobIntakeForm({
                 className="app-input"
               />
             </Field>
-            <Field label="Requirements" hint="One item per line">
+            <Field label="Requirements">
               <textarea
                 value={formState.requirements}
                 onChange={(event) => updateField("requirements", event.target.value)}
@@ -312,7 +344,7 @@ export function JobIntakeForm({
                 className="app-input"
               />
             </Field>
-            <Field label="Tools" hint="One item per line">
+            <Field label="Tools">
               <textarea
                 value={formState.tools}
                 onChange={(event) => updateField("tools", event.target.value)}
@@ -320,7 +352,7 @@ export function JobIntakeForm({
                 className="app-input"
               />
             </Field>
-            <Field label="Leadership Signals" hint="One item per line">
+            <Field label="Leadership Signals">
               <textarea
                 value={formState.leadershipSignals}
                 onChange={(event) =>
@@ -331,46 +363,59 @@ export function JobIntakeForm({
               />
             </Field>
           </div>
-        </section>
+        </details>
 
-        <section className="app-form-section space-y-4">
-          <div className="space-y-1">
-            <p className="app-kicker">Context And Provenance</p>
-            <p className="text-sm leading-6 text-ink/72">
-              Keep ambiguity visible instead of smoothing it away.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field label="Ambiguity Signals" hint="One item per line">
-              <textarea
-                value={formState.ambiguitySignals}
+        <details
+          className="app-form-section group relative overflow-hidden border-emerald-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(249,247,240,0.92))] shadow-sm"
+          open={false}
+        >
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-sky-300/90 via-emerald-300/90 to-transparent" />
+          <summary className="cursor-pointer list-none">
+            <div className="space-y-3">
+              <div className="space-y-1">
+                <p className="app-kicker">Optional Details</p>
+                <p className="text-sm leading-6 text-ink/72">
+                  Add extra notes only if they help explain the job or what is still unclear.
+                </p>
+              </div>
+              <span className="app-disclosure-toggle">
+                Expand Here
+              </span>
+            </div>
+          </summary>
+          <div className="mt-4 space-y-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="Unclear or missing details" hint="One item per line">
+                <textarea
+                  value={formState.ambiguitySignals}
+                  onChange={(event) =>
+                    updateField("ambiguitySignals", event.target.value)
+                  }
+                  rows={5}
+                  className="app-input"
+                />
+              </Field>
+              <Field label="Industry or team context">
+                <textarea
+                  value={formState.domain}
+                  onChange={(event) => updateField("domain", event.target.value)}
+                  rows={5}
+                  className="app-input"
+                />
+              </Field>
+            </div>
+
+            <Field label="Source link or note">
+              <input
+                value={formState.sourceUrlOrIdentifier}
                 onChange={(event) =>
-                  updateField("ambiguitySignals", event.target.value)
+                  updateField("sourceUrlOrIdentifier", event.target.value)
                 }
-                rows={5}
-                className="app-input"
-              />
-            </Field>
-            <Field label="Domain / Context">
-              <textarea
-                value={formState.domain}
-                onChange={(event) => updateField("domain", event.target.value)}
-                rows={5}
                 className="app-input"
               />
             </Field>
           </div>
-
-          <Field label="Source URL or Identifier">
-            <input
-              value={formState.sourceUrlOrIdentifier}
-              onChange={(event) =>
-                updateField("sourceUrlOrIdentifier", event.target.value)
-              }
-              className="app-input"
-            />
-          </Field>
-        </section>
+        </details>
 
         {error ? (
           <p className="rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
@@ -383,7 +428,7 @@ export function JobIntakeForm({
             type="submit"
             className="app-button-primary"
           >
-            Run first-pass analysis
+            Review this job
           </button>
           <button
             type="button"
@@ -393,37 +438,22 @@ export function JobIntakeForm({
             Reset
           </button>
         </div>
-        <p className="text-sm leading-6 text-ink/68">
-          For the cleanest live walkthrough, keep the seeded structure intact and move directly into review after submission.
+        <p className="text-sm leading-6 text-ink/66">
+          For the smoothest demo, keep the recommended example as-is, review the result, then save it to the tracker.
         </p>
       </form>
 
-      <aside className="app-accent-panel space-y-5 p-6 sm:p-7 lg:sticky lg:top-6">
-        <div>
-          <p className="app-kicker">What the app gives you</p>
-          <div className="mt-2 space-y-2">
-            <div className="app-card px-4 py-3">Recommendation: — visible after run</div>
-            <div className="app-card px-4 py-3">Top signals: — highlights the strongest matches</div>
-          </div>
-        </div>
-
-        <div>
-          <p className="app-kicker">Intake Notes</p>
-          <h3 className="mt-2 text-xl font-semibold text-ink">The live engine stays unchanged</h3>
-          <p className="mt-3 text-sm leading-6 text-ink/74">
-            This screen is polished for demo presentation, but the guardrails and downstream session flow stay exactly the same.
+      <section className="max-w-3xl rounded-[20px] border border-slate-300/55 bg-[linear-gradient(180deg,rgba(248,251,252,0.92),rgba(241,246,248,0.84))] px-4 py-3 shadow-[0_12px_24px_rgba(22,37,47,0.04),inset_0_1px_0_rgba(255,255,255,0.46)]">
+        <div className="space-y-2">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-700/58">Closing support</p>
+          <p className="text-sm leading-5 text-ink/76">
+            <span className="font-semibold text-slate-800/78">Next step:</span> Review the sample job to see the recommendation, risks, resume direction, and save-ready result on the next page.
+          </p>
+          <p className="text-sm leading-5 text-ink/72">
+            <span className="font-semibold text-slate-800/76">System note:</span> Unknown job details stay blank or marked unknown instead of being auto-filled.
           </p>
         </div>
-        <ul className="space-y-3 text-sm leading-6 text-ink/75">
-          <li className="app-card px-4 py-3">Only the approved profile and rule files drive the analysis.</li>
-          <li className="app-card px-4 py-3">Unknown posting fields stay unresolved instead of being invented.</li>
-          <li className="app-card px-4 py-3">Seeded demo scenarios populate this exact form and still run through the same validation, routing, and saved-session flow.</li>
-          <li className="app-card px-4 py-3">
-            Open issues like APW title/date precision and hard metrics remain visible
-            as unresolved credibility constraints.
-          </li>
-        </ul>
-      </aside>
+      </section>
     </div>
   );
 }
@@ -447,3 +477,4 @@ function Field({ label, children, hint, required }: FieldProps) {
     </label>
   );
 }
+

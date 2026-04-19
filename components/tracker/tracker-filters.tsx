@@ -42,11 +42,11 @@ export function TrackerFiltersPanel({
   }
 
   return (
-    <div className="app-subpanel mt-6 p-4">
-      <div className="flex flex-col gap-3 border-b border-line/80 pb-4 md:flex-row md:items-center md:justify-between">
+    <div className="mt-4 overflow-hidden rounded-[24px] border border-slate-300/55 bg-[linear-gradient(180deg,rgba(248,251,252,0.96),rgba(240,246,248,0.88))] p-3 shadow-[0_14px_30px_rgba(22,37,47,0.05),inset_0_1px_0_rgba(255,255,255,0.52)] sm:p-3.5">
+      <div className="flex flex-col gap-2 border-b border-slate-300/45 pb-3 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="app-kicker">Review filters</p>
-          <p className="mt-1 text-sm leading-6 text-ink/75">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-700/60">Review filters</p>
+          <p className="mt-0.5 text-sm leading-5 text-ink/75">
             Showing {visibleCount} of {totalCount} saved role{totalCount === 1 ? "" : "s"}.
           </p>
         </div>
@@ -59,12 +59,12 @@ export function TrackerFiltersPanel({
         </button>
       </div>
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         <FilterField label="Application status">
           <select
             value={filters.applicationStatus}
             onChange={(event) => handleApplicationStatusChange(event.target.value)}
-            className="app-input"
+            className="app-input min-h-[2.75rem] py-2"
           >
             <option value="all">All</option>
             {applicationStatusOptions.map((option) => (
@@ -79,7 +79,7 @@ export function TrackerFiltersPanel({
           <select
             value={filters.networkingStatus}
             onChange={(event) => handleNetworkingStatusChange(event.target.value)}
-            className="app-input"
+            className="app-input min-h-[2.75rem] py-2"
           >
             <option value="all">All</option>
             {networkingStatusOptions.map((option) => (
@@ -94,7 +94,7 @@ export function TrackerFiltersPanel({
           <select
             value={filters.laneMatched}
             onChange={(event) => onChange({ laneMatched: event.target.value })}
-            className="app-input"
+            className="app-input min-h-[2.75rem] py-2"
           >
             <option value="all">All</option>
             {laneOptions.map((value) => (
@@ -109,7 +109,7 @@ export function TrackerFiltersPanel({
           <select
             value={filters.resumeVariant}
             onChange={(event) => onChange({ resumeVariant: event.target.value })}
-            className="app-input"
+            className="app-input min-h-[2.75rem] py-2"
           >
             <option value="all">All</option>
             {resumeVariantOptions.map((value) => (
@@ -128,7 +128,7 @@ export function TrackerFiltersPanel({
                 workflowFocus: event.target.value as TrackerFilters["workflowFocus"]
               })
             }
-            className="app-input"
+            className="app-input min-h-[2.75rem] py-2"
           >
             <option value="all">All</option>
             <option value="follow_up_due">Follow-up due</option>
@@ -144,7 +144,7 @@ export function TrackerFiltersPanel({
                 sortBy: event.target.value as TrackerFilters["sortBy"]
               })
             }
-            className="app-input"
+            className="app-input min-h-[2.75rem] py-2"
           >
             <option value="newest">Newest</option>
             <option value="fitScore">Fit score</option>
@@ -164,8 +164,13 @@ function FilterField({
   children: ReactNode;
 }) {
   return (
-    <label className="block space-y-2">
-      <span className="app-label">{label}</span>
+    <label className="block space-y-1.5">
+      <span
+        className="text-sm font-semibold text-slate-800/88"
+        style={{ fontFamily: '"Aptos", "Segoe UI", sans-serif' }}
+      >
+        {label}
+      </span>
       {children}
     </label>
   );

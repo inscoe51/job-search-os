@@ -162,6 +162,27 @@
     background-color: hsl(var(--accent-soft) / 0.35);
   }
 
+  .app-disclosure-toggle {
+    @apply inline-flex items-center justify-center rounded-full px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-white no-underline shadow-sm;
+    font-family: "Aptos", "Segoe UI", sans-serif;
+    background-color: rgb(6 95 70);
+    box-shadow:
+      0 10px 20px rgb(6 95 70 / 0.16),
+      inset 0 1px 0 rgb(255 255 255 / 0.16);
+  }
+
+  .app-disclosure-toggle:hover {
+    background-color: rgb(4 120 87);
+  }
+
+  .app-disclosure-toggle:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 4px rgb(16 185 129 / 0.14),
+      0 10px 20px rgb(6 95 70 / 0.16),
+      inset 0 1px 0 rgb(255 255 255 / 0.16);
+  }
+
   .app-table-head {
     @apply text-[11px] font-semibold uppercase tracking-[0.24em] text-muted;
     font-family: "Aptos", "Segoe UI", sans-serif;
@@ -191,6 +212,126 @@
 
   .app-page-hero > * {
     position: relative;
+  }
+
+  .app-page-hero-quiet {
+    @apply relative overflow-hidden rounded-[28px] border p-4 sm:p-5;
+    border-color: hsl(var(--line) / 0.68);
+    background:
+      linear-gradient(155deg, rgba(248, 251, 253, 0.98) 0%, rgba(242, 247, 249, 0.95) 58%, rgba(236, 244, 247, 0.92) 100%);
+    box-shadow:
+      0 18px 38px hsl(var(--ink) / 0.06),
+      inset 0 1px 0 hsl(0 0% 100% / 0.56);
+  }
+
+  .app-page-hero-quiet::before {
+    content: "";
+    position: absolute;
+    inset: auto -8% -32% auto;
+    width: 220px;
+    height: 220px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.1) 0%, transparent 72%);
+    pointer-events: none;
+  }
+
+  .app-page-hero-quiet > * {
+    position: relative;
+  }
+
+  .app-brand-header {
+    @apply relative overflow-hidden rounded-[28px] border px-5 py-4 sm:px-6 sm:py-4;
+    border-color: hsl(var(--line) / 0.72);
+    background:
+      linear-gradient(160deg, rgba(216, 238, 248, 0.97), rgba(247, 252, 255, 0.95) 42%, rgba(223, 246, 235, 0.95));
+    box-shadow:
+      0 18px 42px hsl(var(--ink) / 0.07),
+      inset 0 1px 0 hsl(0 0% 100% / 0.58);
+  }
+
+  .app-brand-header::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% -42% auto;
+    width: 210px;
+    height: 210px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.12) 0%, transparent 72%);
+    pointer-events: none;
+  }
+
+  .app-brand-header > * {
+    position: relative;
+  }
+
+  .app-brand-header-compact {
+    @apply relative overflow-hidden rounded-[24px] border px-4 py-3 sm:px-5 sm:py-3.5;
+    border-color: hsl(var(--line) / 0.68);
+    background:
+      linear-gradient(160deg, rgba(238, 246, 250, 0.96), rgba(248, 251, 253, 0.95) 42%, rgba(239, 248, 244, 0.94));
+    box-shadow:
+      0 14px 30px hsl(var(--ink) / 0.06),
+      inset 0 1px 0 hsl(0 0% 100% / 0.56);
+  }
+
+  .app-brand-header-compact::before {
+    content: "";
+    position: absolute;
+    inset: auto -10% -48% auto;
+    width: 180px;
+    height: 180px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, hsl(var(--accent) / 0.1) 0%, transparent 72%);
+    pointer-events: none;
+  }
+
+  .app-brand-header-compact > * {
+    position: relative;
+  }
+
+  .app-brand-header-compact-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.24em];
+    color: rgb(6 78 59 / 0.64);
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-brand-header-compact-name {
+    @apply mt-1 text-sm font-semibold tracking-[0.08em];
+    color: rgb(8 47 73 / 0.72);
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-brand-header-compact-status {
+    @apply text-xs font-semibold tracking-[0.14em] sm:text-right;
+    color: rgb(6 78 59 / 0.58);
+    font-family: "Aptos", "Segoe UI", sans-serif;
+  }
+
+  .app-brand-wordmark {
+    @apply text-[2.15rem] font-bold tracking-[-0.04em] sm:text-[2.55rem];
+    font-family: "Aptos Display", "Segoe UI Semibold", "Trebuchet MS", sans-serif;
+    background: linear-gradient(135deg, #04180d 0%, #0d3b21 18%, #1d6a3c 33%, #dff3e7 45%, #6aaa7d 52%, #1d5e37 64%, #0f3d23 78%, #02140b 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+
+  .app-brand-wordmark-search {
+    background: linear-gradient(135deg, #e4f7eb 0%, #f1fbf5 18%, #d4eedf 34%, #8fc8a5 52%, #2e7d52 74%, #14532d 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+
+  .app-brand-process {
+ .app-brand-process {
+  @apply text-sm font-semibold tracking-[0.14em];
+  color: hsl(205 70% 15% / 0.72);
+  font-family: "Aptos", "Segoe UI", sans-serif;
+}
+color: hsl(205 70% 15% / 0.72);
+    font-family: "Aptos", "Segoe UI", sans-serif;
   }
 
   .app-hero-stat {

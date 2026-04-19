@@ -8,6 +8,7 @@ import {
 type StatusBadgeProps = {
   value: string;
   kind?: "application" | "networking" | "fit" | "life";
+  labelOverride?: string;
 };
 
 const toneMap: Record<string, string> = {
@@ -23,7 +24,7 @@ const toneMap: Record<string, string> = {
   apply: "border-accent/15 bg-accent-soft text-accent-strong",
   apply_with_caution: "border-caution/15 bg-caution-soft text-caution",
   hold: "border-caution/15 bg-caution-soft text-caution",
-  pass: "border-danger/15 bg-danger-soft text-danger",
+  pass: "border-accent/15 bg-accent-soft text-accent-strong",
   partial: "border-caution/15 bg-caution-soft text-caution",
   fail: "border-danger/15 bg-danger-soft text-danger",
   unknown: "border-line bg-surface/85 text-ink",
@@ -37,8 +38,9 @@ const toneMap: Record<string, string> = {
   freelance_better: "border-danger/15 bg-danger-soft text-danger"
 };
 
-export function StatusBadge({ value, kind = "application" }: StatusBadgeProps) {
+export function StatusBadge({ value, kind = "application", labelOverride }: StatusBadgeProps) {
   const label =
+    labelOverride ??
     kind === "application"
       ? getApplicationStatusLabel(value as ApplicationStatus) ?? value
       : kind === "networking"
