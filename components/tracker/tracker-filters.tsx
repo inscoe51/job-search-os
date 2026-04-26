@@ -42,10 +42,10 @@ export function TrackerFiltersPanel({
   }
 
   return (
-    <div className="mt-4 overflow-hidden rounded-[24px] border border-slate-300/55 bg-[linear-gradient(180deg,rgba(248,251,252,0.96),rgba(240,246,248,0.88))] p-3 shadow-[0_14px_30px_rgba(22,37,47,0.05),inset_0_1px_0_rgba(255,255,255,0.52)] sm:p-3.5">
-      <div className="flex flex-col gap-2 border-b border-slate-300/45 pb-3 md:flex-row md:items-center md:justify-between">
+    <div className="mt-4 rounded-[20px] border border-slate-300/50 bg-white/48 px-3.5 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.46)] sm:px-4">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-700/60">Review filters</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-700/60">Review filters</p>
           <p className="mt-0.5 text-sm leading-5 text-ink/75">
             Showing {visibleCount} of {totalCount} saved role{totalCount === 1 ? "" : "s"}.
           </p>
@@ -59,7 +59,7 @@ export function TrackerFiltersPanel({
         </button>
       </div>
 
-      <div className="mt-3 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-3 grid gap-2.5 md:grid-cols-2 xl:grid-cols-6">
         <FilterField label="Application status">
           <select
             value={filters.applicationStatus}
@@ -166,7 +166,7 @@ function FilterField({
   return (
     <label className="block space-y-1.5">
       <span
-        className="text-sm font-semibold text-slate-800/88"
+        className="text-[12px] font-semibold uppercase tracking-[0.14em] text-slate-700/66"
         style={{ fontFamily: '"Aptos", "Segoe UI", sans-serif' }}
       >
         {label}

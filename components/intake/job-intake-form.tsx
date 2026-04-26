@@ -94,13 +94,11 @@ export function buildJobPostingFromFormState(
 type JobIntakeFormProps = {
   seededPosting?: JobPosting | null;
   selectedScenarioId?: DemoScenarioId | null;
-  openCoreDetailsToken?: number;
 };
 
 export function JobIntakeForm({
   seededPosting = null,
-  selectedScenarioId = null,
-  openCoreDetailsToken = 0
+  selectedScenarioId = null
 }: JobIntakeFormProps) {
   const router = useRouter();
   const sessionRepository = useMemo(
@@ -109,8 +107,6 @@ export function JobIntakeForm({
   );
   const [formState, setFormState] = useState<IntakeFormState>(emptyState);
   const [error, setError] = useState<string | null>(null);
-  const [showSeedPreview, setShowSeedPreview] = useState(false);
-  const [isCoreDetailsOpen, setIsCoreDetailsOpen] = useState(false);
 
   function updateField<K extends keyof IntakeFormState>(
     key: K,
@@ -130,21 +126,13 @@ export function JobIntakeForm({
   useEffect(() => {
     if (!seededPosting) {
       setFormState(emptyState);
-      setShowSeedPreview(false);
       setError(null);
       return;
     }
 
     setFormState(toFormState(seededPosting));
-    setShowSeedPreview(false);
     setError(null);
   }, [seededPosting]);
-
-  useEffect(() => {
-    if (openCoreDetailsToken > 0) {
-      setIsCoreDetailsOpen(true);
-    }
-  }, [openCoreDetailsToken]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -176,72 +164,27 @@ export function JobIntakeForm({
         <div className="space-y-3 rounded-[26px] border border-emerald-200/70 bg-[linear-gradient(135deg,rgba(236,253,245,0.74),rgba(255,251,245,0.92)_52%,rgba(239,248,255,0.78))] px-5 py-4.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.58),0_10px_24px_rgba(15,23,42,0.04)] sm:px-6">
           <p className="app-kicker">Job Intake</p>
           <h2 className="text-2xl font-semibold text-ink">
-            {selectedScenarioId ? "Review the sample job" : "Structured posting input"}
+            {selectedScenarioId ? "Review the demo job posting" : "Structured posting input"}
           </h2>
           <p className="app-copy">
             {selectedScenarioId
-              ? "The recommended demo example is already loaded into the same form used by the live review."
+              ? "The selected scenario has loaded these visible posting fields below."
               : "Enter one posting in structured form. Partial data is allowed, but unknown fields stay unknown."}
           </p>
-          {selectedScenarioId ? (
-            <div className="app-callout border-emerald-200/80 bg-[linear-gradient(180deg,rgba(236,253,245,0.82),rgba(255,251,245,0.92))]">
-              <p className="app-mini-label">Demo Loaded</p>
-              <p className="mt-2 text-sm leading-6 text-ink/80">
-                Strong Fit Example
-              </p>
-              <div className="mt-3">
-                <button
-                  type="button"
-                  onClick={() => setShowSeedPreview((s) => !s)}
-                  className="app-disclosure-toggle"
-                >
-                  Expand Here
-                </button>
-              </div>
-
-              {showSeedPreview && seededPosting ? (
-                <div
-                  className="mt-3 app-card border-sky-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(248,250,248,0.9))] p-3"
-                  id="seed-preview"
-                >
-                  <p className="font-semibold">{seededPosting.title || "(no title)"}</p>
-                  {seededPosting.company ? (
-                    <p className="text-sm text-ink/72">{seededPosting.company}</p>
-                  ) : null}
-                  {seededPosting.responsibilities?.length ? (
-                    <ul className="mt-2 text-sm list-disc pl-5">
-                      {seededPosting.responsibilities.slice(0, 3).map((r, i) => (
-                        <li key={i}>{r}</li>
-                      ))}
-                    </ul>
-                  ) : null}
-                </div>
-              ) : null}
-            </div>
-          ) : null}
         </div>
 
-        <details
+        <section
           className="app-form-section group relative overflow-hidden border-emerald-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(249,247,240,0.92))] shadow-sm"
-          open={isCoreDetailsOpen}
         >
           <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-sky-300/90 via-emerald-300/90 to-transparent" />
-          <summary
-            className="cursor-pointer list-none"
-            onClick={() => setIsCoreDetailsOpen((current) => !current)}
-          >
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="space-y-1">
-                <p className="app-kicker">Core Posting Details</p>
-                <p className="text-sm leading-6 text-ink/72">
-                  Start with the main facts so the review begins with the clearest picture of the job.
-                </p>
-              </div>
-              <span className="app-disclosure-toggle">
-                Expand Here
-              </span>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <p className="app-kicker">Core Posting Details</p>
+              <p className="text-sm leading-6 text-ink/72">
+                Start with the main facts so the review begins with the clearest picture of the job.
+              </p>
             </div>
-          </summary>
+          </div>
           <div className="mt-4 space-y-4">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="Company">
@@ -305,7 +248,7 @@ export function JobIntakeForm({
               />
             </Field>
           </div>
-        </details>
+        </section>
 
         <details
           className="app-form-section group relative overflow-hidden border-sky-200/80 bg-[linear-gradient(180deg,rgba(255,251,245,0.95),rgba(249,247,240,0.92))] shadow-sm"
@@ -442,18 +385,6 @@ export function JobIntakeForm({
           For the smoothest demo, keep the recommended example as-is, review the result, then save it to the tracker.
         </p>
       </form>
-
-      <section className="max-w-3xl rounded-[20px] border border-slate-300/55 bg-[linear-gradient(180deg,rgba(248,251,252,0.92),rgba(241,246,248,0.84))] px-4 py-3 shadow-[0_12px_24px_rgba(22,37,47,0.04),inset_0_1px_0_rgba(255,255,255,0.46)]">
-        <div className="space-y-2">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-700/58">Closing support</p>
-          <p className="text-sm leading-5 text-ink/76">
-            <span className="font-semibold text-slate-800/78">Next step:</span> Review the sample job to see the recommendation, risks, resume direction, and save-ready result on the next page.
-          </p>
-          <p className="text-sm leading-5 text-ink/72">
-            <span className="font-semibold text-slate-800/76">System note:</span> Unknown job details stay blank or marked unknown instead of being auto-filled.
-          </p>
-        </div>
-      </section>
     </div>
   );
 }

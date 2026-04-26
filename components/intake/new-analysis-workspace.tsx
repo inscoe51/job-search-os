@@ -12,17 +12,13 @@ import {
 } from "@/lib/demo/sample-job-posting";
 import type { JobPosting } from "@/lib/validation/schemas";
 
-type EntryPath = "guided" | "manual";
-
 export function NewAnalysisWorkspace() {
   const scenarios = useMemo(() => getDemoScenarioSummaries(), []);
-  const [entryPath, setEntryPath] = useState<EntryPath>("guided");
   const [selectedScenarioId, setSelectedScenarioId] =
     useState<DemoScenarioId | null>(primaryDemoScenarioId);
   const [seededPosting, setSeededPosting] = useState<JobPosting | null>(() =>
     loadDemoJobPostingScenario(primaryDemoScenarioId)
   );
-  const [openCoreDetailsToken, setOpenCoreDetailsToken] = useState(0);
 
   function scrollToJobIntake() {
     window.requestAnimationFrame(() => {
@@ -36,7 +32,6 @@ export function NewAnalysisWorkspace() {
   }
 
   function handleLoadScenario(scenarioId: DemoScenarioId) {
-    setEntryPath("guided");
     setSelectedScenarioId(scenarioId);
     setSeededPosting(loadDemoJobPostingScenario(scenarioId));
   }
@@ -46,44 +41,17 @@ export function NewAnalysisWorkspace() {
     scrollToJobIntake();
   }
 
-  function handleChooseManual() {
-    setEntryPath("manual");
-    setSelectedScenarioId(null);
-    setSeededPosting(null);
-  }
-
-  function handleChooseManualAndScroll() {
-    handleChooseManual();
-    setOpenCoreDetailsToken((current) => current + 1);
-    scrollToJobIntake();
-  }
-
-  function handleChooseGuided() {
-    handleLoadScenario(primaryDemoScenarioId);
-  }
-
-  function handleChooseGuidedAndScroll() {
-    handleChooseGuided();
-    scrollToJobIntake();
-  }
-
   return (
     <div className="space-y-6">
       <DemoGuide
         scenarios={scenarios}
-        entryPath={entryPath}
         selectedScenarioId={selectedScenarioId}
-        onChooseGuided={handleChooseGuidedAndScroll}
-        onChooseManual={handleChooseManualAndScroll}
         onLoadScenario={handleLoadScenarioAndScroll}
       />
-      {entryPath === "guided" || entryPath === "manual" ? (
-        <JobIntakeForm
-          openCoreDetailsToken={openCoreDetailsToken}
-          selectedScenarioId={selectedScenarioId}
-          seededPosting={seededPosting}
-        />
-      ) : null}
+      <JobIntakeForm
+        selectedScenarioId={selectedScenarioId}
+        seededPosting={seededPosting}
+      />
     </div>
   );
 }

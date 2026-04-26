@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 import { AnalysisReview } from "@/components/analysis/analysis-review";
@@ -41,6 +42,11 @@ export function AnalysisSessionView({
     <div className="space-y-6">
       <AnalysisReview session={session} />
       <DecisionSaveForm session={session} />
+      <div className="flex justify-start">
+        <Link href="/new-analysis" className="app-button-secondary px-4 py-2">
+          Start another analysis
+        </Link>
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { isPrimaryDemoSource } from "@/lib/demo/sample-job-posting";
-import { formatResumeDirectionLabel } from "@/lib/display/labels";
+import { formatDisplayLabel } from "@/lib/display/labels";
 import { TrackerFiltersPanel } from "@/components/tracker/tracker-filters";
 import { createBrowserTrackerRepository } from "@/lib/repository/browser-tracker-repository";
 import {
@@ -61,7 +61,7 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <section className="app-page-hero-quiet">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
@@ -141,15 +141,28 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
             : "hidden"
         }`}
       >
+        <div className="flex flex-col gap-1.5 border-b border-slate-300/45 bg-white/36 px-4 py-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-700/60">
+              Weekly review list
+            </p>
+            <p className="mt-0.5 text-sm leading-5 text-ink/68">
+              Scan the job, fit strength, recommended action, and current workflow state.
+            </p>
+          </div>
+          <p className="text-sm font-semibold text-ink/72">
+            {filteredRecords.length} shown
+          </p>
+        </div>
         <div className="overflow-x-auto">
           <table className="min-w-full text-left text-sm">
             <thead className="bg-slate-100/80 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-700/60">
               <tr>
-                <th className="px-4 py-3.5">Role</th>
-                <th className="px-4 py-3.5">Lane</th>
+                <th className="px-4 py-3.5">Job</th>
                 <th className="px-4 py-3.5">Fit</th>
-                <th className="px-4 py-3.5">Statuses</th>
-                <th className="px-4 py-3.5">Follow-up</th>
+                <th className="px-4 py-3.5">Recommended action</th>
+                <th className="px-4 py-3.5">Current state</th>
+                <th className="px-4 py-3.5">Open</th>
               </tr>
             </thead>
             <tbody>
@@ -158,58 +171,46 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
                   key={record.jobId}
                   className="border-t border-slate-300/45 align-top bg-white/24 transition-colors hover:bg-slate-100/55"
                 >
-                  <td className="px-4 py-3 align-top">
+                  <td className="w-[34%] px-4 py-3.5 align-top">
                     <p className="font-semibold leading-5 text-ink">{record.title}</p>
                     <p className="mt-0.5 text-sm leading-5 text-ink/72">{record.company}</p>
-                    <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] uppercase tracking-[0.16em] text-slate-700/56">
-                      <span>{formatResumeDirectionLabel(record.resumeVariant)}</span>
-                      <span className="text-ink/35">|</span>
-                      <span className="normal-case tracking-normal text-xs text-muted">{record.source}</span>
-                    </div>
                   </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="max-w-[13rem] rounded-[0.95rem] border border-slate-300/35 bg-slate-50/50 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]">
-                      <p className="leading-5 text-ink/78">{record.laneMatched}</p>
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="rounded-[0.95rem] border border-slate-300/35 bg-slate-50/50 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]">
-                      <p className="text-sm font-semibold leading-5">{record.fitScore}/100</p>
-                    </div>
-                    <div className="mt-1.5 flex flex-wrap gap-1.5">
+                  <td className="w-[18%] px-4 py-3.5 align-top">
+                    <div className="inline-flex flex-wrap items-center gap-1.5 rounded-full border border-slate-300/45 bg-white/58 px-2.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.46)]">
+                      <span className="text-sm font-semibold leading-none text-ink">
+                        {record.fitScore}/100
+                      </span>
                       <StatusBadge value={record.fitVerdict} kind="fit" />
-                      <StatusBadge value={record.lifeFitLabel} kind="life" />
                     </div>
                   </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="flex flex-col gap-1.5 rounded-[0.95rem] border border-slate-300/35 bg-slate-50/50 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]">
+                  <td className="w-[20%] px-4 py-3.5 align-top">
+                    <StatusBadge
+                      value={record.analysisContext.recommendation}
+                      kind="fit"
+                      labelOverride={formatDisplayLabel(record.analysisContext.recommendation)}
+                    />
+                  </td>
+                  <td className="w-[20%] px-4 py-3.5 align-top">
+                    <div className="space-y-1.5">
                       <StatusBadge
                         value={record.applicationStatus}
                         kind="application"
                         labelOverride={getTrackerStatusDisplayLabel(record.applicationStatus)}
                       />
-                      <StatusBadge
-                        value={record.networkingStatus}
-                        kind="networking"
-                        labelOverride={getTrackerStatusDisplayLabel(record.networkingStatus)}
-                      />
+                      {record.followUpDate ? (
+                        <p className="text-xs leading-4 text-ink/60">
+                          Follow-up {formatDateLabel(record.followUpDate)}
+                        </p>
+                      ) : null}
                     </div>
                   </td>
-                  <td className="px-4 py-3 align-top">
-                    <div className="flex flex-col items-start gap-1.5 rounded-[0.95rem] border border-slate-300/35 bg-slate-50/50 px-2.5 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)]">
-                      <div>
-                        <p className="text-sm font-semibold leading-5">{formatDateLabel(record.followUpDate)}</p>
-                        <p className="mt-0.5 text-xs leading-4 text-ink/55">
-                          Saved {formatDateLabel(record.savedAt)}
-                        </p>
-                      </div>
-                      <Link
-                        href={`/tracker/${record.jobId}`}
-                        className="app-button-ghost px-2.5 py-1 text-xs"
-                      >
-                        Open record
-                      </Link>
-                    </div>
+                  <td className="w-[8%] px-4 py-3.5 align-top">
+                    <Link
+                      href={`/tracker/${record.jobId}`}
+                      className="app-button-ghost px-2.5 py-1 text-xs"
+                    >
+                      Open record
+                    </Link>
                   </td>
                 </tr>
               ))}
@@ -233,6 +234,10 @@ function MetricChip({ label, value }: { label: string; value: string }) {
 function getTrackerStatusDisplayLabel(value: string): string | undefined {
   if (value === "apply_now") {
     return "Ready to apply";
+  }
+
+  if (value === "hold_for_variant") {
+    return "Hold for resume variant";
   }
 
   if (value === "not_applicable") {
