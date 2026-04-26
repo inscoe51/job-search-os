@@ -40,4 +40,15 @@ export class MemoryTrackerRepository implements TrackerRepository {
     this.records = [next, ...this.records.filter((record) => record.jobId !== jobId)];
     return next;
   }
+
+  remove(jobId: string): boolean {
+    const nextRecords = this.records.filter((record) => record.jobId !== jobId);
+
+    if (nextRecords.length === this.records.length) {
+      return false;
+    }
+
+    this.records = nextRecords;
+    return true;
+  }
 }

@@ -264,7 +264,8 @@ export function JobIntakeForm({
                 </p>
               </div>
               <span className="app-disclosure-toggle">
-                Expand Here
+                <span className="inline group-open:hidden">EXPAND HERE</span>
+                <span className="hidden group-open:inline">COLLAPSE SECTION</span>
               </span>
             </div>
           </summary>
@@ -322,7 +323,8 @@ export function JobIntakeForm({
                 </p>
               </div>
               <span className="app-disclosure-toggle">
-                Expand Here
+                <span className="inline group-open:hidden">EXPAND HERE</span>
+                <span className="hidden group-open:inline">COLLAPSE SECTION</span>
               </span>
             </div>
           </summary>

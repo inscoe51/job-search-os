@@ -65,4 +65,5 @@ export interface TrackerRepository {
   get(jobId: string): TrackerRecord | null;
   save(record: TrackerRecord): TrackerRecord;
   update(jobId: string, updates: TrackerWorkflowUpdate): TrackerRecord | null;
+  remove(jobId: string): boolean;
 }

@@ -49,6 +49,22 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
   const primaryDemoRecord =
     records.find((record) => isPrimaryDemoSource(record.source)) ?? null;
 
+  function deleteRecord(record: TrackerRecord) {
+    const confirmed = window.confirm("Delete this saved role? This cannot be undone.");
+
+    if (!confirmed) {
+      return;
+    }
+
+    const removed = repository.remove(record.jobId);
+
+    if (!removed) {
+      return;
+    }
+
+    setRecords((current) => current.filter((item) => item.jobId !== record.jobId));
+  }
+
   if (!records.length) {
     return (
       <EmptyState
@@ -159,7 +175,7 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
             <thead className="bg-slate-100/80 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-700/60">
               <tr>
                 <th className="px-4 py-3.5">Job</th>
-                <th className="px-4 py-3.5">Fit</th>
+                <th className="py-3.5 pl-3 pr-4">Fit</th>
                 <th className="px-4 py-3.5">Recommended action</th>
                 <th className="px-4 py-3.5">Current state</th>
                 <th className="px-4 py-3.5">Open</th>
@@ -175,8 +191,8 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
                     <p className="font-semibold leading-5 text-ink">{record.title}</p>
                     <p className="mt-0.5 text-sm leading-5 text-ink/72">{record.company}</p>
                   </td>
-                  <td className="w-[18%] px-4 py-3.5 align-top">
-                    <div className="inline-flex flex-wrap items-center gap-1.5 rounded-full border border-slate-300/45 bg-white/58 px-2.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.46)]">
+                  <td className="w-[18%] py-3.5 pl-3 pr-4 align-top">
+                    <div className="inline-flex items-center gap-1 rounded-full border border-slate-300/45 bg-white/58 px-2 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.46)] whitespace-nowrap">
                       <span className="text-sm font-semibold leading-none text-ink">
                         {record.fitScore}/100
                       </span>
@@ -205,12 +221,22 @@ export function TrackerTable({ initialRecords }: TrackerTableProps = {}) {
                     </div>
                   </td>
                   <td className="w-[8%] px-4 py-3.5 align-top">
-                    <Link
-                      href={`/tracker/${record.jobId}`}
-                      className="app-button-ghost px-2.5 py-1 text-xs"
-                    >
-                      Open record
-                    </Link>
+                    <div className="flex flex-col items-start gap-1.5">
+                      <Link
+                        href={`/tracker/${record.jobId}`}
+                        className="app-button-ghost px-2.5 py-1 text-xs"
+                      >
+                        Open record
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => deleteRecord(record)}
+                        className="px-1 text-xs font-semibold text-danger/70 underline-offset-2 transition hover:text-danger hover:underline"
+                        aria-label={`Delete saved role for ${record.title} at ${record.company}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

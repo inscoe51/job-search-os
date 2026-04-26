@@ -174,10 +174,7 @@ export function AnalysisReview({ session }: AnalysisReviewProps) {
             />
             <SignalList
               title="Bridges"
-              items={bridgeItems.map(
-                (area) =>
-                  `${area.jobNeed} -> ${area.candidateAngle}${area.warning ? ` | ${area.warning}` : ""}`
-              )}
+              items={bridgeItems.map(formatBridgeText)}
               empty="No translation areas were needed for the current first-pass read."
               compact
               maxItems={2}
@@ -341,6 +338,22 @@ function ProofList({
 
 function displayUnknown(value: string | null): string {
   return value ?? "Unknown";
+}
+
+function formatBridgeText(
+  area: AnalysisSession["analysis"]["translationAreas"][number]
+): string {
+  return `${area.jobNeed}: ${formatBridgeAngle(area.candidateAngle)}${area.warning ? ` | ${area.warning}` : ""}`;
+}
+
+function formatBridgeAngle(text: string): string {
+  const trimmed = text.trim();
+
+  if (!trimmed) {
+    return trimmed;
+  }
+
+  return `${trimmed.charAt(0).toLocaleLowerCase()}${trimmed.slice(1)}`;
 }
 
 function FullAnalysisSupport({

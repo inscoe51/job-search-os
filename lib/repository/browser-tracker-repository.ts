@@ -71,6 +71,18 @@ export class BrowserTrackerRepository implements TrackerRepository {
 
     return updatedRecord;
   }
+
+  remove(jobId: string): boolean {
+    const records = readRecords();
+    const nextRecords = records.filter((record) => record.jobId !== jobId);
+
+    if (nextRecords.length === records.length) {
+      return false;
+    }
+
+    writeRecords(nextRecords);
+    return true;
+  }
 }
 
 export function createBrowserTrackerRepository(): TrackerRepository {

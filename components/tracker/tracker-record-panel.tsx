@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { EmptyState } from "@/components/shared/empty-state";
@@ -25,6 +26,7 @@ export function TrackerRecordPanel({
   jobId,
   initialRecord = null
 }: TrackerRecordPanelProps) {
+  const router = useRouter();
   const repository = useMemo(() => createBrowserTrackerRepository(), []);
   const [record, setRecord] = useState<TrackerRecord | null>(initialRecord);
   const [error, setError] = useState<string | null>(null);
@@ -65,52 +67,62 @@ export function TrackerRecordPanel({
     setError(null);
   }
 
+  function deleteRecord() {
+    if (!record) {
+      setError("The record could not be deleted.");
+      return;
+    }
+
+    const confirmed = window.confirm("Delete this saved role? This cannot be undone.");
+
+    if (!confirmed) {
+      return;
+    }
+
+    const removed = repository.remove(record.jobId);
+
+    if (!removed) {
+      setError("The record could not be deleted.");
+      return;
+    }
+
+    setError(null);
+    router.push("/tracker");
+  }
+
   return (
     <div className="space-y-4">
-      <section className="app-panel p-4 sm:p-5">
+      <section className="app-page-hero-quiet">
         <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="app-kicker">Screen 5</p>
-            <h2 className="mt-2 text-2xl font-semibold text-ink">Tracker Record Detail</h2>
-            <p className="mt-1.5 text-sm leading-5 text-ink/72">
-              Update workflow state without rerunning the original fit analysis.
+            <h2 className="mt-1.5 text-[1.7rem] font-semibold text-ink">
+              {record.company} / {record.title}
+            </h2>
+            <p className="mt-1 text-sm leading-5 text-ink/72">
+              Work the saved role from its current tracker state. Original analysis stays locked.
             </p>
+          </div>
         </div>
-        <div className="flex flex-wrap gap-2">
-            <StatusBadge
-              value={record.applicationStatus}
-              kind="application"
-              labelOverride={getTrackerStatusDisplayLabel(record.applicationStatus)}
-            />
-            <StatusBadge
-              value={record.networkingStatus}
-              kind="networking"
-              labelOverride={getTrackerStatusDisplayLabel(record.networkingStatus)}
-            />
-        </div>
-      </div>
 
-        <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          <Summary label="Company" value={record.company} />
-          <Summary label="Title" value={record.title} />
+        <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-5">
           <Summary label="Saved lane" value={record.laneMatched} />
-          <Summary label="Saved" value={formatDateLabel(record.savedAt)} />
-        </div>
-
-        <div className="mt-3 grid gap-3 md:grid-cols-3">
-          <Summary label="Saved fit verdict" value={formatDisplayLabel(record.fitVerdict)} />
+          <Summary label="Saved fit" value={formatDisplayLabel(record.fitVerdict)} />
           <Summary
-            label="Saved resume direction"
+            label="Resume direction"
             value={formatResumeDirectionLabel(record.resumeVariant)}
           />
           <Summary
-            label="Saved next move"
+            label="Saved recommendation"
             value={formatDisplayLabel(record.analysisContext.recommendation)}
           />
+          <Summary label="Saved" value={formatDateLabel(record.savedAt)} />
         </div>
         {showPrimaryDemoCue ? (
-          <div className="mt-3 rounded-[1.1rem] border border-line/45 bg-surface/24 px-3 py-2.5">
-            <p className="app-mini-label">Recommended Demo Result</p>
+          <div className="mt-3 rounded-[1.1rem] border border-slate-300/45 bg-white/42 px-3 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.44)]">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-700/58">
+              Recommended Demo Result
+            </p>
             <p className="mt-1 text-sm leading-5 text-ink/78">
               This is the recommended live-demo record. Use it to show that saved analysis context
               stays intact while workflow fields remain editable.
@@ -119,15 +131,35 @@ export function TrackerRecordPanel({
         ) : null}
       </section>
 
-      <section className="app-panel p-5 pb-4">
-        <div>
-          <p className="app-kicker">Editable workflow fields</p>
-          <h3 className="text-xl font-semibold text-ink">Workflow updates</h3>
-          <p className="mt-1.5 text-sm leading-5 text-ink/72">
-            Edit only the approved tracker workflow fields here. Saved fit, lane,
-            and resume-direction context remains read-only below.
-          </p>
-          <div className="mt-4 grid gap-x-4 gap-y-3 md:grid-cols-2 xl:grid-cols-3">
+      <section className="overflow-hidden rounded-[28px] border border-emerald-300/55 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(246,250,247,0.9))] shadow-[0_18px_38px_rgba(14,28,20,0.06),inset_0_1px_0_rgba(255,255,255,0.5)]">
+        <div className="border-b border-emerald-200/60 bg-[linear-gradient(180deg,rgba(230,244,237,0.88),rgba(246,250,247,0.62))] px-5 py-4 sm:px-6">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-900/56">
+                Editable workflow fields
+              </p>
+              <h3 className="mt-1 text-xl font-semibold text-ink">Current next-step management</h3>
+              <p className="mt-1.5 max-w-2xl text-sm leading-5 text-ink/72">
+                Update only the tracker fields that help you manage this role now.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <StatusBadge
+                value={record.applicationStatus}
+                kind="application"
+                labelOverride={getTrackerStatusDisplayLabel(record.applicationStatus)}
+              />
+              <StatusBadge
+                value={record.networkingStatus}
+                kind="networking"
+                labelOverride={getTrackerStatusDisplayLabel(record.networkingStatus)}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="px-5 py-5 sm:px-6 sm:py-6">
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <Field label="Application status">
               <select
                 value={record.applicationStatus}
@@ -162,7 +194,7 @@ export function TrackerRecordPanel({
                 ))}
               </select>
             </Field>
-            <Field label="Application date">
+            <Field label="Application date" helper="When the application was sent.">
               <input
                 type="date"
                 value={record.applicationDate ?? ""}
@@ -172,7 +204,7 @@ export function TrackerRecordPanel({
                 className="app-input"
               />
             </Field>
-            <Field label="Follow-up date">
+            <Field label="Follow-up date" helper="Use this for the next check-in or reminder.">
               <input
                 type="date"
                 value={record.followUpDate ?? ""}
@@ -182,81 +214,101 @@ export function TrackerRecordPanel({
                 className="app-input"
               />
             </Field>
-            <Field label="Interview stage">
+            <Field label="Interview stage" helper="Current process step, if active.">
               <input
                 value={record.interviewStage ?? ""}
                 onChange={(event) =>
                   updateRecord({ interviewStage: event.target.value || null })
                 }
+                placeholder="Recruiter screen"
                 className="app-input"
               />
             </Field>
-            <Field label="Outcome">
+            <Field label="Outcome" helper="Latest result or waiting state.">
               <input
                 value={record.outcome ?? ""}
                 onChange={(event) =>
                   updateRecord({ outcome: event.target.value || null })
                 }
+                placeholder="Awaiting response"
                 className="app-input"
+              />
+            </Field>
+
+            <Field
+              label="Notes"
+              helper="Working notes for outreach, timing, or decision context."
+              className="md:col-span-2 xl:col-span-3"
+            >
+              <textarea
+                rows={4}
+                value={record.notes ?? ""}
+                onChange={(event) => updateRecord({ notes: event.target.value || null })}
+                className="app-input resize-y"
               />
             </Field>
           </div>
 
-          <Field label="Notes">
-            <textarea
-              rows={4}
-              value={record.notes ?? ""}
-              onChange={(event) => updateRecord({ notes: event.target.value || null })}
-              className="app-input resize-y"
-            />
-          </Field>
-
           {error ? (
-            <p className="mt-3 rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
+            <p className="mt-4 rounded-2xl border border-danger/25 bg-danger-soft px-4 py-3 text-sm text-danger">
               {error}
             </p>
           ) : null}
+        </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
+        <div className="border-t border-emerald-200/60 bg-[linear-gradient(180deg,rgba(237,246,241,0.7),rgba(247,250,248,0.92))] px-5 py-4 sm:px-6">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-900/50">
+            Navigation
+          </p>
+          <div className="mt-3 flex flex-wrap gap-3">
             <Link
               href="/tracker"
-              className="app-button-primary px-4 py-2"
+              className="app-button-primary"
             >
               Back to tracker
             </Link>
             <Link
               href="/new-analysis"
-              className="app-button-secondary px-4 py-2"
+              className="app-button-secondary"
             >
               Start new analysis
             </Link>
+            <button
+              type="button"
+              onClick={deleteRecord}
+              className="inline-flex items-center justify-center rounded-full border border-danger/25 bg-danger-soft px-5 py-3 text-sm font-semibold text-danger no-underline transition hover:border-danger/40 hover:bg-danger-soft/80"
+            >
+              Delete record
+            </button>
           </div>
         </div>
       </section>
 
-      <section className="app-panel p-4">
+      <section className="overflow-hidden rounded-[24px] border border-sky-200/60 bg-[linear-gradient(180deg,rgba(251,253,254,0.92),rgba(241,247,249,0.86))] shadow-[0_14px_30px_rgba(22,41,50,0.05),inset_0_1px_0_rgba(255,255,255,0.52)]">
         <button
           type="button"
           onClick={() => setShowReadOnlyContext((current) => !current)}
-          className="flex w-full items-center justify-between gap-3 rounded-[1rem] border border-line/45 bg-surface/20 px-4 py-3 text-left transition-colors hover:bg-surface/32"
+          className="flex w-full items-center justify-between gap-3 px-5 py-4 text-left transition-colors hover:bg-sky-50/48 sm:px-6"
           aria-expanded={showReadOnlyContext}
         >
           <div>
-            <p className="app-kicker">Read-only analysis context</p>
-            <h3 className="mt-1 text-lg font-semibold text-ink">Original analysis context</h3>
-            <p className="mt-1 text-sm leading-5 text-ink/70">
-              Review the saved analysis only when you need the preserved recommendation context.
+            <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-sky-900/48">
+              Locked analysis context
+            </p>
+            <h3 className="mt-1 text-lg font-semibold text-ink">Original fit logic</h3>
+            <p className="mt-1 max-w-2xl text-sm leading-5 text-ink/68">
+              Read-only support from the saved analysis. It does not change when workflow fields are updated.
             </p>
           </div>
-          <span className="text-xs font-semibold uppercase tracking-[0.16em] text-ink/60">
-            {showReadOnlyContext ? "Collapse" : "Expand"}
+          <span className="app-disclosure-toggle shrink-0">
+            {showReadOnlyContext ? "COLLAPSE" : "EXPAND"}
           </span>
         </button>
 
         {showReadOnlyContext ? (
-          <div className="mt-4 space-y-4">
-            <section className="app-subpanel p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">
+          <div className="space-y-4 border-t border-sky-200/60 px-5 py-5 sm:px-6">
+            <section className="rounded-[22px] border border-sky-200/60 bg-white/52 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.5)]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-900/48">
                 Saved summary
               </p>
               <p className="mt-2 text-sm leading-6 text-ink/80">{record.analysisContext.summary}</p>
@@ -308,15 +360,27 @@ function Summary({ label, value }: { label: string; value: string }) {
 
 function Field({
   label,
-  children
+  children,
+  helper,
+  className
 }: {
   label: string;
   children: ReactNode;
+  helper?: string;
+  className?: string;
 }) {
   return (
-    <label className="mt-4 block space-y-1.5">
-      <span className="app-label">{label}</span>
+    <label className={`block space-y-2 ${className ?? ""}`}>
+      <span
+        className="text-sm font-semibold text-emerald-950/88"
+        style={{ fontFamily: '"Aptos", "Segoe UI", sans-serif' }}
+      >
+        {label}
+      </span>
       {children}
+      {helper ? (
+        <span className="block text-sm leading-5 text-emerald-950/60">{helper}</span>
+      ) : null}
     </label>
   );
 }

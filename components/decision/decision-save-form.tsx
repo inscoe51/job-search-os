@@ -184,25 +184,17 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
           ) : null}
         </div>
 
-        <details className="group/decision-workflow" open>
-          <summary className="list-none cursor-pointer">
-            <div className="overflow-hidden rounded-[26px] border border-emerald-300/55 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(246,250,247,0.9))] shadow-[inset_0_1px_0_rgba(255,255,255,0.48),0_16px_34px_rgba(14,28,20,0.05)]">
-              <div className="flex items-start justify-between gap-3 border-b border-emerald-200/60 bg-[linear-gradient(180deg,rgba(230,244,237,0.88),rgba(246,250,247,0.6))] px-5 py-4 sm:px-6">
-                <div className="space-y-1">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-900/56">Workflow details</p>
-                  <p className="text-sm leading-5 text-ink/72">
-                    Confirm the save-ready workflow fields without changing the locked analysis handoff.
-                  </p>
-                </div>
-                <span className="app-disclosure-toggle">
-                  <span className="inline group-open/decision-workflow:hidden">EXPAND</span>
-                  <span className="hidden group-open/decision-workflow:inline">COLLAPSE</span>
-                </span>
-              </div>
+        <div className="overflow-hidden rounded-[26px] border border-emerald-300/55 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(246,250,247,0.9))] shadow-[inset_0_1px_0_rgba(255,255,255,0.48),0_16px_34px_rgba(14,28,20,0.05)]">
+          <div className="border-b border-emerald-200/60 bg-[linear-gradient(180deg,rgba(230,244,237,0.88),rgba(246,250,247,0.6))] px-5 py-4 sm:px-6">
+            <div className="space-y-1">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-900/56">Workflow details</p>
+              <p className="text-sm leading-5 text-ink/72">
+                Confirm the save-ready workflow fields without changing the locked analysis handoff.
+              </p>
             </div>
-          </summary>
+          </div>
 
-          <div className="mt-3 overflow-hidden rounded-[24px] border border-emerald-200/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(246,250,247,0.9))] shadow-[inset_0_1px_0_rgba(255,255,255,0.48)]">
+          <div className="overflow-hidden bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(246,250,247,0.9))]">
             <div className="px-5 py-5 sm:px-6 sm:py-6">
               <div className="mt-0 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
                 <Field label="Recommended next action">
@@ -356,7 +348,7 @@ export function DecisionSaveForm({ session }: DecisionSaveFormProps) {
               </div>
             </div>
           </div>
-        </details>
+        </div>
       </div>
     </section>
   );
